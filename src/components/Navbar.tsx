@@ -27,18 +27,20 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-all duration-500 ${
           scrolled
             ? 'bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E8DDD4]'
-            : 'bg-transparent'
+            : 'bg-[#FAF8F5]/80 backdrop-blur-sm border-b border-[#E8DDD4]/60'
         }`}
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+        <motion.div
+          className="max-w-7xl mx-auto px-6 lg:px-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <div className="flex items-center justify-between h-14">
             {/* Logo */}
             <a
               href="#"
@@ -47,14 +49,14 @@ export default function Navbar() {
             >
               <span
                 className={`font-serif text-xl font-light leading-tight tracking-wide transition-colors duration-300 ${
-                  scrolled ? 'text-[#2C2C2C]' : 'text-[#FAF8F5]'
+                  scrolled ? 'text-[#2C2C2C]' : 'text-[#2C2C2C]'
                 }`}
               >
                 Pokhara Skin
               </span>
               <span
                 className={`font-sans text-[9px] tracking-[0.25em] uppercase font-light transition-colors duration-300 ${
-                  scrolled ? 'text-[#A0896E]' : 'text-[#E8DDD4]'
+                  scrolled ? 'text-[#A0896E]' : 'text-[#A0896E]'
                 }`}
               >
                 & Hair Clinic
@@ -67,8 +69,8 @@ export default function Navbar() {
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  className={`nav-link font-sans text-[11px] tracking-[0.18em] uppercase font-light transition-colors duration-300 bg-transparent border-none cursor-pointer ${
-                    scrolled ? 'text-[#6B6560]' : 'text-[#E8DDD4]'
+                  className={`nav-link font-sans text-[11px] tracking-[0.18em] uppercase font-medium transition-colors duration-300 bg-transparent border-none cursor-pointer ${
+                    scrolled ? 'text-[#6B6560]' : 'text-[#6B6560]'
                   } hover:text-[#A0896E]`}
                 >
                   {link.label}
@@ -80,18 +82,18 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-6">
               <a
                 href="tel:+977-61-000000"
-                className={`font-sans text-[11px] tracking-[0.15em] transition-colors duration-300 ${
-                  scrolled ? 'text-[#6B6560]' : 'text-[#C4B8A8]'
+                className={`font-sans text-[11px] font-medium tracking-[0.15em] transition-colors duration-300 ${
+                  scrolled ? 'text-[#6B6560]' : 'text-[#6B6560]'
                 } hover:text-[#A0896E]`}
               >
                 +977 61-XXXXXX
               </a>
               <button
                 onClick={() => handleNavClick('#contact')}
-                className={`font-sans text-[10px] tracking-[0.18em] uppercase font-medium px-5 py-2.5 border transition-all duration-300 ${
+                className={`font-sans text-[10px] tracking-[0.18em] uppercase font-semibold px-4 py-2 border transition-all duration-300 ${
                   scrolled
                     ? 'border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#2C2C2C] hover:text-[#FAF8F5]'
-                    : 'border-[#FAF8F5]/60 text-[#FAF8F5] hover:bg-[#FAF8F5] hover:text-[#2C2C2C]'
+                    : 'border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#2C2C2C] hover:text-[#FAF8F5]'
                 }`}
               >
                 Book Appointment
@@ -106,23 +108,23 @@ export default function Navbar() {
             >
               <span
                 className={`block w-5 h-px transition-all duration-300 ${
-                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#FAF8F5]'
+                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#2C2C2C]'
                 } ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
               />
               <span
                 className={`block w-5 h-px transition-all duration-300 ${
-                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#FAF8F5]'
+                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#2C2C2C]'
                 } ${menuOpen ? 'opacity-0' : ''}`}
               />
               <span
                 className={`block w-5 h-px transition-all duration-300 ${
-                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#FAF8F5]'
+                  scrolled ? 'bg-[#2C2C2C]' : 'bg-[#2C2C2C]'
                 } ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
               />
             </button>
           </div>
-        </div>
-      </motion.header>
+        </motion.div>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>

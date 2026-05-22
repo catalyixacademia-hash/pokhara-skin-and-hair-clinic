@@ -30,33 +30,38 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-screen min-h-[600px] overflow-hidden bg-[#1A1816]">
-      {/* Background images */}
-      {heroImages.map((img, idx) => (
-        <div
-          key={img}
-          className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
-          style={{ opacity: currentImg === idx ? 1 : 0 }}
-        >
-          <img
-            src={img}
-            alt="Dermatology clinic"
-            className="w-full h-full object-cover scale-105"
-            style={{
-              transform: currentImg === idx ? 'scale(1.05)' : 'scale(1)',
-              transition: 'transform 8s ease-out',
-            }}
-            loading={idx === 0 ? 'eager' : 'lazy'}
-          />
-        </div>
-      ))}
+    <section
+      className="hero-section"
+      aria-label="Hero"
+    >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+        {heroImages.map((img, idx) => (
+          <div
+            key={img}
+            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+            style={{ opacity: currentImg === idx ? 1 : 0 }}
+          >
+            <img
+              src={img}
+              alt=""
+              className="h-full w-full object-cover object-[center_40%] scale-105"
+              style={{
+                transform: currentImg === idx ? 'scale(1.05)' : 'scale(1)',
+                transition: 'transform 8s ease-out',
+              }}
+              loading={idx === 0 ? 'eager' : 'lazy'}
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 hero-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1A1816]/70 via-[#1A1816]/30 to-transparent" />
+      </div>
 
-      {/* Cinematic overlay */}
-      <div className="absolute inset-0 hero-overlay" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1816]/70 via-[#1A1816]/30 to-transparent" />
+      {/* Pushes copy below the header zone */}
+      <div className="row-start-1 min-h-0" aria-hidden="true" />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-20 lg:pb-28">
+      <div className="row-start-2 relative z-10 w-full pb-20 lg:pb-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full">
           <div className="max-w-3xl">
             {/* Eyebrow */}
@@ -125,11 +130,11 @@ export default function Hero() {
               <div className="w-8 h-8 rounded-full bg-[#A0896E]/30 border border-[#A0896E]/40 flex items-center justify-center">
                 <span className="text-[#C4B8A8] text-xs">MD</span>
               </div>
-              <div>
-                <span className="font-sans text-[#FAF8F5] text-xs tracking-wide">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="font-sans text-xs tracking-wide text-[#FAF8F5]">
                   Dr. Prakash Acharya
                 </span>
-                <span className="font-sans text-[#6B6560] text-xs ml-2">
+                <span className="font-sans text-xs text-[#C4B8A8]">
                   Consultant Dermatologist
                 </span>
               </div>
