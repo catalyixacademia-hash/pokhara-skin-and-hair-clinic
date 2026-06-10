@@ -1,33 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const results = [
-  {
-    label: 'Acne Treatment',
-    before: 'https://images.pexels.com/photos/4586728/pexels-photo-4586728.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    after: 'https://images.pexels.com/photos/7479960/pexels-photo-7479960.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    duration: '8 weeks of treatment',
-  },
-  {
-    label: 'Pigmentation Correction',
-    before: 'https://images.pexels.com/photos/3985361/pexels-photo-3985361.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    after: 'https://images.pexels.com/photos/15327096/pexels-photo-15327096.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    duration: '3 chemical peel sessions',
-  },
-  {
-    label: 'Hair Density Restoration',
-    before: 'https://images.pexels.com/photos/7320791/pexels-photo-7320791.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    after: 'https://images.pexels.com/photos/23349910/pexels-photo-23349910.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    duration: '4 PRP sessions over 4 months',
-  },
-  {
-    label: 'Skin Rejuvenation',
-    before: 'https://images.pexels.com/photos/6730032/pexels-photo-6730032.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    after: 'https://images.pexels.com/photos/7479517/pexels-photo-7479517.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=480',
-    duration: '6-session microneedling course',
-  },
-];
+import { useResults } from '../hooks/useResults';
 
 function CompareSlider({ before, after }: { before: string; after: string }) {
   const [position, setPosition] = useState(50);
@@ -127,11 +101,12 @@ function CompareSlider({ before, after }: { before: string; after: string }) {
 }
 
 type ResultCardProps = {
-  result: (typeof results)[0];
+  result: (typeof skinResults)[0];
   index: number;
+  compact?: boolean;
 };
 
-function ResultCard({ result, index }: ResultCardProps) {
+function ResultCard({ result, index, compact = false }: ResultCardProps) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
@@ -140,7 +115,7 @@ function ResultCard({ result, index }: ResultCardProps) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
       transition={{ duration: 0.8, delay: index * 0.15 }}
-      className="group"
+      className={compact ? 'max-w-md' : 'group border-l-skin pl-4'}
     >
       <CompareSlider before={result.before} after={result.after} />
       <div className="mt-4 flex items-center justify-between">
@@ -174,9 +149,10 @@ function ResultCard({ result, index }: ResultCardProps) {
 
 export default function Results() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { skinResults, hairResults } = useResults();
 
   return (
-    <section id="results" className="bg-[#FAF8F5] section-padding">
+    <section id="results" className="bg-ivory section-padding">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div ref={ref}>
           <motion.div
@@ -212,10 +188,21 @@ export default function Results() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {results.map((result, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 mb-12">
+          {skinResults.map((result, i) => (
             <ResultCard key={result.label} result={result} index={i} />
           ))}
+        </div>
+
+        <div className="border-t border-blush pt-10">
+          <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-hair-accent mb-6">
+            Hair Restoration Results
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
+            {hairResults.map((result, i) => (
+              <ResultCard key={result.label} result={result} index={i} compact />
+            ))}
+          </div>
         </div>
 
         <motion.p

@@ -1,13 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const credentials = [
-  { label: 'Qualification', value: 'MD, Dermatology & Venereology' },
-  { label: 'Specialization', value: 'Clinical & Aesthetic Dermatology' },
-  { label: 'Focus Areas', value: 'Hair Restoration, Acne, Anti-aging, Laser' },
-  { label: 'Clinic', value: 'Pokhara Skin and Hair Clinic' },
-  { label: 'Location', value: 'Nayabazar, Pokhara, Nepal' },
-];
+import { doctor } from '../data/clinic';
 
 const philosophy = [
   {
@@ -45,7 +38,7 @@ export default function Doctor() {
               <div className="img-zoom aspect-[3/4] overflow-hidden bg-[#C4B8A8] mb-8">
                 <img
                   src="https://images.pexels.com/photos/7659876/pexels-photo-7659876.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600"
-                  alt="Dr. Prakash Acharya - Consultant Dermatologist"
+                  alt={doctor.portraitAlt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -54,16 +47,16 @@ export default function Doctor() {
               {/* Name card */}
               <div className="border-l-2 border-[#A0896E] pl-5 mb-8">
                 <h3 className="font-serif text-2xl font-light text-[#2C2C2C] mb-1">
-                  Dr. Prakash Acharya
+                  {doctor.name}
                 </h3>
                 <p className="font-sans text-[11px] tracking-[0.18em] uppercase text-[#A0896E]">
-                  Consultant Dermatologist · MD
+                  {doctor.titleShort}
                 </p>
               </div>
 
               {/* Credentials */}
               <div className="space-y-3">
-                {credentials.map((c) => (
+                {doctor.credentials.map((c) => (
                   <div key={c.label} className="flex gap-3">
                     <span className="font-sans text-[10px] tracking-[0.12em] uppercase text-[#C4B8A8] w-24 shrink-0 pt-0.5">
                       {c.label}
@@ -98,18 +91,14 @@ export default function Doctor() {
                 Guided Aesthetic Care
               </h2>
 
-              <p className="font-sans text-[#6B6560] text-sm leading-[1.9] mb-5 font-light">
-                Dr. Prakash Acharya is a qualified Consultant Dermatologist with an MD in Dermatology
-                and Venereology. He established Pokhara Skin and Hair Clinic with the vision of making
-                internationally standard dermatological care accessible to patients across the Gandaki region of Nepal.
-              </p>
-
-              <p className="font-sans text-[#6B6560] text-sm leading-[1.9] mb-10 font-light">
-                With clinical expertise spanning medical dermatology, trichology, and aesthetic procedures,
-                Dr. Acharya brings a holistic, evidence-based perspective to every patient interaction.
-                His approach combines the precision of clinical medicine with a genuine understanding
-                of the emotional dimensions of skin and hair health.
-              </p>
+              {doctor.bio.map((paragraph) => (
+                <p
+                  key={paragraph.slice(0, 40)}
+                  className="font-sans text-[#6B6560] text-sm leading-[1.9] mb-5 last:mb-10 font-light"
+                >
+                  {paragraph}
+                </p>
+              ))}
 
               {/* Philosophy cards */}
               <div className="space-y-5 mb-10">

@@ -14,7 +14,7 @@ import Footer from './components/Footer';
 
 export default function App() {
   return (
-    <div className="bg-[#FAF8F5]">
+    <div className="bg-ivory">
       <Navbar />
       {/* Reserves space so hero starts below the fixed header (all browsers) */}
       <div className="h-[var(--nav-height)] shrink-0" aria-hidden="true" />

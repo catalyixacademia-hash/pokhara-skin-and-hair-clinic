@@ -1,37 +1,22 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const treatments = [
-  'Skin Consultation',
-  'Acne & Pigmentation',
-  'Chemical Peel',
-  'Microneedling',
-  'Laser Treatment',
-  'HydraFacial',
-  'PRP Hair Therapy',
-  'GFC Therapy',
-  'Exosome Therapy',
-  'Hair Fall Consultation',
-  'Botox',
-  'Dermal Fillers',
-  'Anti-Aging Treatment',
-  'Laser Hair Reduction',
-  'General Dermatology',
-];
-
-const clinicHours = [
-  { day: 'Sunday', time: '10:00 AM - 6:00 PM' },
-  { day: 'Monday', time: '10:00 AM - 6:00 PM' },
-  { day: 'Tuesday', time: '10:00 AM - 6:00 PM' },
-  { day: 'Wednesday', time: '10:00 AM - 6:00 PM' },
-  { day: 'Thursday', time: '10:00 AM - 6:00 PM' },
-  { day: 'Friday', time: '10:00 AM - 2:00 PM' },
-  { day: 'Saturday', time: 'Closed' },
-];
+import {
+  address,
+  clinicHours,
+  formatPhoneDisplay,
+  getPhone,
+  hours,
+  phones,
+  phoneHref,
+  social,
+} from '../data/clinic';
+import { getSupabase, isSupabaseConfigured } from '../lib/supabase';
+import { useTreatmentOptions } from '../hooks/useTreatmentOptions';
 
 export default function Appointment() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { treatmentOptions } = useTreatmentOptions();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -41,14 +26,39 @@ export default function Appointment() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    setSubmitError(null);
+
+    const supabase = getSupabase();
+    if (supabase && isSupabaseConfigured) {
+      const { error } = await supabase.from('appointments').insert({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || null,
+        treatment: formData.treatment,
+        preferred_date: formData.date || null,
+        message: formData.message || null,
+        status: 'pending',
+      });
+
+      if (error) {
+        setSubmitError('Could not submit your request. Please call the clinic directly.');
+        setSubmitting(false);
+        return;
+      }
+    }
+
     setSubmitted(true);
+    setSubmitting(false);
     setTimeout(() => setSubmitted(false), 4000);
     setFormData({ name: '', phone: '', email: '', treatment: '', date: '', message: '' });
   };
@@ -128,7 +138,7 @@ export default function Appointment() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="+977 98XXXXXXXX"
+                      placeholder={formatPhoneDisplay(getPhone('appointments').number)}
                       required
                       className="premium-input"
                     />
@@ -161,7 +171,7 @@ export default function Appointment() {
                       className="premium-select"
                     >
                       <option value="">Select a treatment</option>
-                      {treatments.map((t) => (
+                      {treatmentOptions.map((t) => (
                         <option key={t} value={t}>{t}</option>
                       ))}
                     </select>
@@ -195,15 +205,19 @@ export default function Appointment() {
                   />
                 </div>
 
+                {submitError && (
+                  <p className="text-sm text-red-700 mb-4">{submitError}</p>
+                )}
+
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button type="submit" className="btn-primary flex-1 justify-center">
-                    Request Appointment
+                  <button type="submit" disabled={submitting} className="btn-primary flex-1 justify-center disabled:opacity-60">
+                    {submitting ? 'Submitting…' : 'Request Appointment'}
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                       <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
                   <a
-                    href="https://wa.me/97798XXXXXXXX?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20Pokhara%20Skin%20and%20Hair%20Clinic."
+                    href={social.whatsapp.urlWithMessage}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 px-6 py-3 border border-[#A8B5A2] text-[#6B6560] hover:bg-[#A8B5A2]/10 transition-all duration-300"
@@ -235,25 +249,35 @@ export default function Appointment() {
                     <circle cx="8" cy="6" r="1.5"/>
                   </svg>
                   <div>
-                    <p className="font-sans text-xs text-[#2C2C2C] font-light">Nayabazar / Zero KM Area</p>
-                    <p className="font-sans text-xs text-[#6B6560] font-light">Opposite GMC Hospital Gate, Pokhara, Nepal</p>
+                    <p className="font-sans text-xs text-[#2C2C2C] font-light">{address.line1}</p>
+                    <p className="font-sans text-xs text-[#6B6560] font-light">{address.landmark}, {address.area}</p>
                   </div>
                 </div>
-                <div className="flex gap-3 items-center">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#A0896E" strokeWidth="1.2" className="shrink-0">
+                <div className="flex gap-3 items-start">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#A0896E" strokeWidth="1.2" className="mt-0.5 shrink-0">
                     <path d="M14 11c0 .3-.1.6-.2.8L12 13.6c-.4.4-.9.6-1.4.4C7 12.8 3.2 9 1.9 5.4c-.2-.5 0-1 .4-1.4L4.2 2.2C4.4 2.1 4.7 2 5 2c.3 0 .5.1.7.3L8 5.4c.2.2.3.5.3.7 0 .2-.1.5-.3.7L7 7.9c.9 1.8 2.3 3.2 4.1 4.1l1.1-1c.2-.2.5-.3.7-.3.2 0 .5.1.7.3l2.1 2.3c.2.2.3.4.3.7z"/>
                   </svg>
-                  <div>
-                    <p className="font-sans text-xs text-[#2C2C2C] font-light">+977 61-XXXXXX</p>
-                    <p className="font-sans text-xs text-[#6B6560] font-light">+977 98XXXXXXXX</p>
+                  <div className="space-y-1">
+                    {phones.map((phone) => (
+                      <a
+                        key={phone.role}
+                        href={phoneHref(phone.number)}
+                        className="block font-sans text-xs text-[#2C2C2C] font-light hover:text-[#A0896E] transition-colors"
+                      >
+                        {formatPhoneDisplay(phone.number)}
+                        <span className="text-[#6B6560]"> · {phone.label}</span>
+                      </a>
+                    ))}
                   </div>
                 </div>
                 <div className="flex gap-3 items-center">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#A0896E" strokeWidth="1.2" className="shrink-0">
-                    <rect x="1" y="3" width="14" height="10" rx="1.5"/>
-                    <path d="M1 5l7 5 7-5"/>
+                    <circle cx="8" cy="8" r="6"/>
+                    <path d="M8 5v3l2 2"/>
                   </svg>
-                  <p className="font-sans text-xs text-[#2C2C2C] font-light">info@pokharaskinhairclinic.com</p>
+                  <p className="font-sans text-xs text-[#6B6560] font-light">
+                    Call or WhatsApp to book your appointment
+                  </p>
                 </div>
               </div>
             </div>
@@ -265,12 +289,15 @@ export default function Appointment() {
                 {clinicHours.map((h) => (
                   <div key={h.day} className="flex justify-between items-center py-1.5 border-b border-[#E8DDD4] last:border-0">
                     <span className="font-sans text-xs text-[#6B6560] font-light">{h.day}</span>
-                    <span className={`font-sans text-xs font-light ${h.time === 'Closed' ? 'text-[#C4B8A8] italic' : 'text-[#2C2C2C]'}`}>
+                    <span className="font-sans text-xs font-light text-[#2C2C2C]">
                       {h.time}
                     </span>
                   </div>
                 ))}
               </div>
+              <p className="font-sans text-[10px] text-[#A0896E] mt-3 font-light italic">
+                {hours.saturdayNote}
+              </p>
             </div>
 
             {/* Quick action */}
@@ -282,7 +309,7 @@ export default function Appointment() {
                 WhatsApp us directly for quick appointments or urgent queries.
               </p>
               <a
-                href="https://wa.me/97798XXXXXXXX"
+                href={social.whatsapp.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-bronze w-full justify-center"

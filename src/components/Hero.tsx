@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
-const heroImages = [
-  'https://images.pexels.com/photos/32260065/pexels-photo-32260065.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1080&w=1920',
-  'https://images.pexels.com/photos/3985361/pexels-photo-3985361.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1080&w=1920',
-  'https://images.pexels.com/photos/4586728/pexels-photo-4586728.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1080&w=1920',
-];
+import { doctor } from '../data/clinic';
+import { useHeroSlides } from '../hooks/useHeroSlides';
 
 export default function Hero() {
+  const { heroImages } = useHeroSlides();
   const [currentImg, setCurrentImg] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (heroImages.length === 0) return;
     setIsLoaded(true);
     const interval = setInterval(() => {
       setCurrentImg((prev) => (prev + 1) % heroImages.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [heroImages.length]);
 
   const handleBookClick = () => {
     const el = document.querySelector('#contact');
@@ -82,13 +80,13 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="font-serif text-[clamp(2.6rem,7vw,5rem)] font-light text-[#FAF8F5] leading-[1.08] tracking-[-0.01em] mb-6"
+              className="font-serif text-[clamp(2.6rem,7vw,5rem)] font-light text-ivory leading-[1.08] tracking-[-0.01em] mb-6"
             >
-              Advanced Skin & Hair
+              Advanced Skin Care
               <br />
-              <em className="font-light italic text-[#E8DDD4]">Care Rooted in</em>
-              <br />
-              Medical Expertise
+              <span className="text-[clamp(1.4rem,3.5vw,2.4rem)] text-taupe font-light">
+                & Hair Restoration
+              </span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -96,10 +94,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="font-sans text-[#C4B8A8] text-base font-light leading-relaxed mb-10 max-w-xl"
+              className="font-sans text-taupe text-base font-light leading-relaxed mb-10 max-w-xl"
             >
-              Personalized dermatology and aesthetic treatments designed for healthy skin,
-              confident hair, and natural results.
+              Expert dermatology and advanced skin treatments in Pokhara — with specialized
+              hair restoration when you need it.
             </motion.p>
 
             {/* CTAs */}
@@ -132,10 +130,10 @@ export default function Hero() {
               </div>
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                 <span className="font-sans text-xs tracking-wide text-[#FAF8F5]">
-                  Dr. Prakash Acharya
+                  {doctor.name}
                 </span>
                 <span className="font-sans text-xs text-[#C4B8A8]">
-                  Consultant Dermatologist
+                  {doctor.title}
                 </span>
               </div>
             </motion.div>

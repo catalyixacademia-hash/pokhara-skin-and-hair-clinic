@@ -1,5 +1,12 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import {
+  address,
+  clinic,
+  hoursSummaryWithNote,
+  landmarks,
+  maps,
+} from '../data/clinic';
 
 export default function Location() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
@@ -43,20 +50,20 @@ export default function Location() {
           >
             <div className="map-frame w-full aspect-[16/9] overflow-hidden border border-[#E8DDD4]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3516.0!2d83.9856!3d28.2096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNayabazar%2C+Pokhara!5e0!3m2!1sen!2snp!4v1234567890"
+                src={maps.embedUrl}
                 width="100%"
                 height="100%"
                 style={{ border: 0, filter: 'saturate(0.2) brightness(1.05)' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Pokhara Skin and Hair Clinic Location"
+                title={`${clinic.name} Location`}
               />
             </div>
             <div className="mt-3 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-[#A0896E]" />
               <span className="font-sans text-[10px] text-[#6B6560] tracking-wide">
-                Nayabazar / Zero KM · Pokhara, Gandaki Province, Nepal
+                {address.mapCaption}
               </span>
             </div>
           </motion.div>
@@ -77,12 +84,11 @@ export default function Location() {
                     <circle cx="8" cy="6" r="1.5"/>
                   </svg>
                   <div>
-                    <p className="font-sans text-xs font-medium text-[#2C2C2C] mb-0.5">Pokhara Skin and Hair Clinic</p>
+                    <p className="font-sans text-xs font-medium text-[#2C2C2C] mb-0.5">{clinic.name}</p>
                     <p className="font-sans text-xs text-[#6B6560] font-light leading-relaxed">
-                      Nayabazar / Zero KM Area<br/>
-                      Opposite GMC Hospital Gate<br/>
-                      Pokhara, Gandaki Province<br/>
-                      Nepal
+                      {address.full.map((line) => (
+                        <span key={line} className="block">{line}</span>
+                      ))}
                     </p>
                   </div>
                 </div>
@@ -92,11 +98,7 @@ export default function Location() {
             <div>
               <h3 className="font-serif text-xl font-light text-[#2C2C2C] mb-4">Landmarks Nearby</h3>
               <ul className="space-y-2">
-                {[
-                  'Opposite GMC Hospital Main Gate',
-                  'Nayabazar Zero KM intersection',
-                  'Near Prithvi Narayan Campus area',
-                ].map((lm) => (
+                {landmarks.map((lm) => (
                   <li key={lm} className="flex items-start gap-2">
                     <div className="w-1 h-1 rounded-full bg-[#A0896E] mt-1.5 shrink-0" />
                     <span className="font-sans text-xs text-[#6B6560] font-light">{lm}</span>
@@ -124,14 +126,14 @@ export default function Location() {
                   </svg>
                   <div>
                     <p className="font-sans text-xs font-medium text-[#2C2C2C] mb-0.5">Open Hours</p>
-                    <p className="font-sans text-xs text-[#6B6560] font-light">Sun–Thu: 10AM–6PM · Fri: 10AM–2PM</p>
+                    <p className="font-sans text-xs text-[#6B6560] font-light">{hoursSummaryWithNote()}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <a
-              href="https://goo.gl/maps/pokhara-skin-hair-clinic"
+              href={maps.openUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary w-full justify-center"

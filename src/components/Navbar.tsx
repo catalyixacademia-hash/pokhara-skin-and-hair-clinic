@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { address, clinic, formatPhoneDisplay, getPhone, phoneHref } from '../data/clinic';
 
 const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Treatments', href: '#services' },
   { label: 'Doctor', href: '#doctor' },
   { label: 'Results', href: '#results' },
+  { label: 'Gallery', href: '#gallery' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -52,14 +54,14 @@ export default function Navbar() {
                   scrolled ? 'text-[#2C2C2C]' : 'text-[#2C2C2C]'
                 }`}
               >
-                Pokhara Skin
+                {clinic.nameLine1}
               </span>
               <span
                 className={`font-sans text-[9px] tracking-[0.25em] uppercase font-light transition-colors duration-300 ${
                   scrolled ? 'text-[#A0896E]' : 'text-[#A0896E]'
                 }`}
               >
-                & Hair Clinic
+                {clinic.nameLine2}
               </span>
             </a>
 
@@ -81,12 +83,12 @@ export default function Navbar() {
             {/* CTA */}
             <div className="hidden lg:flex items-center gap-6">
               <a
-                href="tel:+977-61-000000"
+                href={phoneHref(getPhone('main').number)}
                 className={`font-sans text-[11px] font-medium tracking-[0.15em] transition-colors duration-300 ${
                   scrolled ? 'text-[#6B6560]' : 'text-[#6B6560]'
                 } hover:text-[#A0896E]`}
               >
-                +977 61-XXXXXX
+                {formatPhoneDisplay(getPhone('main').number)}
               </a>
               <button
                 onClick={() => handleNavClick('#contact')}
@@ -167,7 +169,7 @@ export default function Navbar() {
                   Book Appointment
                 </button>
                 <p className="font-sans text-[#6B6560] text-sm mt-6 text-center">
-                  Nayabazar, Pokhara, Nepal
+                  {address.short}
                 </p>
               </motion.div>
             </div>

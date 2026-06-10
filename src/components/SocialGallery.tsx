@@ -1,59 +1,10 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const galleryItems = [
-  {
-    img: 'https://images.pexels.com/photos/32260065/pexels-photo-32260065.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Skin Treatment Session',
-    tag: 'Treatment',
-    tall: true,
-  },
-  {
-    img: 'https://images.pexels.com/photos/4586740/pexels-photo-4586740.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Patient Consultation',
-    tag: 'Consultation',
-    tall: false,
-  },
-  {
-    img: 'https://images.pexels.com/photos/3985361/pexels-photo-3985361.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Facial Care Procedure',
-    tag: 'Skin Care',
-    tall: false,
-  },
-  {
-    img: 'https://images.pexels.com/photos/7479960/pexels-photo-7479960.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Glowing Skin Results',
-    tag: 'Results',
-    tall: false,
-  },
-  {
-    img: 'https://images.pexels.com/photos/36963686/pexels-photo-36963686.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Hair Restoration Procedure',
-    tag: 'Hair Care',
-    tall: false,
-  },
-  {
-    img: 'https://images.pexels.com/photos/29648642/pexels-photo-29648642.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Clinical Dermatology',
-    tag: 'Dermatology',
-    tall: true,
-  },
-  {
-    img: 'https://images.pexels.com/photos/4586728/pexels-photo-4586728.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Laser Treatment',
-    tag: 'Laser',
-    tall: false,
-  },
-  {
-    img: 'https://images.pexels.com/photos/15327096/pexels-photo-15327096.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=600',
-    label: 'Beautiful Skin Results',
-    tag: 'Results',
-    tall: false,
-  },
-];
+import { social } from '../data/clinic';
+import { useGallery } from '../hooks/useGallery';
 
 type GalleryItemProps = {
-  item: (typeof galleryItems)[0];
+  item: { img: string; label: string; tag: string; tall: boolean };
   index: number;
 };
 
@@ -92,9 +43,10 @@ function GalleryItem({ item, index }: GalleryItemProps) {
 
 export default function SocialGallery() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { galleryItems } = useGallery();
 
   return (
-    <section className="bg-[#FAF8F5] section-padding">
+    <section id="gallery" className="bg-bone section-padding">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div ref={ref} className="mb-12">
           <motion.div
@@ -120,26 +72,48 @@ export default function SocialGallery() {
               <em className="italic text-[#A0896E]">Clinic</em>
             </motion.h2>
 
-            <motion.a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: inView ? 1 : 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="font-sans text-[10px] tracking-[0.2em] uppercase text-[#6B6560] hover:text-[#A0896E] transition-colors duration-300 flex items-center gap-2"
-            >
-              Follow on Instagram
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M1 7h12M7 1l6 6-6 6"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </motion.a>
+            <div className="flex flex-wrap items-center gap-4">
+              <motion.a
+                href={social.instagram.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: inView ? 1 : 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="font-sans text-[10px] tracking-[0.2em] uppercase text-[#6B6560] hover:text-[#A0896E] transition-colors duration-300 flex items-center gap-2"
+              >
+                Follow on Instagram
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M1 7h12M7 1l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </motion.a>
+              <motion.a
+                href={social.tiktok.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: inView ? 1 : 0 }}
+                transition={{ duration: 0.7, delay: 0.35 }}
+                className="font-sans text-[10px] tracking-[0.2em] uppercase text-[#6B6560] hover:text-[#A0896E] transition-colors duration-300 flex items-center gap-2"
+              >
+                Follow on TikTok
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M1 7h12M7 1l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </motion.a>
+            </div>
           </div>
         </div>
 
@@ -153,23 +127,43 @@ export default function SocialGallery() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 10 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="mt-10 flex items-center justify-center gap-3"
+          className="mt-10 flex flex-wrap items-center justify-center gap-6"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#A0896E"
-            strokeWidth="1.5"
+          <a
+            href={social.instagram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <circle cx="12" cy="12" r="5" />
-            <circle cx="17.5" cy="6.5" r="1" fill="#A0896E" stroke="none" />
-          </svg>
-          <span className="font-sans text-[11px] tracking-[0.2em] text-[#A0896E]">
-            @pokharaskinandhairclinic
-          </span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#A0896E"
+              strokeWidth="1.5"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <circle cx="12" cy="12" r="5" />
+              <circle cx="17.5" cy="6.5" r="1" fill="#A0896E" stroke="none" />
+            </svg>
+            <span className="font-sans text-[11px] tracking-[0.2em] text-[#A0896E]">
+              {social.instagram.handle}
+            </span>
+          </a>
+          <a
+            href={social.tiktok.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#A0896E">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+            <span className="font-sans text-[11px] tracking-[0.2em] text-[#A0896E]">
+              {social.tiktok.handle}
+            </span>
+          </a>
         </motion.div>
       </div>
     </section>

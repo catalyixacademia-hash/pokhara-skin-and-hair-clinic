@@ -1,57 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const testimonials = [
-  {
-    name: 'Priya S.',
-    location: 'Pokhara',
-    treatment: 'Acne & Pigmentation Treatment',
-    rating: 5,
-    quote: 'After years of struggling with hormonal acne, I finally found a clinic that approached my skin medically rather than cosmetically. Dr. Acharya created a treatment plan that addressed the root cause. Three months later, my skin is clearer than it has been in a decade.',
-    initial: 'P',
-  },
-  {
-    name: 'Rohan M.',
-    location: 'Pokhara',
-    treatment: 'PRP Hair Restoration',
-    rating: 5,
-    quote: 'I was skeptical about PRP therapy but the consultation was thorough and honest — Dr. Acharya explained exactly what to expect and what not to expect. Four sessions in, my hair density has noticeably improved. The professionalism here is unlike any clinic I have visited.',
-    initial: 'R',
-  },
-  {
-    name: 'Sunita T.',
-    location: 'Kaski',
-    treatment: 'Chemical Peel & Skin Rejuvenation',
-    rating: 5,
-    quote: 'The clinic feels different from the moment you walk in. Clean, calm, and clinical in the best way. My skin tone is significantly more even after the peel series, and the team was genuinely attentive throughout every session.',
-    initial: 'S',
-  },
-  {
-    name: 'Aarav K.',
-    location: 'Pokhara',
-    treatment: 'GFC Hair Therapy',
-    rating: 5,
-    quote: 'GFC therapy at Pokhara Skin and Hair Clinic genuinely changed how I feel about my hair. I came in feeling resigned about my hairline. Three months after treatment, I feel confident again. The expertise here is real.',
-    initial: 'A',
-  },
-  {
-    name: 'Manjula R.',
-    location: 'Lekhnath',
-    treatment: 'Laser Pigmentation Treatment',
-    rating: 5,
-    quote: 'I travelled from Lekhnath specifically for this clinic after reading about Dr. Acharya. Worth every kilometer. The laser treatment for my pigmentation was precise, painless, and the results were visible within two weeks.',
-    initial: 'M',
-  },
-  {
-    name: 'Deepa B.',
-    location: 'Pokhara',
-    treatment: 'Botox & Filler Consultation',
-    rating: 5,
-    quote: 'What I appreciated most was the honest, no-pressure consultation. Dr. Acharya advised me against a treatment I thought I wanted and suggested an alternative that has given me genuinely natural results. That kind of integrity is rare.',
-    initial: 'D',
-  },
-];
+import { useTestimonials } from '../hooks/useTestimonials';
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -67,6 +17,7 @@ function StarRating({ count }: { count: number }) {
 
 export default function Testimonials() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { testimonials } = useTestimonials();
   const [activeIndex, setActiveIndex] = useState(0);
   const visibleCount = 3;
 

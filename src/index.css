@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ivory: #FAF8F5;
+  --color-bone: #F2EDE6;
+  --color-cream: #EDE8DF;
+  --color-blush: #E8DDD4;
+  --color-taupe: #C4B8A8;
+  --color-sage: #A8B5A2;
+  --color-bronze: #A0896E;
+  --color-charcoal: #2C2C2C;
+  --color-warm-gray: #6B6560;
+  --color-dark-warm: #1A1816;
+  --color-skin-accent: #A0896E;
+  --color-hair-accent: #8B9E8B;
+}
+
 @layer base {
   :root {
     --nav-height: 3.5rem; /* matches compact Navbar h-14 */
@@ -13,6 +28,8 @@
     --color-charcoal: #2C2C2C;
     --color-warm-gray: #6B6560;
     --color-dark-warm: #1A1816;
+    --color-skin-accent: #A0896E;
+    --color-hair-accent: #8B9E8B;
   }
 
   * {
@@ -33,7 +50,13 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--color-ivory);
     color: var(--color-charcoal);
-    line-height: 1.6;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      line-height: 1.75;
+    }
   }
 
   h1, h2, h3, h4 {
@@ -90,6 +113,74 @@
   .border-bone { border-color: var(--color-bone); }
   .border-bronze { border-color: var(--color-bronze); }
 
+  .text-hair-accent { color: var(--color-hair-accent); }
+  .border-hair-accent { border-color: var(--color-hair-accent); }
+  .bg-hair-accent { background-color: var(--color-hair-accent); }
+
+  .section-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-bronze);
+  }
+
+  .category-skin {
+    color: var(--color-skin-accent);
+    border: 1px solid var(--color-blush);
+    background-color: rgba(160, 137, 110, 0.08);
+  }
+
+  .category-hair {
+    color: var(--color-hair-accent);
+    border: 1px solid var(--color-taupe);
+    background-color: rgba(139, 158, 139, 0.08);
+  }
+
+  .category-aesthetic {
+    color: var(--color-warm-gray);
+    border: 1px solid var(--color-blush);
+    background-color: rgba(107, 101, 96, 0.05);
+  }
+
+  .chip-skin {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-skin-accent);
+    border: 1px solid var(--color-blush);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .chip-hair {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-hair-accent);
+    border: 1px solid var(--color-taupe);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .chip-aesthetic {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-warm-gray);
+    border: 1px solid var(--color-blush);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .border-l-skin {
+    border-left: 3px solid var(--color-skin-accent);
+  }
+
+  .border-l-hair {
+    border-left: 3px solid var(--color-hair-accent);
+  }
+
   .tracking-widest-plus {
     letter-spacing: 0.25em;
   }
@@ -122,13 +213,13 @@
   background: linear-gradient(to bottom, transparent 40%, rgba(26, 24, 22, 0.6) 100%);
 }
 
-/* Cinematic hero overlay */
+/* Cinematic hero overlay with warm skin-toned wash */
 .hero-overlay {
   background: linear-gradient(
     135deg,
-    rgba(26, 24, 22, 0.65) 0%,
-    rgba(26, 24, 22, 0.35) 50%,
-    rgba(26, 24, 22, 0.2) 100%
+    rgba(26, 24, 22, 0.7) 0%,
+    rgba(80, 55, 45, 0.35) 45%,
+    rgba(26, 24, 22, 0.25) 100%
   );
 }
 

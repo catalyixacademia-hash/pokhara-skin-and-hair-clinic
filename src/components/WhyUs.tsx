@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { doctor } from '../data/clinic';
 
 const features = [
   {
@@ -142,7 +143,7 @@ export default function WhyUs() {
             Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology.
           </p>
           <div className="font-sans text-[10px] tracking-[0.25em] uppercase text-[#A0896E]">
-            Dr. Prakash Acharya, MD &middot; Consultant Dermatologist
+            {doctor.name}, MD · {doctor.title}
           </div>
         </motion.div>
       </div>

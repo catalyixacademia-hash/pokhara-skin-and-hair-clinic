@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { address, clinic } from '../data/clinic';
 
 const stats = [
   { value: '5000+', label: 'Patients Treated' },
@@ -54,7 +55,7 @@ export default function About() {
               transition={{ duration: 0.8, delay: 0.25 }}
               className="font-sans text-[#6B6560] text-sm leading-[1.9] mb-6 font-light"
             >
-              Pokhara Skin and Hair Clinic was founded with a singular vision — to bring internationally
+              {clinic.name} was founded with a singular vision — to bring internationally
               standard dermatology and aesthetic medicine to the people of Pokhara. Under the guidance
               of Dr. Prakash Acharya, every consultation is approached with clinical rigour and genuine
               human care.
@@ -139,10 +140,10 @@ export default function About() {
                   Located At
                 </div>
                 <div className="font-serif text-sm text-[#2C2C2C]">
-                  Nayabazar, Pokhara
+                  {address.line1}
                 </div>
                 <div className="font-sans text-[10px] text-[#6B6560] mt-0.5">
-                  Opp. GMC Hospital Gate
+                  {address.landmark}
                 </div>
               </motion.div>
             </motion.div>

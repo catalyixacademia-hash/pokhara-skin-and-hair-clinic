@@ -9,7 +9,7 @@ const trustItems = [
         <path d="M11 7v4l3 2"/>
       </svg>
     ),
-    label: 'Consultant Dermatologist',
+    label: 'Board Certified Dermatologist',
     sub: 'MD Qualified Expert',
   },
   {
@@ -23,17 +23,7 @@ const trustItems = [
       </svg>
     ),
     label: 'Modern Skin Analysis',
-    sub: 'Advanced Diagnostics',
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 2C6 2 2 6 2 11s4 9 9 9 9-4 9-9"/>
-        <path d="M16 2l4 4-7 7-4-2-5 5"/>
-      </svg>
-    ),
-    label: 'Advanced Hair Restoration',
-    sub: 'PRP · GFC · Exosome',
+    sub: 'Skin diagnostics · Hair care',
   },
   {
     icon: (
@@ -53,8 +43,19 @@ const trustItems = [
         <rect x="7" y="2" width="8" height="7" rx="1"/>
       </svg>
     ),
-    label: 'Safe Clinical Procedures',
-    sub: 'Evidence-Based Medicine',
+    label: 'Evidence-Based Medicine',
+    sub: 'Safe Clinical Procedures',
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 2C6 2 2 6 2 11s4 9 9 9 9-4 9-9"/>
+        <path d="M16 2l4 4-7 7-4-2-5 5"/>
+      </svg>
+    ),
+    label: 'Hair Restoration',
+    sub: 'PRP · GFC · Exosome',
+    compact: true,
   },
 ];
 
@@ -62,7 +63,7 @@ export default function TrustBar() {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   return (
-    <section ref={ref} className="bg-[#FAF8F5] border-b border-[#E8DDD4] py-8">
+    <section ref={ref} className="bg-cream border-b border-blush py-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-0">
           {trustItems.map((item, i) => (
@@ -71,15 +72,21 @@ export default function TrustBar() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 16 }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="flex flex-col items-center text-center px-4 lg:border-r last:border-r-0 border-[#E8DDD4] group"
+              className="flex flex-col items-center text-center px-4 lg:border-r last:border-r-0 border-blush group"
             >
-              <div className="text-[#A0896E] mb-3 group-hover:text-[#2C2C2C] transition-colors duration-300">
+              <div className="text-bronze mb-3 group-hover:text-charcoal transition-colors duration-300">
                 {item.icon}
               </div>
-              <span className="font-sans text-[11px] tracking-[0.08em] text-[#2C2C2C] font-medium uppercase mb-0.5">
+              <span
+                className={`font-sans tracking-[0.08em] text-charcoal uppercase mb-0.5 ${
+                  'compact' in item && item.compact
+                    ? 'text-[10px] font-normal text-warm-gray'
+                    : 'text-[11px] font-medium'
+                }`}
+              >
                 {item.label}
               </span>
-              <span className="font-sans text-[10px] text-[#A8B5A2] tracking-wide">
+              <span className="font-sans text-[10px] text-sage tracking-wide">
                 {item.sub}
               </span>
             </motion.div>
