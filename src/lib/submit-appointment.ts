@@ -11,7 +11,7 @@ export type AppointmentFormData = {
 };
 
 export type SubmitAppointmentResult =
-  | { ok: true; appointmentId?: string; userEmailSent?: boolean }
+  | { ok: true; appointmentId?: string; userEmailSent?: boolean; emailWarning?: string }
   | { ok: false; error: string };
 
 export async function submitAppointment(
@@ -50,6 +50,7 @@ export async function submitAppointment(
     error?: string;
     appointmentId?: string;
     userEmailSent?: boolean;
+    emailWarning?: string;
   } | null;
 
   if (!payload?.ok) {
@@ -63,5 +64,6 @@ export async function submitAppointment(
     ok: true,
     appointmentId: payload.appointmentId,
     userEmailSent: payload.userEmailSent,
+    emailWarning: payload.emailWarning,
   };
 }

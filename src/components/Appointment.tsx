@@ -13,13 +13,14 @@ import { submitAppointment } from '../lib/submit-appointment';
 import { useTreatmentOptions } from '../hooks/useTreatmentOptions';
 import SectionHeader from './ui/SectionHeader';
 import Container from './ui/Container';
+import TreatmentSelect from './ui/TreatmentSelect';
 
 function FormLabel({ children }: { children: React.ReactNode }) {
   return <label className="section-label block mb-2">{children}</label>;
 }
 
 export default function Appointment() {
-  const { treatmentOptions } = useTreatmentOptions();
+  const { treatmentGroups, loading: treatmentsLoading } = useTreatmentOptions();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,6 +31,7 @@ export default function Appointment() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [userEmailSent, setUserEmailSent] = useState(false);
+  const [emailWarning, setEmailWarning] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -51,12 +53,14 @@ export default function Appointment() {
     }
 
     setUserEmailSent(Boolean(result.userEmailSent));
+    setEmailWarning(result.emailWarning ?? null);
     setSubmitted(true);
     setSubmitting(false);
     setTimeout(() => {
       setSubmitted(false);
       setUserEmailSent(false);
-    }, 6000);
+      setEmailWarning(null);
+    }, 8000);
     setFormData({ name: '', phone: '', email: '', treatment: '', date: '', message: '' });
   };
 
@@ -74,6 +78,9 @@ export default function Appointment() {
                   Thank you. We will contact you within 24 hours to confirm your appointment.
                   {userEmailSent && (
                     <span className="block mt-2">A confirmation email has been sent to your inbox.</span>
+                  )}
+                  {emailWarning && !userEmailSent && (
+                    <span className="block mt-2 text-sm">Your request is saved. We could not send a confirmation email right now, but the clinic has your details.</span>
                   )}
                 </p>
               </div>
@@ -97,12 +104,16 @@ export default function Appointment() {
                   </div>
                   <div>
                     <FormLabel>Treatment *</FormLabel>
-                    <select name="treatment" value={formData.treatment} onChange={handleChange} required className="premium-select">
-                      <option value="">Select a treatment</option>
-                      {treatmentOptions.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
-                    </select>
+                    <TreatmentSelect
+                      name="treatment"
+                      value={formData.treatment}
+                      onChange={handleChange}
+                      groups={treatmentGroups}
+                      loading={treatmentsLoading}
+                    />
+                    <p className="font-sans text-xs text-muted mt-2">
+                      Grouped by specialty — choose the closest match and we will confirm during your call.
+                    </p>
                   </div>
                 </div>
 
@@ -122,7 +133,7 @@ export default function Appointment() {
                   <button type="submit" disabled={submitting} className="btn-primary flex-1 disabled:opacity-60">
                     {submitting ? 'Submitting…' : 'Request appointment'}
                   </button>
-                  <a href={social.whatsapp.urlWithMessage} target="_blank" rel="noopener noreferrer" className="btn-secondary flex-1 justify-center">
+                  <a href={social.whatsapp.urlWithMessage} target="_blank" rel="noopener noreferrer" className="btn-whatsapp flex-1">
                     WhatsApp
                   </a>
                 </div>

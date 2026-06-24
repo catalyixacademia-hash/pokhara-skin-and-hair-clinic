@@ -115,25 +115,74 @@ export const doctor = {
   portraitAlt: 'Dr. Prakash Acharya - Board Certified Dermatologist',
 } as const;
 
-export const treatmentOptions = [
-  'Skin Consultation',
-  'Skin Analyzer / Skin Test',
-  'Acne & Pigmentation',
-  'Chemical Peel',
-  'Microneedling',
-  'Laser Treatment',
-  'HydraFacial',
-  'Nail Problems',
-  'PRP Hair Therapy',
-  'GFC Therapy',
-  'Exosome Therapy',
-  'Hair Fall Consultation',
-  'Botox',
-  'Dermal Fillers',
-  'Anti-Aging Treatment',
-  'Laser Hair Reduction',
-  'General Dermatology',
+export const treatmentOptionGroups = [
+  {
+    label: 'Skin care',
+    hint: 'Primary specialty',
+    options: [
+      'Skin Consultation',
+      'Skin Analyzer / Skin Test',
+      'Acne & Pigmentation',
+      'Chemical Peel',
+      'Microneedling',
+      'Laser Treatment',
+      'HydraFacial',
+      'Nail Problems',
+      'General Dermatology',
+    ],
+  },
+  {
+    label: 'Hair restoration',
+    hint: 'Scalp & density',
+    options: [
+      'PRP Hair Therapy',
+      'GFC Therapy',
+      'Exosome Therapy',
+      'Hair Fall Consultation',
+    ],
+  },
+  {
+    label: 'Aesthetic procedures',
+    hint: 'Cosmetic dermatology',
+    options: [
+      'Botox',
+      'Dermal Fillers',
+      'Anti-Aging Treatment',
+      'Laser Hair Reduction',
+    ],
+  },
 ] as const;
+
+export const treatmentOptions = treatmentOptionGroups.flatMap((group) => group.options);
+
+const treatmentCategoryByLabel = new Map<string, string>(
+  treatmentOptionGroups.flatMap((group) =>
+    group.options.map((option) => [option, group.label] as const),
+  ),
+);
+
+export function groupTreatmentOptions(labels: string[]): { label: string; options: string[] }[] {
+  const grouped = new Map<string, string[]>();
+
+  for (const label of labels) {
+    const category = treatmentCategoryByLabel.get(label) ?? 'Other treatments';
+    const bucket = grouped.get(category) ?? [];
+    bucket.push(label);
+    grouped.set(category, bucket);
+  }
+
+  const orderedCategories = [
+    ...treatmentOptionGroups.map((group) => group.label),
+    'Other treatments',
+  ];
+
+  return orderedCategories
+    .filter((category) => grouped.has(category))
+    .map((category) => ({
+      label: category,
+      options: grouped.get(category) ?? [],
+    }));
+}
 
 export const footerServiceLinks = [
   'Acne & Pigmentation',

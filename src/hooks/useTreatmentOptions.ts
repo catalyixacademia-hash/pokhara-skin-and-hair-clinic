@@ -1,6 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  groupTreatmentOptions,
+  treatmentOptionGroups,
+  treatmentOptions as fallbackOptions,
+} from '../data/clinic';
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase';
-import { treatmentOptions as fallbackOptions } from '../data/clinic';
+
+export type TreatmentOptionGroup = {
+  label: string;
+  options: string[];
+};
 
 export function useTreatmentOptions() {
   const [options, setOptions] = useState<string[]>([...fallbackOptions]);
@@ -26,5 +35,23 @@ export function useTreatmentOptions() {
       });
   }, []);
 
-  return { treatmentOptions: options, loading };
+  const treatmentGroups = useMemo(
+    () => groupTreatmentOptions(options),
+    [options],
+  );
+
+  const fallbackGroups = useMemo(
+    () =>
+      treatmentOptionGroups.map((group) => ({
+        label: group.label,
+        options: [...group.options],
+      })),
+    [],
+  );
+
+  return {
+    treatmentOptions: options,
+    treatmentGroups: options.length ? treatmentGroups : fallbackGroups,
+    loading,
+  };
 }

@@ -53,7 +53,7 @@ async function sendResendEmail(options: {
   html: string;
   text: string;
   replyTo?: string[];
-}): Promise<void> {
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   const payload: Record<string, unknown> = {
     from: options.from,
     to: options.to,
@@ -66,18 +66,25 @@ async function sendResendEmail(options: {
     payload.reply_to = options.replyTo;
   }
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${options.apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${options.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`Resend API error (${response.status}): ${errorBody}`);
+    if (!response.ok) {
+      const errorBody = await response.text();
+      return { ok: false, error: `Resend ${response.status}: ${errorBody}` };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown Resend error';
+    return { ok: false, error: message };
   }
 }
 
@@ -97,17 +104,9 @@ Deno.serve(async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')?.trim();
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')?.trim();
 
-  if (!resendApiKey || !fromEmail || !adminEmail || !supabaseUrl || !serviceRoleKey) {
-    return jsonResponse(
-      {
-        error:
-          'Server email configuration is incomplete. Set RESEND_API_KEY, RESEND_FROM_EMAIL, ADMIN_NOTIFICATION_EMAIL, SUPABASE_URL, and SUPABASE_SERVICE_ROLE_KEY.',
-      },
-      500,
-    );
+  if (!supabaseUrl || !serviceRoleKey) {
+    return jsonResponse({ error: 'Server database configuration is incomplete.' }, 500);
   }
-
-  const fromAddress = `Pokhara Skin & Hair Clinic <${fromEmail}>`;
 
   let payload: BookingPayload;
   try {
@@ -144,24 +143,38 @@ Deno.serve(async (req) => {
 
   const appointmentId = inserted.id as string;
   const replyTo = replyToEmail ? [replyToEmail] : undefined;
+  const emailConfigured = Boolean(resendApiKey && fromEmail && adminEmail);
+  const fromAddress = fromEmail ?? 'onboarding@resend.dev';
 
-  try {
+  let adminEmailSent = false;
+  let userEmailSent = false;
+  const emailErrors: string[] = [];
+
+  if (!emailConfigured) {
+    emailErrors.push('Email service is not fully configured on the server.');
+  } else {
     const adminEmailContent = buildAdminEmail(booking, appointmentId);
-    await sendResendEmail({
-      apiKey: resendApiKey,
+    const adminResult = await sendResendEmail({
+      apiKey: resendApiKey!,
       from: fromAddress,
-      to: [adminEmail],
+      to: [adminEmail!],
       subject: adminEmailContent.subject,
       html: adminEmailContent.html,
       text: adminEmailContent.text,
       replyTo: booking.email ? [booking.email] : replyTo,
     });
 
-    let userEmailSent = false;
+    if (adminResult.ok) {
+      adminEmailSent = true;
+    } else {
+      console.error('Admin email failed:', adminResult.error);
+      emailErrors.push('Admin notification email failed.');
+    }
+
     if (booking.email) {
       const userEmailContent = buildUserEmail(booking);
-      await sendResendEmail({
-        apiKey: resendApiKey,
+      const userResult = await sendResendEmail({
+        apiKey: resendApiKey!,
         from: fromAddress,
         to: [booking.email],
         subject: userEmailContent.subject,
@@ -169,23 +182,21 @@ Deno.serve(async (req) => {
         text: userEmailContent.text,
         replyTo,
       });
-      userEmailSent = true;
-    }
 
-    return jsonResponse({
-      ok: true,
-      appointmentId,
-      userEmailSent,
-      adminEmailSent: true,
-    });
-  } catch (error) {
-    console.error('Email send failed:', error);
-    return jsonResponse(
-      {
-        error: 'Appointment saved but confirmation emails could not be sent. Please call the clinic.',
-        appointmentId,
-      },
-      502,
-    );
+      if (userResult.ok) {
+        userEmailSent = true;
+      } else {
+        console.error('User email failed:', userResult.error);
+        emailErrors.push('Patient confirmation email could not be delivered.');
+      }
+    }
   }
+
+  return jsonResponse({
+    ok: true,
+    appointmentId,
+    adminEmailSent,
+    userEmailSent,
+    emailWarning: emailErrors.length ? emailErrors.join(' ') : undefined,
+  });
 });
