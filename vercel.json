@@ -1,4 +1,5 @@
 {
+  "installCommand": "npm install && npm install --prefix admin",
   "buildCommand": "npm run build && npm run build:admin:prod && node scripts/copy-admin-dist.mjs",
   "outputDirectory": "dist",
   "rewrites": [

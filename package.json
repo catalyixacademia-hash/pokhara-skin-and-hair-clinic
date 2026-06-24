@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "npm install --prefix admin",
     "dev": "vite",
     "dev:admin": "npm run dev --prefix admin",
     "build": "vite build",
