@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { siteUrl } from '@/lib/site-url';
 
 export default function Login() {
   const { signIn, session } = useAuth();
@@ -9,7 +10,7 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  if (session) return <Navigate to="/dashboard" replace />;
+  if (session) return <Navigate to="/bookings" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,36 +23,54 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-charcoal px-4">
-      <form onSubmit={handleSubmit} className="admin-card w-full max-w-md">
-        <h1 className="font-serif text-2xl mb-1">Clinic Admin</h1>
-        <p className="text-sm text-warm-gray mb-6">Sign in to manage content</p>
-        {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
-        <div className="space-y-4">
-          <div>
-            <label className="admin-label">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="admin-input"
-            />
+      <div className="w-full max-w-md">
+        <form onSubmit={handleSubmit} className="admin-card">
+          <p className="text-[10px] uppercase tracking-widest text-bronze mb-2">Staff only</p>
+          <h1 className="font-serif text-2xl mb-1">Admin panel</h1>
+          <p className="text-sm text-warm-gray mb-6">
+            Sign in to manage patient booking form submissions.
+          </p>
+          {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+          <div className="space-y-4">
+            <div>
+              <label className="admin-label" htmlFor="admin-email">
+                Email
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                required
+                autoComplete="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="admin-input"
+              />
+            </div>
+            <div>
+              <label className="admin-label" htmlFor="admin-password">
+                Password
+              </label>
+              <input
+                id="admin-password"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="admin-input"
+              />
+            </div>
+            <button type="submit" disabled={loading} className="admin-btn-primary w-full">
+              {loading ? 'Signing in…' : 'Sign in'}
+            </button>
           </div>
-          <div>
-            <label className="admin-label">Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="admin-input"
-            />
-          </div>
-          <button type="submit" disabled={loading} className="admin-btn-primary w-full">
-            {loading ? 'Signing in…' : 'Sign In'}
-          </button>
-        </div>
-      </form>
+        </form>
+        <p className="text-center mt-6 text-sm text-taupe">
+          <a href={siteUrl} className="text-bronze hover:underline">
+            ← Back to clinic website
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

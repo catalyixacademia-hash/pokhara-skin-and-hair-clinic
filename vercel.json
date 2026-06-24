@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run build && npm run build:admin:prod && node scripts/copy-admin-dist.mjs",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/:path*", "destination": "/admin/index.html" }
+  ]
+}

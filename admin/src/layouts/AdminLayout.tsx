@@ -1,17 +1,8 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { siteUrl } from '@/lib/site-url';
 
-const navItems = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/appointments', label: 'Appointments' },
-  { to: '/services', label: 'Services' },
-  { to: '/testimonials', label: 'Testimonials' },
-  { to: '/results', label: 'Results' },
-  { to: '/gallery', label: 'Gallery' },
-  { to: '/hero', label: 'Hero Slides' },
-  { to: '/settings', label: 'Clinic Settings' },
-  { to: '/doctor', label: 'Doctor Profile' },
-];
+const navItems = [{ to: '/bookings', label: 'Booking forms' }] as const;
 
 export default function AdminLayout() {
   const { signOut, user } = useAuth();
@@ -44,13 +35,23 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <button
-          type="button"
-          onClick={handleSignOut}
-          className="m-4 admin-btn-secondary text-xs border-white/20 text-taupe hover:text-white"
-        >
-          Sign Out
-        </button>
+        <div className="p-4 border-t border-white/10 space-y-2">
+          <a
+            href={siteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center admin-btn-secondary text-xs border-white/20 text-taupe hover:text-white"
+          >
+            View website
+          </a>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="w-full admin-btn-secondary text-xs border-white/20 text-taupe hover:text-white"
+          >
+            Sign out
+          </button>
+        </div>
       </aside>
       <main className="flex-1 p-8 overflow-auto">
         <Outlet />

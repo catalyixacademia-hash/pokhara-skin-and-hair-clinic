@@ -8,6 +8,8 @@
     "dev:admin": "npm run dev --prefix admin",
     "build": "vite build",
     "build:admin": "npm run build --prefix admin",
+    "build:admin:prod": "npm run build --prefix admin",
+    "build:all": "npm run build && npm run build:admin:prod && node scripts/copy-admin-dist.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

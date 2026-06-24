@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 
 type Appointment = {
@@ -18,8 +18,10 @@ const statuses: Appointment['status'][] = ['pending', 'confirmed', 'completed', 
 
 export default function AppointmentDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [row, setRow] = useState<Appointment | null>(null);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -28,27 +30,53 @@ export default function AppointmentDetail() {
       .select('*')
       .eq('id', id)
       .single()
-      .then(({ data }) => setRow(data));
+      .then(({ data, error: fetchError }) => {
+        if (fetchError) setError(fetchError.message);
+        else setRow(data);
+      });
   }, [id]);
 
   const updateStatus = async (status: Appointment['status']) => {
     if (!id) return;
     setSaving(true);
-    const { data } = await supabase
+    const { data, error: updateError } = await supabase
       .from('appointments')
       .update({ status, updated_at: new Date().toISOString() })
       .eq('id', id)
       .select()
       .single();
-    if (data) setRow(data);
+    if (updateError) setError(updateError.message);
+    else if (data) setRow(data);
     setSaving(false);
   };
+
+  const handleDelete = async () => {
+    if (!id || !row) return;
+    if (!confirm(`Delete booking for ${row.name}? This cannot be undone.`)) return;
+    const { error: deleteError } = await supabase.from('appointments').delete().eq('id', id);
+    if (deleteError) {
+      setError(deleteError.message);
+      return;
+    }
+    navigate('/bookings');
+  };
+
+  if (error && !row) {
+    return (
+      <div>
+        <Link to="/bookings" className="text-sm text-bronze hover:underline">
+          ← Back to bookings
+        </Link>
+        <p className="mt-4 text-red-600">{error}</p>
+      </div>
+    );
+  }
 
   if (!row) {
     return (
       <div>
-        <Link to="/appointments" className="text-sm text-bronze hover:underline">
-          ← Back
+        <Link to="/bookings" className="text-sm text-bronze hover:underline">
+          ← Back to bookings
         </Link>
         <p className="mt-4 text-warm-gray">Loading…</p>
       </div>
@@ -57,10 +85,22 @@ export default function AppointmentDetail() {
 
   return (
     <div>
-      <Link to="/appointments" className="text-sm text-bronze hover:underline">
-        ← Back to appointments
+      <Link to="/bookings" className="text-sm text-bronze hover:underline">
+        ← Back to bookings
       </Link>
-      <h1 className="font-serif text-3xl mt-4 mb-6">{row.name}</h1>
+      <div className="flex flex-wrap items-start justify-between gap-4 mt-4 mb-6">
+        <h1 className="font-serif text-3xl">{row.name}</h1>
+        <div className="flex gap-2">
+          <Link to={`/bookings/${row.id}/edit`} className="admin-btn-secondary">
+            Edit
+          </Link>
+          <button type="button" onClick={handleDelete} className="admin-btn-danger">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       <div className="admin-card max-w-xl space-y-4">
         <div>
@@ -79,7 +119,7 @@ export default function AppointmentDetail() {
         </div>
         {row.preferred_date && (
           <div>
-            <p className="admin-label">Preferred Date</p>
+            <p className="admin-label">Preferred date</p>
             <p>{row.preferred_date}</p>
           </div>
         )}
@@ -92,6 +132,7 @@ export default function AppointmentDetail() {
         <div>
           <p className="admin-label">Status</p>
           <select
+            id="status"
             value={row.status}
             disabled={saving}
             onChange={(e) => updateStatus(e.target.value as Appointment['status'])}
@@ -104,9 +145,7 @@ export default function AppointmentDetail() {
             ))}
           </select>
         </div>
-        <p className="text-xs text-warm-gray">
-          Submitted {new Date(row.created_at).toLocaleString()}
-        </p>
+        <p className="text-xs text-warm-gray">Submitted {new Date(row.created_at).toLocaleString()}</p>
       </div>
     </div>
   );

@@ -3,40 +3,30 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { ProtectedRoute, PublicOnlyRoute } from '@/components/ProtectedRoute';
 import AdminLayout from '@/layouts/AdminLayout';
 import Login from '@/pages/Login';
-import Dashboard from '@/pages/Dashboard';
 import AppointmentsList from '@/pages/AppointmentsList';
 import AppointmentDetail from '@/pages/AppointmentDetail';
-import ServicesManager from '@/pages/ServicesManager';
-import TestimonialsManager from '@/pages/TestimonialsManager';
-import ResultsManager from '@/pages/ResultsManager';
-import GalleryManager from '@/pages/GalleryManager';
-import HeroSlidesManager from '@/pages/HeroSlidesManager';
-import ClinicSettings from '@/pages/ClinicSettings';
-import DoctorProfile from '@/pages/DoctorProfile';
+import AppointmentForm from '@/pages/AppointmentForm';
+
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename || undefined}>
         <Routes>
           <Route element={<PublicOnlyRoute />}>
             <Route path="/login" element={<Login />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/appointments" element={<AppointmentsList />} />
-              <Route path="/appointments/:id" element={<AppointmentDetail />} />
-              <Route path="/services" element={<ServicesManager />} />
-              <Route path="/testimonials" element={<TestimonialsManager />} />
-              <Route path="/results" element={<ResultsManager />} />
-              <Route path="/gallery" element={<GalleryManager />} />
-              <Route path="/hero" element={<HeroSlidesManager />} />
-              <Route path="/settings" element={<ClinicSettings />} />
-              <Route path="/doctor" element={<DoctorProfile />} />
+              <Route path="/bookings" element={<AppointmentsList />} />
+              <Route path="/bookings/new" element={<AppointmentForm />} />
+              <Route path="/bookings/:id" element={<AppointmentDetail />} />
+              <Route path="/bookings/:id/edit" element={<AppointmentForm />} />
             </Route>
           </Route>
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/bookings" replace />} />
+          <Route path="*" element={<Navigate to="/bookings" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

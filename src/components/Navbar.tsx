@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { address, clinic, formatPhoneDisplay, getPhone, phoneHref } from '../data/clinic';
+import { adminLoginUrl } from '../lib/admin-url';
 import Container from './ui/Container';
+import { cn } from '../utils/cn';
 
 const navLinks = [
-  { label: 'About', href: '#about' },
   { label: 'Treatments', href: '#services' },
-  { label: 'Doctor', href: '#doctor' },
-  { label: 'Results', href: '#results' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Contact', href: '#contact' },
-];
+  { label: 'About', href: '#about' },
+] as const;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,127 +32,144 @@ export default function Navbar() {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const onHero = !scrolled && !menuOpen;
+  const linkClass = cn(
+    'nav-link font-sans text-sm bg-transparent border-none cursor-pointer touch-target py-2',
+    onHero ? 'nav-link-hero text-paper/90 hover:text-paper' : 'text-muted hover:text-ink',
+  );
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-colors duration-300 ${
+        className={cn(
+          'site-header fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-all duration-300',
           scrolled
             ? 'bg-paper/95 backdrop-blur-md border-b border-line shadow-sm'
-            : 'bg-transparent border-b border-transparent'
-        }`}
+            : 'bg-transparent border-b border-transparent',
+        )}
       >
         <Container>
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between gap-4 h-14">
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                setMenuOpen(false);
               }}
-              className="flex flex-col cursor-pointer touch-target justify-center"
+              className="shrink-0 touch-target flex items-center"
+              aria-label={`${clinic.nameShort} home`}
             >
               <span
-                className={`font-serif text-lg md:text-xl leading-tight transition-colors ${
-                  scrolled ? 'text-ink' : 'text-paper'
-                }`}
+                className={cn(
+                  'font-serif text-lg md:text-xl leading-none transition-colors',
+                  onHero ? 'text-paper' : 'text-ink',
+                )}
               >
-                {clinic.nameLine1}
-              </span>
-              <span
-                className={`font-sans text-[10px] tracking-wide uppercase transition-colors ${
-                  scrolled ? 'text-muted' : 'text-paper/80'
-                }`}
-              >
-                {clinic.nameLine2}
+                {clinic.nameShort}
               </span>
             </a>
 
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Main">
               {navLinks.map((link) => (
                 <button
                   key={link.href}
                   type="button"
                   onClick={() => handleNavClick(link.href)}
-                  className={`nav-link font-sans text-sm transition-colors bg-transparent border-none cursor-pointer touch-target ${
-                    scrolled ? 'text-muted hover:text-ink' : 'text-paper/90 hover:text-paper'
-                  }`}
+                  className={cn(linkClass, 'px-3 lg:px-4')}
                 >
                   {link.label}
                 </button>
               ))}
             </nav>
 
-            <div className="hidden lg:flex items-center gap-5">
+            <div className="flex items-center gap-2 sm:gap-3">
               <a
-                href={phoneHref(getPhone('main').number)}
-                className={`font-sans text-sm transition-colors ${
-                  scrolled ? 'text-muted hover:text-ink' : 'text-paper/90 hover:text-paper'
-                }`}
+                href={adminLoginUrl}
+                className={cn(
+                  'hidden md:inline-flex text-sm py-2 px-3 lg:px-4 border transition-colors touch-target items-center',
+                  onHero
+                    ? 'text-paper/90 border-paper/30 hover:border-paper hover:text-paper'
+                    : 'text-muted border-line hover:border-ink hover:text-ink',
+                )}
               >
-                {formatPhoneDisplay(getPhone('main').number)}
+                Staff login
               </a>
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
-                className={scrolled ? 'btn-primary text-sm py-2 px-4' : 'btn-outline text-sm py-2 px-4'}
+                className={cn(
+                  'hidden sm:inline-flex btn-primary text-sm py-2 px-4 lg:px-5',
+                  onHero && 'bg-paper text-ink border-paper hover:bg-transparent hover:text-paper',
+                )}
               >
-                Book
+                Book visit
+              </button>
+
+              <button
+                type="button"
+                className="md:hidden touch-target flex flex-col gap-1.5 items-center justify-center w-11 h-11"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+              >
+                <span
+                  className={cn(
+                    'block w-5 h-px transition-all',
+                    onHero ? 'bg-paper' : 'bg-ink',
+                    menuOpen && 'rotate-45 translate-y-[7px]',
+                  )}
+                />
+                <span
+                  className={cn(
+                    'block w-5 h-px transition-all',
+                    onHero ? 'bg-paper' : 'bg-ink',
+                    menuOpen && 'opacity-0',
+                  )}
+                />
+                <span
+                  className={cn(
+                    'block w-5 h-px transition-all',
+                    onHero ? 'bg-paper' : 'bg-ink',
+                    menuOpen && '-rotate-45 -translate-y-[7px]',
+                  )}
+                />
               </button>
             </div>
-
-            <button
-              type="button"
-              className="lg:hidden touch-target flex flex-col gap-1.5 items-center justify-center"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-              aria-expanded={menuOpen}
-            >
-              <span
-                className={`block w-5 h-px transition-all ${
-                  scrolled || menuOpen ? 'bg-ink' : 'bg-paper'
-                } ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
-              />
-              <span
-                className={`block w-5 h-px transition-all ${
-                  scrolled || menuOpen ? 'bg-ink' : 'bg-paper'
-                } ${menuOpen ? 'opacity-0' : ''}`}
-              />
-              <span
-                className={`block w-5 h-px transition-all ${
-                  scrolled || menuOpen ? 'bg-ink' : 'bg-paper'
-                } ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
-              />
-            </button>
           </div>
         </Container>
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-paper flex flex-col lg:hidden">
-          <div className="h-[var(--nav-height)] shrink-0" />
-          <nav className="flex-1 overflow-y-auto px-6 py-8 pb-safe">
+        <div className="fixed inset-0 z-40 bg-paper md:hidden">
+          <div className="h-[var(--nav-height)] shrink-0 border-b border-line" />
+          <nav className="flex flex-col px-6 py-6 pb-safe" aria-label="Mobile">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 type="button"
                 onClick={() => handleNavClick(link.href)}
-                className="block w-full text-left font-serif text-2xl text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target"
+                className="text-left font-serif text-xl text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
               >
                 {link.label}
               </button>
             ))}
-            <div className="mt-8 space-y-4">
+
+            <div className="mt-8 space-y-3">
+              <a href={adminLoginUrl} className="btn-secondary w-full text-center">
+                Staff login
+              </a>
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
                 className="btn-primary w-full"
               >
-                Book Appointment
+                Book visit
               </button>
               <a href={phoneHref(getPhone('main').number)} className="btn-secondary w-full">
-                {formatPhoneDisplay(getPhone('main').number)}
+                Call {formatPhoneDisplay(getPhone('main').number)}
               </a>
-              <p className="font-sans text-muted text-sm text-center pt-2">{address.short}</p>
+              <p className="font-sans text-muted text-xs text-center pt-3">{address.short}</p>
             </div>
           </nav>
         </div>
