@@ -22,12 +22,12 @@ Get-Content $envFile | ForEach-Object {
 $required = @(
   "RESEND_API_KEY",
   "RESEND_FROM_EMAIL",
-  "ADMIN_NOTIFICATION_EMAIL",
-  "SUPABASE_SERVICE_ROLE_KEY"
+  "ADMIN_NOTIFICATION_EMAIL"
 )
 
 foreach ($key in $required) {
-  if (-not (Get-Item "env:$key" -ErrorAction SilentlyContinue)?.Value) {
+  $value = (Get-Item "env:$key" -ErrorAction SilentlyContinue).Value
+  if (-not $value) {
     Write-Error "Missing $key in .env"
   }
 }
@@ -37,8 +37,7 @@ supabase secrets set `
   "RESEND_API_KEY=$env:RESEND_API_KEY" `
   "RESEND_FROM_EMAIL=$env:RESEND_FROM_EMAIL" `
   "ADMIN_NOTIFICATION_EMAIL=$env:ADMIN_NOTIFICATION_EMAIL" `
-  "CLINIC_REPLY_TO_EMAIL=$env:CLINIC_REPLY_TO_EMAIL" `
-  "SUPABASE_SERVICE_ROLE_KEY=$env:SUPABASE_SERVICE_ROLE_KEY"
+  "CLINIC_REPLY_TO_EMAIL=$env:CLINIC_REPLY_TO_EMAIL"
 
 Write-Host "Deploying send-appointment-emails..."
 supabase functions deploy send-appointment-emails

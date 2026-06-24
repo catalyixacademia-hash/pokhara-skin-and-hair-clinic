@@ -17,6 +17,7 @@ type BookingPayload = {
   treatment?: string;
   date?: string | null;
   message?: string | null;
+  formType?: 'booking' | 'general_query';
 };
 
 function jsonResponse(body: Record<string, unknown>, status = 200): Response {
@@ -40,6 +41,7 @@ function normalizeBooking(payload: BookingPayload): AppointmentBooking | null {
     treatment,
     date: payload.date?.trim() || null,
     message: payload.message?.trim() || null,
+    formType: payload.formType === 'general_query' ? 'general_query' : 'booking',
   };
 }
 
@@ -52,20 +54,25 @@ async function sendResendEmail(options: {
   text: string;
   replyTo?: string[];
 }): Promise<void> {
+  const payload: Record<string, unknown> = {
+    from: options.from,
+    to: options.to,
+    subject: options.subject,
+    html: options.html,
+    text: options.text,
+  };
+
+  if (options.replyTo?.length) {
+    payload.reply_to = options.replyTo;
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${options.apiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from: options.from,
-      to: options.to,
-      subject: options.subject,
-      html: options.html,
-      text: options.text,
-      reply_to: options.replyTo,
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
@@ -83,13 +90,12 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: 'Method not allowed' }, 405);
   }
 
-  const resendApiKey = Deno.env.get('RESEND_API_KEY');
-  const fromEmail = Deno.env.get('RESEND_FROM_EMAIL');
-  const fromName = Deno.env.get('RESEND_FROM_NAME') ?? 'Pokhara Skin & Hair Clinic';
-  const adminEmail = Deno.env.get('ADMIN_NOTIFICATION_EMAIL');
-  const replyToEmail = Deno.env.get('CLINIC_REPLY_TO_EMAIL');
-  const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const resendApiKey = Deno.env.get('RESEND_API_KEY')?.trim();
+  const fromEmail = Deno.env.get('RESEND_FROM_EMAIL')?.trim();
+  const adminEmail = Deno.env.get('ADMIN_NOTIFICATION_EMAIL')?.trim();
+  const replyToEmail = Deno.env.get('CLINIC_REPLY_TO_EMAIL')?.trim();
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')?.trim();
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')?.trim();
 
   if (!resendApiKey || !fromEmail || !adminEmail || !supabaseUrl || !serviceRoleKey) {
     return jsonResponse(
@@ -101,7 +107,7 @@ Deno.serve(async (req) => {
     );
   }
 
-  const fromAddress = fromEmail.includes('<') ? fromEmail : `${fromName} <${fromEmail}>`;
+  const fromAddress = `Pokhara Skin & Hair Clinic <${fromEmail}>`;
 
   let payload: BookingPayload;
   try {

@@ -42,7 +42,7 @@ export default function Appointment() {
     setSubmitting(true);
     setSubmitError(null);
 
-    const result = await submitAppointment(formData);
+    const result = await submitAppointment({ ...formData, formType: 'booking' });
 
     if (!result.ok) {
       setSubmitError(result.error);
@@ -112,8 +112,8 @@ export default function Appointment() {
                 </div>
 
                 <div>
-                  <FormLabel>Your concern (optional)</FormLabel>
-                  <textarea name="message" value={formData.message} onChange={handleChange} rows={3} className="premium-input resize-none" />
+                  <FormLabel>Your message or concern</FormLabel>
+                  <textarea name="message" value={formData.message} onChange={handleChange} rows={4} className="premium-input resize-none" placeholder="Tell us about your skin or hair concern, questions, or preferred timing…" />
                 </div>
 
                 {submitError && <p className="text-sm text-red-700">{submitError}</p>}
