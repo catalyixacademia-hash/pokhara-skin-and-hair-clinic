@@ -5,8 +5,11 @@ import Container from './ui/Container';
 import { cn } from '../utils/cn';
 
 const navLinks = [
-  { label: 'Treatments', href: '#services' },
   { label: 'About', href: '#about' },
+  { label: 'Treatments', href: '#services' },
+  { label: 'Results', href: '#results' },
+  { label: 'Doctor', href: '#doctor' },
+  { label: 'Contact', href: '#contact' },
 ] as const;
 
 export default function Navbar() {
@@ -49,7 +52,7 @@ export default function Navbar() {
         )}
       >
         <Container>
-          <div className="flex items-center justify-between gap-4 h-14">
+          <div className="flex items-center justify-between gap-3 h-14">
             <a
               href="#"
               onClick={(e) => {
@@ -70,13 +73,13 @@ export default function Navbar() {
               </span>
             </a>
 
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Main">
+            <nav className="hidden md:flex items-center justify-center flex-1 gap-0.5 lg:gap-1 min-w-0" aria-label="Main">
               {navLinks.map((link) => (
                 <button
                   key={link.href}
                   type="button"
                   onClick={() => handleNavClick(link.href)}
-                  className={cn(linkClass, 'px-3 lg:px-4')}
+                  className={cn(linkClass, 'px-2 lg:px-3 text-[13px] lg:text-sm whitespace-nowrap')}
                 >
                   {link.label}
                 </button>
@@ -154,6 +157,20 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => handleNavClick('#enquiry')}
+              className="text-left font-serif text-xl text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
+            >
+              Ask a question
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('#location')}
+              className="text-left font-serif text-xl text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
+            >
+              Location
+            </button>
 
             <div className="mt-8 space-y-3">
               <a href={adminLoginUrl} className="btn-secondary w-full text-center">

@@ -66,13 +66,15 @@ export default function About() {
           </div>
         </div>
 
-        <div className="border-t border-line pt-10 grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center lg:text-left">
-              <div className="stat-number mb-1">{stat.value}</div>
-              <p className="font-sans text-sm text-muted">{stat.label}</p>
-            </div>
-          ))}
+        <div className="border-t border-line pt-10 md:pt-12">
+          <div className="about-stats">
+            {stats.map((stat) => (
+              <div key={stat.label} className="about-stats__item">
+                <div className="stat-number mb-2">{stat.value}</div>
+                <p className="font-sans text-sm text-muted">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
