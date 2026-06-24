@@ -1,21 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import DataTable from '@/components/DataTable';
+import StatusBadge from '@/components/StatusBadge';
+import type { FormType, Submission } from '@/types/submission';
+import { listBasePath } from '@/types/submission';
 
-type Appointment = {
-  id: string;
-  name: string;
-  phone: string;
-  treatment: string;
-  status: string;
-  preferred_date: string | null;
-  created_at: string;
+type SubmissionsListProps = {
+  formType: FormType;
+  title: string;
+  description: string;
+  topicLabel: string;
 };
 
-export default function AppointmentsList() {
+export default function SubmissionsList({
+  formType,
+  title,
+  description,
+  topicLabel,
+}: SubmissionsListProps) {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<Appointment[]>([]);
+  const basePath = listBasePath(formType);
+  const [rows, setRows] = useState<Submission[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,16 +31,17 @@ export default function AppointmentsList() {
     setError(null);
     const { data, error: fetchError } = await supabase
       .from('appointments')
-      .select('id, name, phone, treatment, status, preferred_date, created_at')
+      .select('*')
+      .eq('form_type', formType)
       .order('created_at', { ascending: false });
     if (fetchError) setError(fetchError.message);
-    else setRows(data ?? []);
+    else setRows((data ?? []) as Submission[]);
     setLoading(false);
   };
 
   useEffect(() => {
     void load();
-  }, []);
+  }, [formType]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -42,37 +49,31 @@ export default function AppointmentsList() {
       (r) =>
         r.name.toLowerCase().includes(q) ||
         r.phone.includes(q) ||
-        r.treatment.toLowerCase().includes(q),
+        r.treatment.toLowerCase().includes(q) ||
+        (r.message?.toLowerCase().includes(q) ?? false),
     );
   }, [rows, search]);
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="font-serif text-3xl">Booking forms</h1>
-          <p className="text-sm text-warm-gray mt-1">
-            Patient appointment requests from the website contact form.
-          </p>
-        </div>
-        <Link to="/bookings/new" className="admin-btn-primary">
-          Add booking
-        </Link>
+      <div className="mb-6">
+        <h1 className="font-serif text-3xl text-ink">{title}</h1>
+        <p className="text-sm text-muted mt-1">{description}</p>
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       {loading ? (
-        <p className="text-warm-gray">Loading bookings…</p>
+        <p className="text-muted">Loading…</p>
       ) : (
         <DataTable
           columns={[
             { key: 'name', label: 'Name' },
             { key: 'phone', label: 'Phone' },
-            { key: 'treatment', label: 'Treatment' },
+            { key: 'treatment', label: topicLabel },
             {
               key: 'status',
               label: 'Status',
-              render: (r) => <span className="capitalize">{r.status}</span>,
+              render: (r) => <StatusBadge status={r.status} />,
             },
             {
               key: 'created_at',
@@ -83,9 +84,9 @@ export default function AppointmentsList() {
           rows={filtered}
           search={search}
           onSearchChange={setSearch}
-          onEdit={(r) => navigate(`/bookings/${r.id}/edit`)}
+          onView={(r) => navigate(`${basePath}/${r.id}`)}
           onDelete={async (r) => {
-            if (!confirm(`Delete booking for ${r.name}?`)) return;
+            if (!confirm(`Delete submission from ${r.name}?`)) return;
             const { error: deleteError } = await supabase.from('appointments').delete().eq('id', r.id);
             if (deleteError) {
               alert(deleteError.message);
@@ -93,11 +94,6 @@ export default function AppointmentsList() {
             }
             setRows((prev) => prev.filter((x) => x.id !== r.id));
           }}
-          extraActions={(r) => (
-            <Link to={`/bookings/${r.id}`} className="admin-btn-secondary text-[10px] py-3 px-2">
-              View
-            </Link>
-          )}
         />
       )}
     </div>

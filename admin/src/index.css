@@ -1,78 +1,270 @@
 @import '../../src/index.css';
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--color-ivory);
-  color: var(--color-charcoal);
+  font-family: var(--font-sans, 'DM Sans', system-ui, sans-serif);
+  background: var(--color-paper, #fbfbfa);
+  color: var(--color-ink, #1c1c1a);
   margin: 0;
 }
 
 .admin-input {
   width: 100%;
-  border: 1px solid var(--color-blush);
+  border: 1px solid var(--color-line, #e8e8e4);
   background: white;
-  padding: 0.5rem 0.75rem;
+  padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
-  color: var(--color-charcoal);
+  color: var(--color-ink);
+  border-radius: 4px;
   outline: none;
+  transition: border-color 0.2s;
 }
 
 .admin-input:focus {
-  border-color: var(--color-bronze);
+  border-color: var(--color-accent, #8b6914);
 }
 
 .admin-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-warm-gray);
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted, #5c5c57);
+  margin-bottom: 0.35rem;
+  font-weight: 500;
 }
 
-.admin-btn {
+.admin-link {
+  font-size: 0.875rem;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.admin-link:hover {
+  text-decoration: underline;
+}
+
+.admin-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.admin-btn-primary:hover {
+  background: var(--color-ink);
+}
+
+.admin-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-  cursor: pointer;
-  border: none;
-}
-
-.admin-btn-primary {
-  background: var(--color-bronze);
-  color: white;
-}
-
-.admin-btn-primary:hover {
-  background: var(--color-charcoal);
-}
-
-.admin-btn-secondary {
+  font-weight: 500;
   background: white;
-  color: var(--color-charcoal);
-  border: 1px solid var(--color-blush);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .admin-btn-secondary:hover {
-  border-color: var(--color-bronze);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .admin-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
   background: #b91c1c;
   color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .admin-btn-danger:hover {
   background: #991b1b;
 }
 
+.admin-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  background: transparent;
+  color: rgba(251, 251, 250, 0.7);
+  border: 1px solid rgba(251, 251, 250, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.admin-btn-ghost:hover {
+  color: white;
+  border-color: rgba(251, 251, 250, 0.4);
+}
+
 .admin-card {
   background: white;
-  border: 1px solid var(--color-blush);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
   padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(28, 28, 26, 0.04);
+}
+
+.admin-stat-card {
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+}
+
+.admin-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  margin-bottom: 0.5rem;
+}
+
+.admin-stat-value {
+  font-family: var(--font-serif, 'Instrument Serif', serif);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.admin-stat-hint {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 0.5rem;
+}
+
+.admin-nav-card {
+  display: block;
+  background: white;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-nav-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px rgba(28, 28, 26, 0.06);
+}
+
+.admin-table thead tr {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.admin-table th {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid var(--color-line);
+  transition: background-color 0.15s;
+}
+
+.admin-table tbody tr:nth-child(even) {
+  background: rgba(251, 251, 250, 0.6);
+}
+
+.admin-table tbody tr:hover {
+  background: var(--color-accent-soft, #f5f3ef);
+}
+
+.admin-bar-track {
+  height: 6px;
+  background: var(--color-line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.admin-bar-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 3px;
+  min-width: 2px;
+}
+
+.admin-chart-bar {
+  background: var(--color-accent);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.85;
+  min-height: 2px;
+}
+
+.admin-chart-bar:hover {
+  opacity: 1;
+}
+
+.text-muted {
+  color: var(--color-muted);
+}
+
+.text-ink {
+  color: var(--color-ink);
+}
+
+.bg-paper {
+  background: var(--color-paper);
+}
+
+.bg-ink {
+  background: var(--color-ink);
+}
+
+.text-paper {
+  color: var(--color-paper);
+}
+
+.bg-accent-soft\/20 {
+  background: color-mix(in srgb, var(--color-accent-soft, #f5f3ef) 20%, transparent);
+}
+
+.border-line {
+  border-color: var(--color-line);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-accent {
+  background: var(--color-accent);
+}
+
+.bg-accent-soft\/30 {
+  background: color-mix(in srgb, var(--color-accent-soft, #f5f3ef) 30%, transparent);
 }

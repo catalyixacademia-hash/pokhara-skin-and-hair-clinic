@@ -11,9 +11,8 @@ type DataTableProps<T extends { id: string }> = {
   rows: T[];
   search: string;
   onSearchChange: (v: string) => void;
-  onEdit: (row: T) => void;
   onDelete: (row: T) => void;
-  extraActions?: (row: T) => ReactNode;
+  onView: (row: T) => void;
 };
 
 export default function DataTable<T extends { id: string }>({
@@ -21,9 +20,8 @@ export default function DataTable<T extends { id: string }>({
   rows,
   search,
   onSearchChange,
-  onEdit,
   onDelete,
-  extraActions,
+  onView,
 }: DataTableProps<T>) {
   return (
     <div className="admin-card">
@@ -37,34 +35,41 @@ export default function DataTable<T extends { id: string }>({
         />
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="admin-table w-full text-sm">
           <thead>
-            <tr className="border-b border-blush text-left text-xs uppercase tracking-wider text-warm-gray">
+            <tr>
               {columns.map((col) => (
-                <th key={String(col.key)} className="py-2 pr-4">
+                <th key={String(col.key)} className="py-3 pr-4">
                   {col.label}
                 </th>
               ))}
-              <th className="py-2">Actions</th>
+              <th className="py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.id} className="border-b border-blush/50 hover:bg-ivory/50">
+              <tr key={row.id}>
                 {columns.map((col) => (
-                  <td key={String(col.key)} className="py-3 pr-4">
+                  <td key={String(col.key)} className="py-3.5 pr-4">
                     {col.render
                       ? col.render(row)
                       : String((row as Record<string, unknown>)[col.key as string] ?? '')}
                   </td>
                 ))}
-                <td className="py-3">
-                  <div className="flex gap-2 items-center">
-                    {extraActions?.(row)}
-                    <button type="button" className="admin-btn-secondary text-[10px] py-1 px-2" onClick={() => onEdit(row)}>
-                      Edit
+                <td className="py-3.5">
+                  <div className="flex gap-2 items-center justify-end">
+                    <button
+                      type="button"
+                      className="admin-btn-secondary text-xs py-1.5 px-3"
+                      onClick={() => onView(row)}
+                    >
+                      View
                     </button>
-                    <button type="button" className="admin-btn-danger text-[10px] py-1 px-2" onClick={() => onDelete(row)}>
+                    <button
+                      type="button"
+                      className="admin-btn-danger text-xs py-1.5 px-3"
+                      onClick={() => onDelete(row)}
+                    >
                       Delete
                     </button>
                   </div>
@@ -73,7 +78,7 @@ export default function DataTable<T extends { id: string }>({
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={columns.length + 1} className="py-8 text-center text-warm-gray">
+                <td colSpan={columns.length + 1} className="py-12 text-center text-muted">
                   No records found.
                 </td>
               </tr>

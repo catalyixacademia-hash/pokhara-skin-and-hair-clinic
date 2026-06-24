@@ -131,6 +131,7 @@ Deno.serve(async (req) => {
       treatment: booking.treatment,
       preferred_date: booking.date || null,
       message: booking.message,
+      form_type: booking.formType ?? 'booking',
       status: 'pending',
     })
     .select('id')

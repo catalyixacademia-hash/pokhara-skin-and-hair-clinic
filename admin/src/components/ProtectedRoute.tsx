@@ -27,6 +27,6 @@ export function PublicOnlyRoute() {
     );
   }
 
-  if (session) return <Navigate to="/bookings" replace />;
+  if (session) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }

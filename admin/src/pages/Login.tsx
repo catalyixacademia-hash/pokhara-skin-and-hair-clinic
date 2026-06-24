@@ -10,7 +10,7 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  if (session) return <Navigate to="/bookings" replace />;
+  if (session) return <Navigate to="/dashboard" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,13 +22,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-charcoal px-4">
+    <div className="min-h-screen flex items-center justify-center bg-ink px-4">
       <div className="w-full max-w-md">
         <form onSubmit={handleSubmit} className="admin-card">
-          <p className="text-[10px] uppercase tracking-widest text-bronze mb-2">Staff only</p>
-          <h1 className="font-serif text-2xl mb-1">Admin panel</h1>
-          <p className="text-sm text-warm-gray mb-6">
-            Sign in to manage patient booking form submissions.
+          <p className="text-[10px] uppercase tracking-widest text-accent mb-2">Staff only</p>
+          <h1 className="font-serif text-2xl text-ink mb-1">Admin panel</h1>
+          <p className="text-sm text-muted mb-6">
+            Sign in to manage bookings, enquiries, and analytics.
           </p>
           {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
           <div className="space-y-4">
@@ -65,8 +65,8 @@ export default function Login() {
             </button>
           </div>
         </form>
-        <p className="text-center mt-6 text-sm text-taupe">
-          <a href={siteUrl} className="text-bronze hover:underline">
+        <p className="text-center mt-6 text-sm text-paper/60">
+          <a href={siteUrl} className="text-accent hover:underline">
             ← Back to clinic website
           </a>
         </p>
