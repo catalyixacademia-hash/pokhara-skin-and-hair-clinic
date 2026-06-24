@@ -27,9 +27,54 @@ Copy `.env.example` to `.env` at the repo root:
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
+
+# Server-side only (Supabase Edge Functions — never prefix with VITE_)
+RESEND_API_KEY=re_xxxxxxxx
+RESEND_FROM_EMAIL=bookings@your-verified-domain.com
+ADMIN_NOTIFICATION_EMAIL=clinic@your-domain.com
+CLINIC_REPLY_TO_EMAIL=clinic@your-domain.com
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-The admin app reads the same variables. Create `admin/.env` with identical values, or symlink/copy from root.
+The admin app reads the same `VITE_*` variables. Create `admin/.env` with identical values, or symlink/copy from root.
+
+**Never commit `.env`** — it is gitignored. Do not put `RESEND_API_KEY` or `SUPABASE_SERVICE_ROLE_KEY` in any `VITE_*` variable.
+
+## Appointment emails (Resend)
+
+Booking submissions call the `send-appointment-emails` Supabase Edge Function, which:
+
+1. Saves the request to the `appointments` table
+2. Sends a **patient confirmation** email (light clinical theme) when an email address is provided
+3. Sends an **admin notification** email (dark operational theme) to `ADMIN_NOTIFICATION_EMAIL`
+
+### Deploy the edge function
+
+```bash
+supabase link --project-ref YOUR_PROJECT_REF
+supabase secrets set RESEND_API_KEY=re_xxxxxxxx
+supabase secrets set RESEND_FROM_EMAIL=bookings@your-verified-domain.com
+supabase secrets set ADMIN_NOTIFICATION_EMAIL=clinic@your-domain.com
+supabase secrets set CLINIC_REPLY_TO_EMAIL=clinic@your-domain.com
+supabase secrets set SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+supabase functions deploy send-appointment-emails
+```
+
+For local function testing:
+
+```bash
+supabase functions serve send-appointment-emails --env-file .env
+```
+
+### Resend without a custom domain
+
+Until you verify a clinic domain in [Resend](https://resend.com/domains), keep:
+
+```env
+RESEND_FROM_EMAIL=onboarding@resend.dev
+```
+
+Emails will show as **Pokhara Skin & Hair Clinic** with Resend’s test sender. Booking alerts still go to `ADMIN_NOTIFICATION_EMAIL` (your Gmail). Patient replies go to `CLINIC_REPLY_TO_EMAIL`. A Vercel URL cannot be used as a mail-from domain.
 
 ## Local development
 
@@ -47,7 +92,7 @@ npm run dev
 npm run dev:admin
 ```
 
-Without Supabase env vars, the public site runs using static data from `src/data/clinic.ts`. Appointment form shows success UI but does not persist unless Supabase is configured.
+Without Supabase env vars and a deployed `send-appointment-emails` edge function, the appointment form cannot persist bookings or send emails.
 
 ## Supabase setup
 
@@ -108,7 +153,7 @@ Hooks fetch published rows from Supabase on mount:
 
 If fetch fails or env is missing, components fall back to static arrays in hooks / `clinic.ts`.
 
-Appointment form inserts into `appointments` when Supabase is configured.
+Appointment form calls the `send-appointment-emails` edge function when Supabase is configured.
 
 ## Build & deploy
 
@@ -132,6 +177,17 @@ SINGLE_FILE=true npm run build
 ```
 
 Deploy `dist/` to Vercel, Netlify, or any static host.
+
+**Production (Vercel):** [https://pokhara-skin-and-hair-clinic.vercel.app/](https://pokhara-skin-and-hair-clinic.vercel.app/)
+
+Set these in the Vercel project → Settings → Environment Variables (Production + Preview):
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+Redeploy after adding env vars so the build picks them up. Resend and service-role keys stay on **Supabase** (edge function secrets), not Vercel.
 
 ### Admin app
 

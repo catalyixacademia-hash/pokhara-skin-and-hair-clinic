@@ -1,178 +1,106 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { doctor } from '../data/clinic';
 import { useHeroSlides } from '../hooks/useHeroSlides';
+import Container from './ui/Container';
 
 export default function Hero() {
   const { heroImages } = useHeroSlides();
   const [currentImg, setCurrentImg] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (heroImages.length === 0) return;
-    setIsLoaded(true);
     const interval = setInterval(() => {
       setCurrentImg((prev) => (prev + 1) % heroImages.length);
     }, 6000);
     return () => clearInterval(interval);
   }, [heroImages.length]);
 
-  const handleBookClick = () => {
-    const el = document.querySelector('#contact');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleExploreClick = () => {
-    const el = document.querySelector('#services');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section
-      className="hero-section"
-      aria-label="Hero"
-    >
+    <section className="hero-section" aria-label="Hero">
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
         {heroImages.map((img, idx) => (
           <div
             key={img}
-            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+            className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
             style={{ opacity: currentImg === idx ? 1 : 0 }}
           >
             <img
               src={img}
               alt=""
-              className="h-full w-full object-cover object-[center_40%] scale-105"
-              style={{
-                transform: currentImg === idx ? 'scale(1.05)' : 'scale(1)',
-                transition: 'transform 8s ease-out',
-              }}
+              className="h-full w-full object-cover object-center"
               loading={idx === 0 ? 'eager' : 'lazy'}
             />
           </div>
         ))}
         <div className="absolute inset-0 hero-overlay" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A1816]/70 via-[#1A1816]/30 to-transparent" />
       </div>
 
-      {/* Pushes copy below the header zone */}
       <div className="row-start-1 min-h-0" aria-hidden="true" />
 
-      {/* Content */}
-      <div className="row-start-2 relative z-10 w-full pb-20 lg:pb-28">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full">
+      <div className="row-start-2 relative z-10 w-full pb-10 md:pb-16 pt-4">
+        <Container>
           <div className="max-w-3xl">
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex items-center gap-3 mb-6"
-            >
-              <div className="w-8 h-px bg-[#A0896E]" />
-              <span className="font-sans text-[10px] tracking-[0.35em] uppercase text-[#C4B8A8] font-light">
-                Pokhara, Nepal · Est. Medical Excellence
+            <h1 className="font-serif text-paper mb-6 md:mb-8">
+              <span className="block text-display leading-[1.05] tracking-tight">
+                Advanced Skin Care
               </span>
-            </motion.div>
-
-            {/* Main headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 30 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="font-serif text-[clamp(2.6rem,7vw,5rem)] font-light text-ivory leading-[1.08] tracking-[-0.01em] mb-6"
-            >
-              Advanced Skin Care
-              <br />
-              <span className="text-[clamp(1.4rem,3.5vw,2.4rem)] text-taupe font-light">
-                & Hair Restoration
+              <span className="block font-serif text-[clamp(1.375rem,3.25vw,2rem)] text-paper/80 mt-4 md:mt-5 font-normal leading-snug">
+                &amp; Hair Restoration
               </span>
-            </motion.h1>
+            </h1>
 
-            {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="font-sans text-taupe text-base font-light leading-relaxed mb-10 max-w-xl"
-            >
+            <p className="font-sans text-paper/90 text-lg md:text-xl leading-relaxed md:leading-[1.75] mb-10 md:mb-12 max-w-xl">
               Expert dermatology and advanced skin treatments in Pokhara — with specialized
               hair restoration when you need it.
-            </motion.p>
+            </p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="flex flex-wrap items-center gap-4"
-            >
-              <button onClick={handleBookClick} className="btn-primary">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => scrollTo('#contact')}
+                className="btn-primary w-full sm:w-auto bg-paper text-ink border-paper hover:bg-transparent hover:text-paper"
+              >
                 Book Appointment
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
               </button>
-              <button onClick={handleExploreClick} className="btn-outline">
+              <button
+                type="button"
+                onClick={() => scrollTo('#services')}
+                className="btn-outline w-full sm:w-auto"
+              >
                 Explore Treatments
               </button>
-            </motion.div>
+            </div>
 
-            {/* Doctor credential */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isLoaded ? 1 : 0 }}
-              transition={{ duration: 0.8, delay: 1.3 }}
-              className="mt-12 flex items-center gap-3"
-            >
-              <div className="w-8 h-8 rounded-full bg-[#A0896E]/30 border border-[#A0896E]/40 flex items-center justify-center">
-                <span className="text-[#C4B8A8] text-xs">MD</span>
+            <div className="mt-10 md:mt-12 flex items-center gap-4 pt-8 md:pt-10 border-t border-paper/20">
+              <div className="w-10 h-10 rounded-full border border-paper/30 flex items-center justify-center shrink-0">
+                <span className="text-paper/90 text-[10px] font-medium">MD</span>
               </div>
-              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span className="font-sans text-xs tracking-wide text-[#FAF8F5]">
-                  {doctor.name}
-                </span>
-                <span className="font-sans text-xs text-[#C4B8A8]">
-                  {doctor.title}
-                </span>
+              <div>
+                <p className="font-sans text-sm md:text-base text-paper">{doctor.name}</p>
+                <p className="font-sans text-xs md:text-sm text-paper/70 mt-0.5">{doctor.title}</p>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </div>
+        </Container>
       </div>
 
-      {/* Slide indicators */}
-      <div className="absolute bottom-8 right-12 flex gap-2 z-10">
+      <div className="absolute bottom-6 right-4 md:right-8 flex gap-2 z-10">
         {heroImages.map((_, idx) => (
           <button
             key={idx}
+            type="button"
             onClick={() => setCurrentImg(idx)}
-            className={`transition-all duration-300 rounded-full ${
-              currentImg === idx
-                ? 'w-6 h-1 bg-[#A0896E]'
-                : 'w-1 h-1 bg-[#6B6560]'
+            className={`touch-target rounded-full transition-all duration-300 ${
+              currentImg === idx ? 'w-8 h-1.5 bg-paper' : 'w-1.5 h-1.5 bg-paper/40'
             }`}
             aria-label={`Slide ${idx + 1}`}
           />
         ))}
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-      >
-        <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-[#6B6560]">
-          Scroll
-        </span>
-        <motion.div
-          className="w-px h-8 bg-gradient-to-b from-[#6B6560] to-transparent"
-          animate={{ scaleY: [1, 0.3, 1], originY: 0 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
     </section>
   );
 }

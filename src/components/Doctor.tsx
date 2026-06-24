@@ -1,140 +1,84 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import { doctor } from '../data/clinic';
+import SectionHeader from './ui/SectionHeader';
+import Container from './ui/Container';
 
 const philosophy = [
   {
-    title: 'Patient-First Approach',
-    body: 'Every treatment decision begins with a thorough understanding of the individual. I believe accurate diagnosis is the foundation of any effective treatment plan.',
+    title: 'Patient-first approach',
+    body: 'Every treatment begins with a thorough understanding of the individual. Accurate diagnosis is the foundation of effective care.',
   },
   {
-    title: 'Evidence-Based Medicine',
-    body: 'All procedures and protocols at the clinic are grounded in peer-reviewed medical science, not trends. Your safety and results are non-negotiable.',
+    title: 'Evidence-based medicine',
+    body: 'All protocols are grounded in peer-reviewed science, not trends. Your safety and results are non-negotiable.',
   },
   {
-    title: 'Natural Aesthetic Results',
-    body: 'The goal is always to restore and enhance, never to alter. I aim for results that feel authentic to who you are, enhancing your confidence naturally.',
+    title: 'Natural aesthetic results',
+    body: 'The goal is to restore and enhance authentically — results that feel true to who you are.',
   },
 ];
 
 export default function Doctor() {
-  const { ref: leftRef, inView: leftInView } = useInView({ threshold: 0.15, triggerOnce: true });
-  const { ref: rightRef, inView: rightInView } = useInView({ threshold: 0.15, triggerOnce: true });
-
   return (
-    <section id="doctor" className="bg-[#EDE8DF] section-padding overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="doctor" className="bg-paper section-padding border-t border-line">
+      <Container>
+        <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+          <div className="lg:col-span-2">
+            <div className="img-zoom aspect-[3/4] overflow-hidden bg-line mb-6">
+              <img
+                src="https://images.pexels.com/photos/7659876/pexels-photo-7659876.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600"
+                alt={doctor.portraitAlt}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
 
-        <div className="grid lg:grid-cols-5 gap-14 lg:gap-20 items-start">
+            <div className="border-l-2 border-accent pl-4 mb-6">
+              <h3 className="font-serif text-2xl text-ink mb-1">{doctor.name}</h3>
+              <p className="font-sans text-sm text-muted">{doctor.titleShort}</p>
+            </div>
 
-          {/* Left: Image + credentials */}
-          <div ref={leftRef} className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: leftInView ? 1 : 0, x: leftInView ? 0 : -30 }}
-              transition={{ duration: 1 }}
-            >
-              {/* Portrait */}
-              <div className="img-zoom aspect-[3/4] overflow-hidden bg-[#C4B8A8] mb-8">
-                <img
-                  src="https://images.pexels.com/photos/7659876/pexels-photo-7659876.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600"
-                  alt={doctor.portraitAlt}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Name card */}
-              <div className="border-l-2 border-[#A0896E] pl-5 mb-8">
-                <h3 className="font-serif text-2xl font-light text-[#2C2C2C] mb-1">
-                  {doctor.name}
-                </h3>
-                <p className="font-sans text-[11px] tracking-[0.18em] uppercase text-[#A0896E]">
-                  {doctor.titleShort}
-                </p>
-              </div>
-
-              {/* Credentials */}
-              <div className="space-y-3">
-                {doctor.credentials.map((c) => (
-                  <div key={c.label} className="flex gap-3">
-                    <span className="font-sans text-[10px] tracking-[0.12em] uppercase text-[#C4B8A8] w-24 shrink-0 pt-0.5">
-                      {c.label}
-                    </span>
-                    <span className="font-sans text-xs text-[#2C2C2C] font-light leading-relaxed">
-                      {c.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right: Content */}
-          <div ref={rightRef} className="lg:col-span-3">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: rightInView ? 1 : 0, y: rightInView ? 0 : 30 }}
-              transition={{ duration: 0.9, delay: 0.2 }}
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="divider-thin" />
-                <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#A0896E]">
-                  Meet the Doctor
-                </span>
-              </div>
-
-              <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-light text-[#2C2C2C] leading-[1.1] mb-8">
-                A Commitment to{' '}
-                <em className="italic text-[#A0896E]">Medically</em>
-                <br />
-                Guided Aesthetic Care
-              </h2>
-
-              {doctor.bio.map((paragraph) => (
-                <p
-                  key={paragraph.slice(0, 40)}
-                  className="font-sans text-[#6B6560] text-sm leading-[1.9] mb-5 last:mb-10 font-light"
-                >
-                  {paragraph}
-                </p>
+            <dl className="space-y-3">
+              {doctor.credentials.map((c) => (
+                <div key={c.label} className="grid grid-cols-[6rem_1fr] gap-2 text-sm">
+                  <dt className="font-sans text-muted">{c.label}</dt>
+                  <dd className="font-sans text-ink">{c.value}</dd>
+                </div>
               ))}
-
-              {/* Philosophy cards */}
-              <div className="space-y-5 mb-10">
-                {philosophy.map((p, i) => (
-                  <motion.div
-                    key={p.title}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: rightInView ? 1 : 0, x: rightInView ? 0 : 20 }}
-                    transition={{ duration: 0.7, delay: 0.4 + i * 0.15 }}
-                    className="bg-[#FAF8F5] border border-[#E8DDD4] p-5"
-                  >
-                    <h4 className="font-serif text-base font-light text-[#2C2C2C] mb-2">
-                      {p.title}
-                    </h4>
-                    <p className="font-sans text-[#6B6560] text-xs leading-relaxed font-light">
-                      {p.body}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-primary"
-              >
-                Schedule a Consultation
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </motion.div>
+            </dl>
           </div>
 
-        </div>
+          <div className="lg:col-span-3">
+            <SectionHeader
+              label="Meet the doctor"
+              title="Medically guided aesthetic care"
+              className="mb-6"
+            />
 
-      </div>
+            {doctor.bio.map((paragraph) => (
+              <p key={paragraph.slice(0, 40)} className="font-sans text-muted text-base leading-relaxed mb-4">
+                {paragraph}
+              </p>
+            ))}
+
+            <div className="space-y-4 my-8">
+              {philosophy.map((p) => (
+                <div key={p.title} className="border border-line p-5 bg-paper">
+                  <h4 className="font-serif text-lg text-ink mb-2">{p.title}</h4>
+                  <p className="font-sans text-sm text-muted leading-relaxed">{p.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn-primary"
+            >
+              Schedule a consultation
+            </button>
+          </div>
+        </div>
+      </Container>
     </section>
   );
 }

@@ -1,0 +1,2 @@
+[functions.send-appointment-emails]
+verify_jwt = false

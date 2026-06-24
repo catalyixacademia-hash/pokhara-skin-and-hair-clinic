@@ -3,6 +3,7 @@ export const clinic = {
   nameShort: 'Pokhara Skin & Hair Clinic',
   nameLine1: 'Pokhara Skin',
   nameLine2: '& Hair Clinic',
+  siteUrl: 'https://pokhara-skin-and-hair-clinic.vercel.app',
   tagline:
     'Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology.',
 } as const;
@@ -79,6 +80,12 @@ export const social = {
     url: 'https://wa.me/9779706929329',
     urlWithMessage:
       'https://wa.me/9779706929329?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20Pokhara%20Skin%20and%20Hair%20Clinic.',
+  },
+  whatsappFloat: {
+    number: '984515246',
+    url: 'https://wa.me/977984515246',
+    urlWithMessage:
+      'https://wa.me/977984515246?text=Hello%2C%20I%20would%20like%20to%20contact%20Pokhara%20Skin%20and%20Hair%20Clinic.',
   },
 } as const;
 

@@ -1,14 +1,31 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { useEffect, useState } from 'react';
 import { useTestimonials } from '../hooks/useTestimonials';
+import SectionHeader from './ui/SectionHeader';
+import Container from './ui/Container';
+
+function useVisibleCount() {
+  const [count, setCount] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      if (window.matchMedia('(min-width: 1024px)').matches) setCount(3);
+      else if (window.matchMedia('(min-width: 768px)').matches) setCount(2);
+      else setCount(1);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  return count;
+}
 
 function StarRating({ count }: { count: number }) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-0.5" aria-label={`${count} stars`}>
       {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} width="10" height="10" viewBox="0 0 10 10" fill="#A0896E">
-          <path d="M5 1l1.2 2.5L9 3.9 7 5.8l.5 2.7L5 7.1 2.5 8.5 3 5.8 1 3.9l2.8-.4z"/>
+        <svg key={i} width="10" height="10" viewBox="0 0 10 10" fill="currentColor" className="text-accent">
+          <path d="M5 1l1.2 2.5L9 3.9 7 5.8l.5 2.7L5 7.1 2.5 8.5 3 5.8 1 3.9l2.8-.4z" />
         </svg>
       ))}
     </div>
@@ -16,128 +33,90 @@ function StarRating({ count }: { count: number }) {
 }
 
 export default function Testimonials() {
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { testimonials } = useTestimonials();
+  const visibleCount = useVisibleCount();
   const [activeIndex, setActiveIndex] = useState(0);
-  const visibleCount = 3;
 
-  const visibleTestimonials = testimonials.slice(activeIndex, activeIndex + visibleCount);
+  const maxIndex = Math.max(0, testimonials.length - visibleCount);
+  const visible = testimonials.slice(activeIndex, activeIndex + visibleCount);
+
+  useEffect(() => {
+    setActiveIndex((i) => Math.min(i, maxIndex));
+  }, [maxIndex]);
 
   return (
-    <section className="bg-[#F2EDE6] section-padding">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-
-        <div ref={ref} className="mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
-            transition={{ duration: 0.7 }}
-            className="flex items-center gap-3 mb-4"
-          >
-            <div className="divider-thin" />
-            <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#A0896E]">
-              Patient Stories
-            </span>
-          </motion.div>
-
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-              transition={{ duration: 0.9, delay: 0.1 }}
-              className="font-serif text-[clamp(2rem,4.5vw,3.2rem)] font-light text-[#2C2C2C] leading-[1.1]"
+    <section className="bg-accent-soft section-padding">
+      <Container>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <SectionHeader
+            label="Patient stories"
+            title="Trusted by patients across Gandaki"
+            className="mb-0"
+          />
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setActiveIndex(Math.max(0, activeIndex - 1))}
+              disabled={activeIndex === 0}
+              className="touch-target border border-line flex items-center justify-center text-muted hover:text-ink hover:border-ink disabled:opacity-30"
+              aria-label="Previous testimonials"
             >
-              Voices of{' '}
-              <em className="italic text-[#A0896E]">Trust</em>
-            </motion.h2>
-
-            {/* Navigation */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: inView ? 1 : 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex gap-2"
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M9 1L3 7l6 6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveIndex(Math.min(maxIndex, activeIndex + 1))}
+              disabled={activeIndex >= maxIndex}
+              className="touch-target border border-line flex items-center justify-center text-muted hover:text-ink hover:border-ink disabled:opacity-30"
+              aria-label="Next testimonials"
             >
-              <button
-                onClick={() => setActiveIndex(Math.max(0, activeIndex - 1))}
-                disabled={activeIndex === 0}
-                className="w-10 h-10 border border-[#C4B8A8] flex items-center justify-center text-[#6B6560] hover:border-[#2C2C2C] hover:text-[#2C2C2C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M9 1L3 7l6 6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-              <button
-                onClick={() => setActiveIndex(Math.min(testimonials.length - visibleCount, activeIndex + 1))}
-                disabled={activeIndex >= testimonials.length - visibleCount}
-                className="w-10 h-10 border border-[#C4B8A8] flex items-center justify-center text-[#6B6560] hover:border-[#2C2C2C] hover:text-[#2C2C2C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M5 1l6 6-6 6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </motion.div>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M5 1l6 6-6 6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
-            {visibleTestimonials.map((t, i) => {
-              return (
-                <motion.div
-                  key={t.name + activeIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="testimonial-card bg-[#FAF8F5] p-8 flex flex-col"
-                >
-                  {/* Quote mark */}
-                  <div className="font-serif text-5xl text-[#E8DDD4] leading-none mb-4 font-light">"</div>
-
-                  <p className="font-sans text-[#6B6560] text-sm leading-[1.9] font-light flex-1 mb-6">
-                    {t.quote}
-                  </p>
-
-                  <div className="border-t border-[#E8DDD4] pt-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[#EDE8DF] border border-[#E8DDD4] flex items-center justify-center shrink-0">
-                        <span className="font-serif text-sm text-[#A0896E]">{t.initial}</span>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="font-sans text-xs font-medium text-[#2C2C2C]">{t.name}</span>
-                          <StarRating count={t.rating} />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-sans text-[9px] tracking-wide text-[#A0896E] uppercase">{t.location}</span>
-                          <span className="text-[#C4B8A8]">·</span>
-                          <span className="font-sans text-[9px] text-[#6B6560] italic">{t.treatment}</span>
-                        </div>
-                      </div>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {visible.map((t) => (
+            <article key={`${t.name}-${activeIndex}`} className="testimonial-card p-6 flex flex-col">
+              <p className="font-sans text-muted text-base leading-relaxed flex-1 mb-6">&ldquo;{t.quote}&rdquo;</p>
+              <div className="border-t border-line pt-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent-soft border border-line flex items-center justify-center shrink-0">
+                  <span className="font-serif text-sm text-accent">{t.initial}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="font-sans text-sm font-medium text-ink truncate">{t.name}</span>
+                    <StarRating count={t.rating} />
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-
-        {/* Pagination dots */}
-        <div className="flex justify-center gap-1.5 mt-10">
-          {Array.from({ length: testimonials.length - visibleCount + 1 }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveIndex(i)}
-              className={`rounded-full transition-all duration-300 ${
-                i === activeIndex ? 'w-5 h-1.5 bg-[#A0896E]' : 'w-1.5 h-1.5 bg-[#C4B8A8]'
-              }`}
-            />
+                  <p className="font-sans text-xs text-muted truncate">
+                    {t.location} · {t.treatment}
+                  </p>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
 
-      </div>
+        {maxIndex > 0 && (
+          <div className="flex justify-center gap-2 mt-8">
+            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveIndex(i)}
+                className={`touch-target rounded-full transition-all ${
+                  i === activeIndex ? 'w-6 h-1.5 bg-accent' : 'w-1.5 h-1.5 bg-line'
+                }`}
+                aria-label={`Go to testimonial set ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </Container>
     </section>
   );
 }

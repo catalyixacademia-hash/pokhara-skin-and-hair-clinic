@@ -11,13 +11,12 @@ import SocialGallery from './components/SocialGallery';
 import Appointment from './components/Appointment';
 import Location from './components/Location';
 import Footer from './components/Footer';
+import WhatsAppFloat from './components/WhatsAppFloat';
 
 export default function App() {
   return (
-    <div className="bg-ivory">
+    <div className="bg-paper min-h-screen">
       <Navbar />
-      {/* Reserves space so hero starts below the fixed header (all browsers) */}
-      <div className="h-[var(--nav-height)] shrink-0" aria-hidden="true" />
       <div className="hero-viewport">
         <Hero />
       </div>
@@ -34,6 +33,7 @@ export default function App() {
         <Location />
       </main>
       <Footer />
+      <WhatsAppFloat />
     </div>
   );
 }

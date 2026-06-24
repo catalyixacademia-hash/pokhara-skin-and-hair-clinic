@@ -1,51 +1,38 @@
-import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 type SectionHeaderProps = {
-  eyebrow: string;
+  label: string;
   title: React.ReactNode;
-  subtitle?: string;
-  inView?: boolean;
+  lede?: string;
   className?: string;
+  align?: 'left' | 'center';
+  inverted?: boolean;
 };
 
 export default function SectionHeader({
-  eyebrow,
+  label,
   title,
-  subtitle,
-  inView = true,
+  lede,
   className,
+  align = 'left',
+  inverted = false,
 }: SectionHeaderProps) {
   return (
-    <div className={cn('mb-14', className)}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
-        transition={{ duration: 0.7 }}
-        className="flex items-center gap-3 mb-4"
-      >
-        <div className="divider-thin" />
-        <span className="section-eyebrow">{eyebrow}</span>
-      </motion.div>
-
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-        transition={{ duration: 0.9, delay: 0.1 }}
-        className="font-serif text-[clamp(2rem,4.5vw,3.2rem)] font-light text-charcoal leading-tight-editorial max-w-2xl"
-      >
+    <div
+      className={cn(
+        'mb-10 md:mb-14',
+        align === 'center' && 'text-center mx-auto max-w-2xl',
+        className,
+      )}
+    >
+      <p className={cn('section-label mb-3', inverted && 'text-paper/60')}>{label}</p>
+      <h2 className={cn('font-serif text-h2 leading-tight-editorial max-w-2xl', inverted ? 'text-paper' : 'text-ink')}>
         {title}
-      </motion.h2>
-
-      {subtitle && (
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 16 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="font-sans text-warm-gray text-sm font-light mt-4 max-w-xl leading-relaxed"
-        >
-          {subtitle}
-        </motion.p>
+      </h2>
+      {lede && (
+        <p className={cn('font-sans text-base mt-4 max-w-xl leading-relaxed', inverted ? 'text-paper/70' : 'text-muted')}>
+          {lede}
+        </p>
       )}
     </div>
   );
