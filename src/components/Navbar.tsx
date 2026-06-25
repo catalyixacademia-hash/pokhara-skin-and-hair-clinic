@@ -63,14 +63,14 @@ export default function Navbar() {
               className="shrink-0 touch-target flex items-center"
               aria-label={`${clinic.nameShort} home`}
             >
-              <span
-                className={cn(
-                  'font-serif text-lg md:text-xl leading-none transition-colors',
-                  onHero ? 'text-paper' : 'text-ink',
-                )}
-              >
-                {clinic.nameShort}
-              </span>
+              <img
+                src="/clinic-logo-nav.png"
+                alt={clinic.nameShort}
+                width={248}
+                height={96}
+                className="h-9 md:h-10 w-auto object-contain object-left"
+                decoding="async"
+              />
             </a>
 
             <nav className="hidden md:flex items-center justify-center flex-1 gap-0.5 lg:gap-1 min-w-0" aria-label="Main">
