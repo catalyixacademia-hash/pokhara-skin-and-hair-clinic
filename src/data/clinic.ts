@@ -198,8 +198,8 @@ export const footerServiceLinks = [
 
 /** Google Maps pin — Pokhara Skin and Hair Clinic, Nayabazar Rd (plus code 6X6P+MP5). */
 const mapLocation = {
-  lat: 28.218896,
-  lng: 83.990982,
+  lat: 28.211638,
+  lng: 83.986859,
   zoom: 17,
   placeName: 'Pokhara Skin and Hair Clinic',
   address: 'Nayabazar Rd, Pokhara 33700, Nepal',
