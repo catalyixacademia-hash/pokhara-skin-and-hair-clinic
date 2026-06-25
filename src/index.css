@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #FBFBFA;
+  --color-paper: #F0EBE3;
+  --color-surface: #F8F4EE;
   --color-ink: #1C1C1A;
-  --color-muted: #5C5C57;
-  --color-line: #E8E8E4;
+  --color-muted: #5A564F;
+  --color-line: #D6CEC3;
   --color-accent: #7A4E3B;
-  --color-accent-soft: #F4EFEB;
+  --color-accent-soft: #E4DBD0;
   --color-hair-accent: #5F6F5F;
   --color-skin-accent: #7A4E3B;
   /* legacy aliases */
-  --color-ivory: #FBFBFA;
+  --color-ivory: #F0EBE3;
   --color-charcoal: #1C1C1A;
-  --color-warm-gray: #5C5C57;
-  --color-blush: #E8E8E4;
+  --color-warm-gray: #5A564F;
+  --color-blush: #D6CEC3;
   --color-bronze: #7A4E3B;
-  --color-bone: #F4EFEB;
-  --color-cream: #F4EFEB;
-  --color-taupe: #8A8A84;
+  --color-bone: #E4DBD0;
+  --color-cream: #E4DBD0;
+  --color-taupe: #8A847A;
   --color-sage: #5F6F5F;
   --color-dark-warm: #1C1C1A;
 }
@@ -25,12 +26,13 @@
 @layer base {
   :root {
     --nav-height: 3.5rem;
-    --color-paper: #FBFBFA;
+    --color-paper: #F0EBE3;
+    --color-surface: #F8F4EE;
     --color-ink: #1C1C1A;
-    --color-muted: #5C5C57;
-    --color-line: #E8E8E4;
+    --color-muted: #5A564F;
+    --color-line: #D6CEC3;
     --color-accent: #7A4E3B;
-    --color-accent-soft: #F4EFEB;
+    --color-accent-soft: #E4DBD0;
     --color-hair-accent: #5F6F5F;
     --color-skin-accent: #7A4E3B;
     --text-display: clamp(2.5rem, 6.5vw, 4.5rem);
@@ -122,6 +124,7 @@
   .text-warm-gray { color: var(--color-muted); }
 
   .bg-paper { background-color: var(--color-paper); }
+  .bg-surface { background-color: var(--color-surface); }
   .bg-ink { background-color: var(--color-ink); }
   .bg-accent-soft { background-color: var(--color-accent-soft); }
   .bg-ivory { background-color: var(--color-paper); }
@@ -315,7 +318,7 @@
 
 .treatment-card {
   border: 1px solid var(--color-line);
-  background: var(--color-paper);
+  background: var(--color-surface);
   transition: border-color 0.25s ease;
 }
 
@@ -414,7 +417,7 @@
 
 .btn-secondary:hover {
   border-color: var(--color-ink);
-  background-color: var(--color-paper);
+  background-color: var(--color-surface);
 }
 
 .btn-whatsapp {
@@ -453,14 +456,14 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid rgba(251, 251, 250, 0.6);
+  border: 1px solid color-mix(in srgb, var(--color-surface) 60%, transparent);
   transition: background-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
   text-decoration: none;
 }
 
 .btn-outline:hover {
-  background-color: var(--color-paper);
+  background-color: var(--color-surface);
   color: var(--color-ink);
 }
 
@@ -636,7 +639,7 @@ textarea.premium-input--compact {
 }
 
 .about-location-card {
-  background: var(--color-paper);
+  background: var(--color-surface);
   border: 1px solid var(--color-line);
   box-shadow: 0 2px 12px rgba(28, 28, 26, 0.06);
 }
@@ -657,7 +660,7 @@ textarea.premium-input--compact {
 }
 
 .booking-form-panel {
-  background: var(--color-paper);
+  background: var(--color-surface);
   border: 1px solid var(--color-line);
   padding: clamp(1.5rem, 4vw, 2.5rem);
   box-shadow: 0 2px 12px rgba(28, 28, 26, 0.04);

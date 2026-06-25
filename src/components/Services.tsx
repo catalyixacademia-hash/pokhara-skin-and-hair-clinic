@@ -108,7 +108,7 @@ export default function Services() {
   const standardSkin = skinServices.filter((s) => !s.featured);
 
   return (
-    <section id="services" className="bg-paper section-padding border-t border-line">
+    <section id="services" className="bg-accent-soft section-padding border-t border-line">
       <Container>
         <SectionHeader
           label="Treatments"
@@ -135,7 +135,7 @@ export default function Services() {
           </div>
         </div>
 
-        <div className="bg-accent-soft border border-line rounded-sm p-5 md:p-6 mb-10">
+        <div className="bg-surface border border-line rounded-sm p-5 md:p-6 mb-10">
           <CategoryBadge variant="hair" className="mb-2 block" />
           <h3 className="font-serif text-xl text-ink mb-2">Hair restoration</h3>
           <p className="font-sans text-muted text-sm max-w-lg mb-5">
@@ -149,7 +149,7 @@ export default function Services() {
           </div>
         </div>
 
-        <div className="border border-line bg-paper">
+        <div className="border border-line bg-surface">
           <button
             type="button"
             onClick={() => setAestheticOpen(!aestheticOpen)}

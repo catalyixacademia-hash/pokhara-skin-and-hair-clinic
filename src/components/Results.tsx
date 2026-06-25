@@ -37,10 +37,10 @@ function CompareSlider({ before, after }: { before: string; after: string }) {
         <span className="absolute top-3 right-3 bg-accent text-paper text-xs px-2 py-1">After</span>
       </div>
       <div
-        className="absolute top-0 bottom-0 w-0.5 bg-paper"
+        className="absolute top-0 bottom-0 w-0.5 bg-surface"
         style={{ left: `${position}%` }}
       >
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-paper border border-line shadow flex items-center justify-center touch-target">
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-surface border border-line shadow flex items-center justify-center touch-target">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 7h-2M13 7h-2M5 4l-2 3 2 3M9 4l2 3-2 3" stroke="currentColor" strokeWidth="1.2" />
           </svg>

@@ -62,7 +62,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => scrollTo('#contact')}
-                className="btn-primary w-full sm:w-auto bg-paper text-ink border-paper hover:bg-transparent hover:text-paper"
+                className="btn-primary w-full sm:w-auto bg-surface text-ink border-surface hover:bg-transparent hover:text-paper"
               >
                 Book Appointment
               </button>
@@ -95,7 +95,7 @@ export default function Hero() {
             type="button"
             onClick={() => setCurrentImg(idx)}
             className={`touch-target rounded-full transition-all duration-300 ${
-              currentImg === idx ? 'w-8 h-1.5 bg-paper' : 'w-1.5 h-1.5 bg-paper/40'
+              currentImg === idx ? 'w-8 h-1.5 bg-surface' : 'w-1.5 h-1.5 bg-surface/40'
             }`}
             aria-label={`Slide ${idx + 1}`}
           />

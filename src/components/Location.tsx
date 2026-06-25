@@ -4,7 +4,7 @@ import Container from './ui/Container';
 
 export default function Location() {
   return (
-    <section id="location" className="bg-paper section-padding border-t border-line">
+    <section id="location" className="bg-accent-soft section-padding border-t border-line">
       <Container>
         <SectionHeader label="Find us" title="Located in the heart of Pokhara" className="mb-10" />
 

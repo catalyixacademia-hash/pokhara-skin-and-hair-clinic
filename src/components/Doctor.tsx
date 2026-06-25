@@ -19,7 +19,7 @@ const philosophy = [
 
 export default function Doctor() {
   return (
-    <section id="doctor" className="bg-paper section-padding border-t border-line">
+    <section id="doctor" className="bg-accent-soft section-padding border-t border-line">
       <Container>
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-2">
@@ -62,7 +62,7 @@ export default function Doctor() {
 
             <div className="space-y-4 my-8">
               {philosophy.map((p) => (
-                <div key={p.title} className="border border-line p-5 bg-paper">
+                <div key={p.title} className="border border-line p-5 bg-surface">
                   <h4 className="font-serif text-lg text-ink mb-2">{p.title}</h4>
                   <p className="font-sans text-sm text-muted leading-relaxed">{p.body}</p>
                 </div>

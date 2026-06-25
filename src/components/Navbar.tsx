@@ -47,7 +47,7 @@ export default function Navbar() {
         className={cn(
           'site-header fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-all duration-300',
           scrolled
-            ? 'bg-paper/95 backdrop-blur-md border-b border-line shadow-sm'
+            ? 'bg-surface/95 backdrop-blur-md border-b border-line shadow-sm'
             : 'bg-transparent border-b border-transparent',
         )}
       >
@@ -103,7 +103,7 @@ export default function Navbar() {
                 onClick={() => handleNavClick('#contact')}
                 className={cn(
                   'hidden sm:inline-flex btn-primary text-sm py-2 px-4 lg:px-5',
-                  onHero && 'bg-paper text-ink border-paper hover:bg-transparent hover:text-paper',
+                  onHero && 'bg-surface text-ink border-surface hover:bg-transparent hover:text-paper',
                 )}
               >
                 Book visit
@@ -119,21 +119,21 @@ export default function Navbar() {
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-paper' : 'bg-ink',
+                    onHero ? 'bg-surface' : 'bg-ink',
                     menuOpen && 'rotate-45 translate-y-[7px]',
                   )}
                 />
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-paper' : 'bg-ink',
+                    onHero ? 'bg-surface' : 'bg-ink',
                     menuOpen && 'opacity-0',
                   )}
                 />
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-paper' : 'bg-ink',
+                    onHero ? 'bg-surface' : 'bg-ink',
                     menuOpen && '-rotate-45 -translate-y-[7px]',
                   )}
                 />
@@ -144,7 +144,7 @@ export default function Navbar() {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-paper md:hidden">
+        <div className="fixed inset-0 z-40 bg-surface md:hidden">
           <div className="h-[var(--nav-height)] shrink-0 border-b border-line" />
           <nav className="flex flex-col px-6 py-6 pb-safe" aria-label="Mobile">
             {navLinks.map((link) => (
