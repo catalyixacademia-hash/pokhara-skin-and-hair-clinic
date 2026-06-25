@@ -518,6 +518,17 @@
   color: var(--color-muted);
 }
 
+textarea.premium-input {
+  min-height: unset;
+  padding-top: 0.5rem;
+  padding-bottom: 0.625rem;
+  line-height: 1.55;
+}
+
+textarea.premium-input--compact {
+  min-height: 5.5rem;
+}
+
 .premium-select {
   cursor: pointer;
   appearance: none;
