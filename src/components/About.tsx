@@ -13,8 +13,8 @@ export default function About() {
   return (
     <section id="about" className="bg-paper section-padding">
       <Container>
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-16">
-          <div>
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start mb-16">
+          <div className="lg:pr-4">
             <SectionHeader
               label="About the clinic"
               title="Where medical precision meets aesthetic care"
@@ -49,19 +49,19 @@ export default function About() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="img-zoom aspect-[4/5] overflow-hidden bg-line">
+          <div className="relative w-full lg:max-w-md lg:ml-auto">
+            <div className="about-visual img-zoom aspect-[5/4] overflow-hidden bg-line">
               <img
-                src="https://images.pexels.com/photos/4586740/pexels-photo-4586740.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=640"
+                src="https://images.pexels.com/photos/4586740/pexels-photo-4586740.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=640&w=800"
                 alt="Doctor consulting patient"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
                 loading="lazy"
               />
             </div>
-            <div className="mt-4 p-4 border border-line bg-paper md:absolute md:-bottom-6 md:right-0 md:max-w-xs md:shadow-sm">
+            <div className="about-location-card mt-4 p-4 md:absolute md:bottom-4 md:left-4 md:mt-0 md:max-w-[15rem]">
               <p className="section-label mb-1">Located at</p>
-              <p className="font-serif text-ink">{address.line1}</p>
-              <p className="font-sans text-sm text-muted mt-1">{address.landmark}</p>
+              <p className="font-serif text-ink leading-snug">{address.line1}</p>
+              <p className="font-sans text-sm text-muted mt-1 leading-relaxed">{address.landmark}</p>
             </div>
           </div>
         </div>

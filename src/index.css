@@ -630,6 +630,17 @@ textarea.premium-input--compact {
   color: var(--color-ink);
 }
 
+.about-visual {
+  border: 1px solid var(--color-line);
+  box-shadow: 0 2px 12px rgba(28, 28, 26, 0.04);
+}
+
+.about-location-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 2px 12px rgba(28, 28, 26, 0.06);
+}
+
 .about-stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
