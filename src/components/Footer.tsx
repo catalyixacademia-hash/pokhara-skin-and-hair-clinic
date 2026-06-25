@@ -57,7 +57,7 @@ export default function Footer() {
 
           <div className="bg-paper/5 border border-paper/10 p-6 max-w-sm w-full">
             <p className="font-sans text-sm text-paper/60 mb-2">Ready to begin?</p>
-            <h3 className="font-serif text-xl mb-4">Book your visit</h3>
+            <h3 className="font-serif text-xl text-paper mb-4">Book your visit</h3>
             <button type="button" onClick={() => scrollTo('#contact')} className="btn-bronze w-full">
               Book appointment
             </button>
