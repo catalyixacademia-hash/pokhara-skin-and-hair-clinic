@@ -71,8 +71,9 @@ export default function Appointment() {
 
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
           <div className="lg:col-span-3">
+            <div className="booking-form-panel">
             {submitted ? (
-              <div className="bg-paper border border-line p-8 md:p-10 text-center">
+              <div className="text-center py-4 md:py-6">
                 <h3 className="font-serif text-2xl text-ink mb-2">Request received</h3>
                 <p className="font-sans text-muted">
                   Thank you. We will contact you within 24 hours to confirm your appointment.
@@ -139,6 +140,7 @@ export default function Appointment() {
                 </div>
               </form>
             )}
+            </div>
           </div>
 
           <aside className="lg:col-span-2 space-y-8">
