@@ -196,11 +196,19 @@ export const footerServiceLinks = [
   'Laser Hair Reduction',
 ] as const;
 
+/** Google Maps pin — Pokhara Skin and Hair Clinic, Nayabazar Rd (plus code 6X6P+MP5). */
+const mapLocation = {
+  lat: 28.218896,
+  lng: 83.990982,
+  zoom: 17,
+  placeName: 'Pokhara Skin and Hair Clinic',
+  address: 'Nayabazar Rd, Pokhara 33700, Nepal',
+  plusCode: '6X6P+MP5',
+} as const;
+
 export const maps = {
-  embedUrl:
-    'https://maps.google.com/maps?q=Pokhara+Skin+and+Hair+Clinic+Nayabazar+GMC+Hospital+Pokhara&hl=en&z=16&output=embed',
-  openUrl:
-    'https://www.google.com/maps/search/?api=1&query=Pokhara+Skin+and+Hair+Clinic+Nayabazar+GMC+Hospital+Pokhara',
+  embedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(`${mapLocation.placeName}, ${mapLocation.address}`)}&ll=${mapLocation.lat},${mapLocation.lng}&z=${mapLocation.zoom}&hl=en&output=embed`,
+  openUrl: `https://www.google.com/maps/place/${encodeURIComponent(mapLocation.placeName)}/@${mapLocation.lat},${mapLocation.lng},${mapLocation.zoom}z`,
 } as const;
 
 function digitsOnly(number: string): string {

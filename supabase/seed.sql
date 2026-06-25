@@ -16,8 +16,8 @@ values (
   'Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology.',
   '{"line1":"Nayabazar-8, Pokhara","line2":"Gandaki Province, Nepal","landmark":"Opposite GMC Hospital (GMC Medical College) Gate","area":"Prithvi Chowk area","short":"Nayabazar-8, Pokhara, Nepal","mapCaption":"Nayabazar-8 · Prithvi Chowk · Pokhara, Gandaki Province, Nepal"}'::jsonb,
   '{"daily":"8:00 AM – 7:00 PM","saturdayNote":"Saturday OPD available","summary":"Daily: 8AM–7PM"}'::jsonb,
-  'https://maps.google.com/maps?q=Pokhara+Skin+and+Hair+Clinic+Nayabazar+GMC+Hospital+Pokhara&hl=en&z=16&output=embed',
-  'https://www.google.com/maps/search/?api=1&query=Pokhara+Skin+and+Hair+Clinic+Nayabazar+GMC+Hospital+Pokhara'
+  'https://maps.google.com/maps?q=Pokhara+Skin+and+Hair+Clinic%2C+Nayabazar+Rd%2C+Pokhara+33700%2C+Nepal&ll=28.218896,83.990982&z=17&hl=en&output=embed',
+  'https://www.google.com/maps/place/Pokhara+Skin+and+Hair+Clinic/@28.218896,83.990982,17z'
 )
 on conflict (id) do update set
   name = excluded.name,
