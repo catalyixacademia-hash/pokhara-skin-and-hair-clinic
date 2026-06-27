@@ -22,7 +22,7 @@ function NavBrand({ onHero, onClick }: NavBrandProps) {
     <a
       href="#"
       onClick={onClick}
-      className="nav-brand shrink-0 touch-target"
+      className="nav-brand shrink-0"
       aria-label={`${clinic.nameShort} home`}
     >
       <span className="nav-brand__mark-wrap">
@@ -104,7 +104,7 @@ export default function Navbar() {
         )}
       >
         <Container>
-          <div className="flex items-center justify-between gap-3 h-14">
+          <div className="flex items-center justify-between gap-3 min-h-14 py-1.5">
             <NavBrand onHero={onHero} onClick={goHome} />
 
             <nav className="hidden md:flex items-center justify-center flex-1 gap-0.5 lg:gap-1 min-w-0" aria-label="Main">
