@@ -14,6 +14,7 @@ export default function App() {
   return (
     <div className="bg-paper min-h-screen">
       <Navbar />
+      <div className="h-[var(--nav-height)]" />
       <div className="hero-viewport">
         <Hero />
       </div>

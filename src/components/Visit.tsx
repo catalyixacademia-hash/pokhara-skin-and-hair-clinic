@@ -5,8 +5,6 @@ import {
   formatPhoneDisplay,
   getPhone,
   hours,
-  landmarks,
-  maps,
   phones,
   phoneHref,
   social,
@@ -231,35 +229,6 @@ export default function Visit() {
                 ))}
               </div>
               <p className="font-body text-sm text-muted mt-3">{hours.saturdayNote}</p>
-            </div>
-
-            <div id="location">
-              <p className="mono-label mb-4">Map</p>
-              <div className="map-frame aspect-[4/3] -mx-4 sm:mx-0 mb-4">
-                <iframe
-                  src={maps.embedUrl}
-                  title="Pokhara Skin and Hair Clinic location"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              </div>
-              <ul className="space-y-2 mb-4">
-                {landmarks.map((landmark) => (
-                  <li key={landmark} className="font-body text-sm text-muted flex gap-2">
-                    <span className="text-accent shrink-0">—</span>
-                    {landmark}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={maps.openUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-sm text-accent hover:underline"
-              >
-                Open in Google Maps →
-              </a>
             </div>
           </Reveal>
         </div>

@@ -29,10 +29,21 @@ export default function Hero() {
 
   return (
     <section className="hero-section" aria-label="Hero">
-      <div className="hero-grid-bg" aria-hidden="true" />
+      {/* Background Image & Grid Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/hero/clinic-hero.webp"
+          alt=""
+          className="w-full h-full object-cover object-right lg:object-center opacity-[0.8]"
+          decoding="async"
+        />
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-paper via-paper/50 to-transparent"
+        />
+      </div>
 
       <Container className="relative z-10 flex flex-col justify-end min-h-full py-12 md:py-16 lg:py-20">
-        <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)] gap-12 lg:gap-16 items-end">
+        <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)] gap-12 lg:gap-16 items-start">
           <div className="max-w-xl">
             <motion.p
               className="mono-label mb-6"

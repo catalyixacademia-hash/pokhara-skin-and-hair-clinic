@@ -10,9 +10,6 @@ export default function Treatments() {
   const [aestheticOpen, setAestheticOpen] = useState(false);
   const { skin: skinServices, hair: hairServices, aesthetic: aestheticServices } = useServices();
 
-  const featuredSkin = skinServices.filter((s) => s.featured);
-  const standardSkin = skinServices.filter((s) => !s.featured);
-
   const scrollToContact = () => {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -31,24 +28,15 @@ export default function Treatments() {
         <Reveal delay={0.05}>
           <div className="mb-12">
             <p className="mono-label mb-6">Skin care — primary specialty</p>
-            <div className="grid md:grid-cols-3 gap-4 mb-8">
-              {featuredSkin.map((service) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {skinServices.map((service) => (
                 <TreatmentRow
                   key={service.title}
                   title={service.title}
                   description={service.description}
+                  img={service.img}
                   category="skin"
                   featured
-                />
-              ))}
-            </div>
-            <div>
-              {standardSkin.map((service) => (
-                <TreatmentRow
-                  key={service.title}
-                  title={service.title}
-                  description={service.description}
-                  category="skin"
                   onSelect={scrollToContact}
                 />
               ))}
@@ -59,13 +47,15 @@ export default function Treatments() {
         <Reveal delay={0.1}>
           <div className="pt-8 border-t border-line">
             <p className="mono-label text-hair-accent mb-6">Hair restoration — complementary care</p>
-            <div className="opacity-90">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {hairServices.map((service) => (
                 <TreatmentRow
                   key={service.title}
                   title={service.title}
                   description={service.description}
+                  img={service.img}
                   category="hair"
+                  featured
                   onSelect={scrollToContact}
                 />
               ))}
@@ -93,13 +83,15 @@ export default function Treatments() {
               )}
             >
               <div className="overflow-hidden">
-                <div className="pt-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                   {aestheticServices.map((service) => (
                     <TreatmentRow
                       key={service.title}
                       title={service.title}
                       description={service.description}
+                      img={service.img}
                       category="aesthetic"
+                      featured
                       onSelect={scrollToContact}
                     />
                   ))}

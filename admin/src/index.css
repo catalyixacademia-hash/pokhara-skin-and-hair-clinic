@@ -1,10 +1,14 @@
 @import '../../src/index.css';
 
 body {
-  font-family: var(--font-sans, 'DM Sans', system-ui, sans-serif);
-  background: var(--color-paper, #fbfbfa);
-  color: var(--color-ink, #1c1c1a);
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-paper, #F7F8FA);
+  color: var(--color-ink, #0D1117);
   margin: 0;
+}
+
+.font-serif {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
 .admin-input {
@@ -20,7 +24,8 @@ body {
 }
 
 .admin-input:focus {
-  border-color: var(--color-accent, #8b6914);
+  border-color: var(--color-accent, #145C7A);
+  box-shadow: 0 0 0 3px rgba(20, 92, 122, 0.12);
 }
 
 .admin-label {
@@ -49,19 +54,21 @@ body {
   justify-content: center;
   padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background: var(--color-accent);
-  color: white;
-  border: none;
+  letter-spacing: 0.08em;
+  background: var(--color-ink, #0D1117);
+  color: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-ink, #0D1117);
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .admin-btn-primary:hover {
-  background: var(--color-ink);
+  background: var(--color-surface, #FFFFFF);
+  color: var(--color-ink, #0D1117);
+  border-color: var(--color-ink, #0D1117);
 }
 
 .admin-btn-primary:disabled {
@@ -76,17 +83,17 @@ body {
   padding: 0.5rem 1rem;
   font-size: 0.75rem;
   font-weight: 500;
-  background: white;
-  color: var(--color-ink);
-  border: 1px solid var(--color-line);
+  background: var(--color-surface, #FFFFFF);
+  color: var(--color-ink, #0D1117);
+  border: 1px solid var(--color-line, #E4E7EB);
   border-radius: 4px;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 }
 
 .admin-btn-secondary:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-ink, #0D1117);
+  background-color: var(--color-paper, #F7F8FA);
 }
 
 .admin-btn-danger {
@@ -151,8 +158,9 @@ body {
 }
 
 .admin-stat-value {
-  font-family: var(--font-serif, 'Instrument Serif', serif);
-  font-size: 2rem;
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  font-size: 2.25rem;
   line-height: 1;
   color: var(--color-ink);
 }

@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import {
   address,
   clinic,
-  doctor,
   formatPhoneDisplay,
   getPhone,
-  hours,
   phoneHref,
 } from '../data/clinic';
 import { adminLoginUrl } from '../lib/admin-url';
@@ -116,14 +114,14 @@ export default function Navbar() {
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a
                 href={adminLoginUrl}
-                className="hidden md:inline-flex btn-secondary text-sm py-2 px-3 lg:px-4"
+                className="!hidden md:!inline-flex btn-secondary text-sm py-2 px-3 lg:px-4"
               >
                 Staff login
               </a>
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
-                className="hidden sm:inline-flex btn-primary text-sm py-2 px-4 lg:px-5"
+                className="!hidden sm:!inline-flex btn-primary text-sm py-2 px-4 lg:px-5"
               >
                 Book visit
               </button>

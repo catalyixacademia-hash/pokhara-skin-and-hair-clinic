@@ -18,6 +18,15 @@ export default function ClinicDoctor() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           <Reveal delay={0.05}>
             <div id="doctor">
+              <div className="mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/3] bg-paper">
+                <img
+                  src="/images/clinic/interior-waiting.webp"
+                  alt="Pokhara Skin & Hair Clinic waiting and reception area"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <p className="mono-label mb-4">About the clinic</p>
               <p className="font-body text-muted leading-relaxed mb-4">
                 {clinic.name} is located in {address.area}, {address.line1} — {address.landmark}.
@@ -41,6 +50,18 @@ export default function ClinicDoctor() {
 
           <Reveal delay={0.1}>
             <div className="surface p-6 md:p-8">
+              <div className="relative mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/5] bg-paper">
+                <img
+                  src="/images/doctor/dr-prakash-acharya.webp"
+                  alt="Dr. Prakash Acharya - Board-certified Dermatologist"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="absolute top-3 right-3 bg-ink/80 backdrop-blur-[2px] text-paper text-[10px] font-mono px-2 py-0.5 rounded tracking-wider uppercase">
+                  Design Placeholder
+                </span>
+              </div>
               <p className="mono-label mb-4">{doctor.name}</p>
               <h3 className="font-display text-h3 text-ink mb-1">{doctor.title}</h3>
               <p className="font-mono text-xs text-muted mb-6">MD, Dermatology &amp; Venereology</p>
