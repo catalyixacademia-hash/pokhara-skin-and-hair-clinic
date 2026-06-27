@@ -27,7 +27,7 @@ function NavBrand({ onHero, onClick }: NavBrandProps) {
     >
       <span className="nav-brand__mark-wrap">
         <img
-          src="/clinic-logo-mark.png"
+          src="/clinic-logo-mark.png?v=3"
           alt=""
           width={256}
           height={256}
