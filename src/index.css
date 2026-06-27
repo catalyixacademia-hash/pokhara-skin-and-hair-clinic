@@ -10,6 +10,8 @@
   --color-accent-soft: #E4DBD0;
   --color-hair-accent: #5F6F5F;
   --color-skin-accent: #7A4E3B;
+  --color-brand-green: #1B6636;
+  --color-brand-navy: #1A4470;
   /* legacy aliases */
   --color-ivory: #F0EBE3;
   --color-charcoal: #1C1C1A;
@@ -35,6 +37,8 @@
     --color-accent-soft: #E4DBD0;
     --color-hair-accent: #5F6F5F;
     --color-skin-accent: #7A4E3B;
+    --color-brand-green: #1B6636;
+    --color-brand-navy: #1A4470;
     --text-display: clamp(2.5rem, 6.5vw, 4.5rem);
     --text-h2: clamp(1.75rem, 3.5vw, 2.5rem);
     --text-h3: clamp(1.25rem, 2vw, 1.5rem);
@@ -120,6 +124,8 @@
   .text-taupe { color: var(--color-muted); }
   .text-sage { color: var(--color-hair-accent); }
   .text-bronze { color: var(--color-accent); }
+  .text-brand-green { color: var(--color-brand-green); }
+  .text-brand-navy { color: var(--color-brand-navy); }
   .text-charcoal { color: var(--color-ink); }
   .text-warm-gray { color: var(--color-muted); }
 
@@ -347,6 +353,68 @@
   cursor: col-resize;
   user-select: none;
   touch-action: none;
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.nav-brand__mark {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .nav-brand__mark {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+.nav-brand__text {
+  display: none;
+  min-width: 0;
+  line-height: 1.1;
+}
+
+@media (min-width: 480px) {
+  .nav-brand__text {
+    display: block;
+  }
+}
+
+.nav-brand__title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .nav-brand__title {
+    font-size: 1.0625rem;
+  }
+}
+
+.nav-brand__subtitle {
+  display: block;
+  margin-top: 0.125rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .nav-brand__subtitle {
+    font-size: 0.625rem;
+  }
 }
 
 .nav-link {

@@ -12,6 +12,50 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ] as const;
 
+type NavBrandProps = {
+  onHero: boolean;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+};
+
+function NavBrand({ onHero, onClick }: NavBrandProps) {
+  return (
+    <a
+      href="#"
+      onClick={onClick}
+      className="nav-brand shrink-0 touch-target"
+      aria-label={`${clinic.nameShort} home`}
+    >
+      <img
+        src="/clinic-logo-mark.png"
+        alt=""
+        width={128}
+        height={128}
+        className="nav-brand__mark"
+        decoding="async"
+        aria-hidden
+      />
+      <span className="nav-brand__text">
+        <span
+          className={cn(
+            'nav-brand__title block',
+            onHero ? 'text-surface' : 'text-brand-green',
+          )}
+        >
+          Pokhara
+        </span>
+        <span
+          className={cn(
+            'nav-brand__subtitle',
+            onHero ? 'text-surface/75' : 'text-brand-navy',
+          )}
+        >
+          Skin &amp; Hair Clinic
+        </span>
+      </span>
+    </a>
+  );
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,6 +79,12 @@ export default function Navbar() {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setMenuOpen(false);
+  };
+
   const onHero = !scrolled && !menuOpen;
   const linkClass = cn(
     'nav-link font-sans text-sm bg-transparent border-none cursor-pointer touch-target py-2',
@@ -46,32 +96,14 @@ export default function Navbar() {
       <header
         className={cn(
           'site-header fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-all duration-300',
-          scrolled
+          scrolled || menuOpen
             ? 'bg-surface/95 backdrop-blur-md border-b border-line shadow-sm'
             : 'bg-transparent border-b border-transparent',
         )}
       >
         <Container>
           <div className="flex items-center justify-between gap-3 h-14">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                setMenuOpen(false);
-              }}
-              className="shrink-0 touch-target flex items-center"
-              aria-label={`${clinic.nameShort} home`}
-            >
-              <img
-                src="/clinic-logo-nav.png"
-                alt={clinic.nameShort}
-                width={248}
-                height={96}
-                className="h-9 md:h-10 w-auto object-contain object-left"
-                decoding="async"
-              />
-            </a>
+            <NavBrand onHero={onHero} onClick={goHome} />
 
             <nav className="hidden md:flex items-center justify-center flex-1 gap-0.5 lg:gap-1 min-w-0" aria-label="Main">
               {navLinks.map((link) => (
@@ -86,7 +118,7 @@ export default function Navbar() {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a
                 href={adminLoginUrl}
                 className={cn(
@@ -119,21 +151,21 @@ export default function Navbar() {
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-surface' : 'bg-ink',
+                    onHero && !menuOpen ? 'bg-surface' : 'bg-ink',
                     menuOpen && 'rotate-45 translate-y-[7px]',
                   )}
                 />
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-surface' : 'bg-ink',
+                    onHero && !menuOpen ? 'bg-surface' : 'bg-ink',
                     menuOpen && 'opacity-0',
                   )}
                 />
                 <span
                   className={cn(
                     'block w-5 h-px transition-all',
-                    onHero ? 'bg-surface' : 'bg-ink',
+                    onHero && !menuOpen ? 'bg-surface' : 'bg-ink',
                     menuOpen && '-rotate-45 -translate-y-[7px]',
                   )}
                 />
@@ -144,8 +176,7 @@ export default function Navbar() {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-surface md:hidden">
-          <div className="h-[var(--nav-height)] shrink-0 border-b border-line" />
+        <div className="fixed inset-0 z-40 bg-surface md:hidden pt-[var(--nav-height)] overflow-y-auto">
           <nav className="flex flex-col px-6 py-6 pb-safe" aria-label="Mobile">
             {navLinks.map((link) => (
               <button
