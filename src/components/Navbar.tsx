@@ -25,15 +25,17 @@ function NavBrand({ onHero, onClick }: NavBrandProps) {
       className="nav-brand shrink-0 touch-target"
       aria-label={`${clinic.nameShort} home`}
     >
-      <img
-        src="/clinic-logo-mark.png"
-        alt=""
-        width={128}
-        height={128}
-        className="nav-brand__mark"
-        decoding="async"
-        aria-hidden
-      />
+      <span className="nav-brand__mark-wrap">
+        <img
+          src="/clinic-logo-mark.png"
+          alt=""
+          width={256}
+          height={256}
+          className="nav-brand__mark"
+          decoding="async"
+          aria-hidden
+        />
+      </span>
       <span className="nav-brand__text">
         <span
           className={cn(
@@ -46,7 +48,7 @@ function NavBrand({ onHero, onClick }: NavBrandProps) {
         <span
           className={cn(
             'nav-brand__subtitle',
-            onHero ? 'text-surface/75' : 'text-brand-navy',
+            onHero ? 'text-surface/85' : 'text-brand-navy',
           )}
         >
           Skin &amp; Hair Clinic
