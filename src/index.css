@@ -231,7 +231,28 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
-  background-color: var(--color-paper);
+  background-color: var(--color-ink);
+}
+
+.hero-overlay-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(247, 248, 250, 0.94) 0%,
+    rgba(247, 248, 250, 0.5) 32%,
+    transparent 58%
+  );
+  pointer-events: none;
+}
+
+.hero-content-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
 }
 
 .hero-grid-bg {

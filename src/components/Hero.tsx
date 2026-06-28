@@ -29,65 +29,52 @@ export default function Hero() {
 
   return (
     <section className="hero-section" aria-label="Hero">
-      {/* Background Image & Grid Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/hero/clinic-hero.png"
           alt=""
-          className="w-full h-full object-cover object-[center_30%] lg:object-center"
+          className="h-full w-full object-cover object-center"
           decoding="async"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/85 to-paper/25 md:via-paper/70 md:to-transparent" />
+        <div className="hero-overlay-bottom" aria-hidden="true" />
       </div>
 
-      <Container className="relative z-10 flex flex-col justify-end min-h-full py-12 md:py-16 lg:py-20">
-        <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)] gap-12 lg:gap-16 items-start">
-          <div className="max-w-xl">
-            <motion.p
-              className="mono-label mb-6"
-              {...stagger}
-              transition={{ ...stagger.transition, delay: 0 }}
-            >
-              Nayabazar-8 · Pokhara, Nepal
-            </motion.p>
+      <Container className="relative z-10 flex min-h-[calc(100dvh-var(--nav-height))] flex-col">
+        <div className="flex-1 min-h-[8rem] sm:min-h-[10rem] lg:min-h-[14rem]" aria-hidden="true" />
 
-            <motion.h1
-              className="font-display text-display text-ink mb-6"
-              {...stagger}
-              transition={{ ...stagger.transition, delay: 0.08 }}
-            >
+        <div className="grid gap-4 pb-6 pt-4 md:pb-10 md:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(260px,300px)] lg:items-end lg:gap-5">
+          <motion.div
+            className="hero-content-panel max-w-2xl"
+            {...stagger}
+            transition={{ ...stagger.transition, delay: 0 }}
+          >
+            <p className="mono-label mb-3">Nayabazar-8 · Pokhara, Nepal</p>
+
+            <h1 className="font-display text-h1 text-ink mb-3 leading-tight">
               Advanced dermatology for skin that deserves clinical care.
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              className="font-body text-lg text-muted leading-relaxed mb-10 max-w-lg"
-              {...stagger}
-              transition={{ ...stagger.transition, delay: 0.16 }}
-            >
-              Board-certified skin treatments in Pokhara — with specialized hair restoration
-              when you need it. Led by {doctor.name}, {doctor.titleShort}.
-            </motion.p>
+            <p className="font-body text-sm md:text-base text-muted leading-relaxed mb-5 max-w-lg">
+              Board-certified skin treatments in Pokhara — with specialized hair restoration when
+              you need it. Led by {doctor.name}, {doctor.titleShort}.
+            </p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
-              {...stagger}
-              transition={{ ...stagger.transition, delay: 0.24 }}
-            >
+            <div className="flex flex-col sm:flex-row gap-3">
               <button type="button" onClick={() => scrollTo('#contact')} className="btn-primary w-full sm:w-auto">
                 Book appointment
               </button>
               <button type="button" onClick={() => scrollTo('#services')} className="btn-outline-frost w-full sm:w-auto">
                 View treatments
               </button>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
           <motion.aside
-            className="clinic-meta-panel"
+            className="clinic-meta-panel w-full lg:justify-self-end"
             aria-label="Clinic information"
             {...stagger}
-            transition={{ ...stagger.transition, delay: 0.32 }}
+            transition={{ ...stagger.transition, delay: 0.1 }}
           >
             <dl>
               <dt>Hours</dt>
