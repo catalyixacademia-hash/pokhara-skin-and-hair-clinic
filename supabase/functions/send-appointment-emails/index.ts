@@ -169,7 +169,7 @@ Deno.serve(async (req) => {
       adminEmailSent = true;
     } else {
       console.error('Admin email failed:', adminResult.error);
-      emailErrors.push('Admin notification email failed.');
+      emailErrors.push(`Admin notification email failed: ${adminResult.error}`);
     }
 
     if (booking.email) {
@@ -188,7 +188,7 @@ Deno.serve(async (req) => {
         userEmailSent = true;
       } else {
         console.error('User email failed:', userResult.error);
-        emailErrors.push('Patient confirmation email could not be delivered.');
+        emailErrors.push(`Patient confirmation email could not be delivered: ${userResult.error}`);
       }
     }
   }
