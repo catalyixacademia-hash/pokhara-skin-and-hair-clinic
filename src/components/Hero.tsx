@@ -32,14 +32,13 @@ export default function Hero() {
       {/* Background Image & Grid Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/hero/clinic-hero.webp"
+          src="/images/hero/clinic-hero.png"
           alt=""
-          className="w-full h-full object-cover object-right lg:object-center opacity-[0.8]"
+          className="w-full h-full object-cover object-[center_30%] lg:object-center"
           decoding="async"
+          fetchPriority="high"
         />
-        <div 
-          className="absolute inset-0 bg-gradient-to-r from-paper via-paper/50 to-transparent"
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/85 to-paper/25 md:via-paper/70 md:to-transparent" />
       </div>
 
       <Container className="relative z-10 flex flex-col justify-end min-h-full py-12 md:py-16 lg:py-20">

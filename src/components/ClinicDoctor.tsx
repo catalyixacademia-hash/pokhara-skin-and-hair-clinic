@@ -50,17 +50,14 @@ export default function ClinicDoctor() {
 
           <Reveal delay={0.1}>
             <div className="surface p-6 md:p-8">
-              <div className="relative mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/5] bg-paper">
+              <div className="relative mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/3] bg-paper">
                 <img
-                  src="/images/doctor/dr-prakash-acharya.webp"
-                  alt="Dr. Prakash Acharya - Board-certified Dermatologist"
-                  className="w-full h-full object-cover"
+                  src="/images/doctor/dr-prakash-acharya.png"
+                  alt={doctor.portraitAlt}
+                  className="w-full h-full object-cover object-[center_20%]"
                   loading="lazy"
                   decoding="async"
                 />
-                <span className="absolute top-3 right-3 bg-ink/80 backdrop-blur-[2px] text-paper text-[10px] font-mono px-2 py-0.5 rounded tracking-wider uppercase">
-                  Design Placeholder
-                </span>
               </div>
               <p className="mono-label mb-4">{doctor.name}</p>
               <h3 className="font-display text-h3 text-ink mb-1">{doctor.title}</h3>
