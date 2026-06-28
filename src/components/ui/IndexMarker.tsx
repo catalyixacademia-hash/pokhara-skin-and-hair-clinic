@@ -10,8 +10,8 @@ export default function IndexMarker({ children, className, inverted = false }: I
   return (
     <span
       className={cn(
-        'font-mono text-[0.8125rem] font-medium tracking-wide',
-        inverted ? 'text-paper/50' : 'text-accent',
+        'section-label',
+        inverted ? 'text-paper/70' : 'text-accent',
         className,
       )}
     >

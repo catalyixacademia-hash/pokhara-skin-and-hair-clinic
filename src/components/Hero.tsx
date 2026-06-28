@@ -58,72 +58,85 @@ export default function Hero() {
   return (
     <section className="hero-section" aria-label="Hero">
       <div className="absolute inset-0 z-0">
-        <img
-          src="/images/hero/clinic-hero.png"
-          alt=""
-          className="h-full w-full object-cover object-center"
-          decoding="async"
-          fetchPriority="high"
-        />
-        <div className="hero-overlay-subtle" aria-hidden="true" />
+        <picture>
+          <source
+            media="(min-width: 1024px)"
+            srcSet="/images/hero/clinic-hero@1920.jpg?v=5"
+          />
+          <img
+            src="/images/hero/clinic-hero.png?v=5"
+            alt=""
+            className="hero-bg-image h-full w-full"
+            width={1024}
+            height={576}
+            decoding="async"
+            fetchPriority="high"
+          />
+        </picture>
       </div>
 
-      <Container className="hero-shell relative z-10">
-        <motion.div
-          className="hero-main-card"
-          {...stagger}
-          transition={{ ...stagger.transition, delay: 0 }}
-        >
-          <p className="hero-badge">
-            <ShieldIcon />
-            Board certified experts
-          </p>
+      <Container className="hero-shell">
+        <div className="hero-bottom-band">
+          <motion.div
+            className="hero-main-card"
+            {...stagger}
+            transition={{ ...stagger.transition, delay: 0 }}
+          >
+            <p className="hero-badge">
+              <ShieldIcon />
+              Board certified experts
+            </p>
 
-          <h1 className="font-display text-h1 text-accent mb-4 leading-tight">
-            Expert care for skin &amp; hair
-          </h1>
+            <h1 className="hero-main-card__title">
+              Expert care for skin &amp; hair
+            </h1>
 
-          <p className="font-body text-base text-muted leading-relaxed mb-6 max-w-md">
-            Leading dermatology and hair restoration in Pokhara. Experience clinical precision in a
-            serene environment.
-          </p>
+            <p className="hero-main-card__lede">
+              Leading dermatology and hair restoration in Pokhara. Experience clinical precision in a
+              serene environment.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button type="button" onClick={() => scrollTo('#contact')} className="btn-accent w-full sm:w-auto">
-              Book appointment
-            </button>
-            <button type="button" onClick={() => scrollTo('#services')} className="btn-hero-secondary w-full sm:w-auto">
-              View treatments
-            </button>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="hero-info-stack"
-          {...stagger}
-          transition={{ ...stagger.transition, delay: 0.12 }}
-        >
-          <div className="hero-info-card">
-            <span className="hero-info-card__icon hero-info-card__icon--accent">
-              <PinIcon />
-            </span>
-            <div>
-              <p className="hero-info-card__label">Location</p>
-              <p className="hero-info-card__value">{address.line1}</p>
+            <div className="hero-cta-row">
+              <button type="button" onClick={() => scrollTo('#contact')} className="btn-primary">
+                Book appointment
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTo('#services')}
+                className="btn-hero-secondary"
+              >
+                View treatments
+              </button>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="hero-info-card">
-            <span className="hero-info-card__icon hero-info-card__icon--warm">
-              <ClockIcon />
-            </span>
-            <div>
-              <p className="hero-info-card__label">Opening hours</p>
-              <p className="hero-info-card__value">{hours.summary}</p>
-              <p className="hero-info-card__note">{hours.saturdayNote}</p>
+          <motion.div
+            className="hero-info-stack"
+            {...stagger}
+            transition={{ ...stagger.transition, delay: 0.12 }}
+          >
+            <div className="hero-info-card">
+              <span className="hero-info-card__icon hero-info-card__icon--accent">
+                <PinIcon />
+              </span>
+              <div className="hero-info-card__body">
+                <p className="hero-info-card__label">Location</p>
+                <p className="hero-info-card__value">{address.line1}</p>
+              </div>
             </div>
-          </div>
-        </motion.div>
+
+            <div className="hero-info-card">
+              <span className="hero-info-card__icon hero-info-card__icon--warm">
+                <ClockIcon />
+              </span>
+              <div className="hero-info-card__body">
+                <p className="hero-info-card__label">Opening hours</p>
+                <p className="hero-info-card__value">{hours.summary}</p>
+                <p className="hero-info-card__note">{hours.saturdayNote}</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </Container>
     </section>
   );

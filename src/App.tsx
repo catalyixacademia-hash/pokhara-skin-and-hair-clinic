@@ -9,15 +9,14 @@ import Visit from './components/Visit';
 import GeneralEnquiry from './components/GeneralEnquiry';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
+import BookFab from './components/BookFab';
 
 export default function App() {
   return (
     <div className="bg-paper min-h-screen">
       <Navbar />
-      <div className="hero-viewport">
-        <Hero />
-      </div>
-      <main>
+      <Hero />
+      <main className="pb-24 md:pb-8">
         <Treatments />
         <CareStandards />
         <ClinicDoctor />
@@ -28,6 +27,7 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppFloat />
+      <BookFab />
     </div>
   );
 }

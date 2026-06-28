@@ -22,7 +22,7 @@ const standards = [
 
 export default function CareStandards() {
   return (
-    <section className="bg-paper section-padding-sm border-t border-line">
+    <section className="bg-surface-container-low section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -32,15 +32,13 @@ export default function CareStandards() {
           />
         </Reveal>
 
-        <div>
+        <div className="grid md:grid-cols-3 gap-6">
           {standards.map((item, i) => (
             <Reveal key={item.index} delay={i * 0.06}>
-              <article className="standard-item">
-                <span className="standard-index">{item.index}</span>
-                <div>
-                  <h3 className="font-display text-h3 text-ink mb-2">{item.title}</h3>
-                  <p className="font-body text-sm text-muted leading-relaxed max-w-xl">{item.body}</p>
-                </div>
+              <article className="standard-card space-y-6">
+                <div className="standard-card__badge">{item.index}</div>
+                <h3 className="font-display text-xl text-ink">{item.title}</h3>
+                <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
               </article>
             </Reveal>
           ))}

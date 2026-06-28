@@ -5,7 +5,7 @@ import Reveal from './motion/Reveal';
 
 export default function ClinicDoctor() {
   return (
-    <section id="about" className="bg-surface section-padding border-t border-line">
+    <section id="about" className="bg-surface section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -15,10 +15,10 @@ export default function ClinicDoctor() {
           />
         </Reveal>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-20 items-start">
           <Reveal delay={0.05}>
-            <div id="doctor">
-              <div className="mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/3] bg-paper">
+            <div className="space-y-8">
+              <div className="clinic-image-frame aspect-square md:aspect-video lg:aspect-square">
                 <img
                   src="/images/clinic/interior-waiting.webp"
                   alt="Pokhara Skin & Hair Clinic waiting and reception area"
@@ -27,56 +27,60 @@ export default function ClinicDoctor() {
                   decoding="async"
                 />
               </div>
-              <p className="mono-label mb-4">About the clinic</p>
-              <p className="font-body text-muted leading-relaxed mb-4">
-                {clinic.name} is located in {address.area}, {address.line1} — {address.landmark}.
-                We serve patients across Pokhara and the wider Gandaki region with advanced skin care,
-                hair restoration, and aesthetic dermatology.
-              </p>
-              <p className="font-body text-muted leading-relaxed mb-6">
-                The clinic is designed for calm, private consultations and evidence-based treatment
-                in a comfortable clinical environment.
-              </p>
-              <ul className="space-y-2">
-                {address.full.map((line) => (
-                  <li key={line} className="font-body text-sm text-ink flex gap-2">
-                    <span className="text-accent shrink-0">—</span>
-                    {line}
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-6">
+                <h3 className="font-display text-2xl text-ink">About the clinic</h3>
+                <p className="font-body text-base text-muted leading-relaxed">
+                  {clinic.name} is located in {address.area}, {address.line1} — {address.landmark}.
+                  We serve patients across Pokhara and the wider Gandaki region with advanced skin care,
+                  hair restoration, and aesthetic dermatology.
+                </p>
+                <ul className="space-y-3">
+                  {address.full.map((line) => (
+                    <li key={line} className="font-body text-base text-muted flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="surface p-6 md:p-8">
-              <div className="relative mb-6 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/3] bg-paper">
-                <img
-                  src="/images/doctor/dr-prakash-acharya.png"
-                  alt={doctor.portraitAlt}
-                  className="w-full h-full object-cover object-[center_20%]"
-                  loading="lazy"
-                  decoding="async"
-                />
+            <div id="doctor" className="clinic-panel space-y-8">
+              <div className="flex flex-col md:flex-row gap-8 items-start">
+                <div className="doctor-portrait">
+                  <img
+                    src="/images/doctor/dr-prakash-acharya.png"
+                    alt={doctor.portraitAlt}
+                    className="w-full h-full object-cover object-[center_20%]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <p className="section-label">{doctor.name}</p>
+                  <h3 className="font-display text-2xl text-ink">{doctor.title}</h3>
+                  <p className="text-label text-secondary">MD, Dermatology &amp; Venereology</p>
+                </div>
               </div>
-              <p className="mono-label mb-4">{doctor.name}</p>
-              <h3 className="font-display text-h3 text-ink mb-1">{doctor.title}</h3>
-              <p className="font-mono text-xs text-muted mb-6">MD, Dermatology &amp; Venereology</p>
 
-              {doctor.bio.map((paragraph) => (
-                <p key={paragraph.slice(0, 40)} className="font-body text-sm text-muted leading-relaxed mb-4 last:mb-6">
-                  {paragraph}
-                </p>
-              ))}
-
-              <dl className="space-y-3 border-t border-line pt-6">
-                {doctor.credentials.slice(0, 4).map((cred) => (
-                  <div key={cred.label}>
-                    <dt className="font-mono text-xs text-muted">{cred.label}</dt>
-                    <dd className="font-body text-sm text-ink mt-0.5">{cred.value}</dd>
-                  </div>
+              <div className="space-y-6 text-muted">
+                {doctor.bio.map((paragraph) => (
+                  <p key={paragraph.slice(0, 40)} className="font-body text-base leading-relaxed">
+                    {paragraph}
+                  </p>
                 ))}
-              </dl>
+
+                <div className="grid sm:grid-cols-2 gap-8">
+                  {doctor.credentials.slice(0, 4).map((cred) => (
+                    <div key={cred.label}>
+                      <p className="text-label text-ink mb-2">{cred.label}</p>
+                      <p className="font-body text-caption text-muted">{cred.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>

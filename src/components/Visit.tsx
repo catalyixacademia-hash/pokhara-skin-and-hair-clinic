@@ -17,6 +17,19 @@ import FormField from './ui/FormField';
 import TreatmentSelect from './ui/TreatmentSelect';
 import Reveal from './motion/Reveal';
 
+function CallIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Visit() {
   const { treatmentGroups, loading: treatmentsLoading } = useTreatmentOptions();
   const [formData, setFormData] = useState({
@@ -65,7 +78,7 @@ export default function Visit() {
   };
 
   return (
-    <section id="contact" className="bg-paper section-padding border-t border-line">
+    <section id="contact" className="bg-surface-container-low section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -75,11 +88,11 @@ export default function Visit() {
           />
         </Reveal>
 
-        <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
-          <Reveal className="lg:col-span-3" delay={0.05}>
-            <div className="booking-form-panel">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-20">
+          <Reveal delay={0.05}>
+            <div className="form-card">
               {submitted ? (
-                <div className="py-4 md:py-6">
+                <div className="py-4">
                   <h3 className="font-display text-h3 text-ink mb-2">Request received</h3>
                   <p className="font-body text-muted">
                     Thank you. We will contact you within 24 hours to confirm your appointment.
@@ -95,8 +108,8 @@ export default function Visit() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField label="Full name" htmlFor="visit-name" required>
                       <input
                         id="visit-name"
@@ -107,6 +120,7 @@ export default function Visit() {
                         required
                         autoComplete="name"
                         className="field-input"
+                        placeholder="Your name"
                       />
                     </FormField>
                     <FormField label="Phone" htmlFor="visit-phone" required>
@@ -124,7 +138,7 @@ export default function Visit() {
                     </FormField>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField label="Email" htmlFor="visit-email">
                       <input
                         id="visit-email"
@@ -182,8 +196,12 @@ export default function Visit() {
                     </p>
                   )}
 
-                  <div className="flex flex-col sm:flex-row gap-3 pt-1">
-                    <button type="submit" disabled={submitting} className="btn-primary flex-1 disabled:opacity-60">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="btn-form-submit flex-1 disabled:opacity-60"
+                    >
                       {submitting ? 'Submitting…' : 'Request appointment'}
                     </button>
                     <a
@@ -200,35 +218,41 @@ export default function Visit() {
             </div>
           </Reveal>
 
-          <Reveal className="lg:col-span-2 space-y-8" delay={0.1}>
-            <div>
-              <p className="mono-label mb-4">Contact</p>
-              <p className="font-body text-sm text-muted mb-1">{address.line1}</p>
-              <p className="font-body text-sm text-muted mb-4">{address.landmark}</p>
+          <Reveal className="space-y-12" delay={0.1}>
+            <div className="space-y-6">
+              <h3 className="font-display text-xl text-ink">Contact</h3>
+              <p className="font-body text-base text-muted">
+                {address.line1}
+                <br />
+                {address.landmark}
+              </p>
               <div className="space-y-2">
                 {phones.map((phone) => (
                   <a
                     key={phone.role}
                     href={phoneHref(phone.number)}
-                    className="block font-body text-sm text-ink hover:text-accent"
+                    className="flex items-center gap-3 font-body text-base text-muted hover:text-accent"
                   >
+                    <span className="text-accent">
+                      <CallIcon />
+                    </span>
                     {formatPhoneDisplay(phone.number)} · {phone.label}
                   </a>
                 ))}
               </div>
             </div>
 
-            <div>
-              <p className="mono-label mb-4">Hours</p>
-              <div className="space-y-1">
+            <div className="space-y-6">
+              <h3 className="font-display text-xl text-ink">Hours</h3>
+              <div>
                 {clinicHours.map((h) => (
-                  <div key={h.day} className="flex justify-between text-sm py-1.5 border-b border-line">
-                    <span className="text-muted">{h.day}</span>
-                    <span className="text-ink font-mono text-xs">{h.time}</span>
+                  <div key={h.day} className="hours-row">
+                    <span className="font-body text-base text-muted">{h.day}</span>
+                    <span className="text-label text-ink">{h.time}</span>
                   </div>
                 ))}
               </div>
-              <p className="font-body text-sm text-muted mt-3">{hours.saturdayNote}</p>
+              <p className="font-body text-caption text-accent">{hours.saturdayNote}</p>
             </div>
           </Reveal>
         </div>

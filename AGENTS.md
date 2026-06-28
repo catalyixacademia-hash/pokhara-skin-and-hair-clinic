@@ -1,12 +1,12 @@
 ## Learned User Preferences
 
 - Prioritize skin treatments over hair in design and content hierarchy; hair should be visually secondary.
-- Avoid generic AI-slop aesthetics; clinical-light sans-led design (cool off-white, ink typography, restrained blue-teal accent)—not cream + serif + sage editorial templates.
+- Avoid generic AI-slop aesthetics; Stitch “Clinical Serenity” theme (Manrope + Work Sans, warm teal `#005f56`, secondary brown `#765842`, soft surface bands)—not cream + serif editorial templates.
 - Verify hero and layout fixes in real browsers (Chrome/Edge), not only the Cursor embedded browser.
-- Navbar: clinic logo mark plus single-line wordmark (`clinic.nameShort`); transparent glass bar over hero; links Treatments, Hair restoration, Dermatology, Results, Contact; Book appointment uses `.btn-accent`; secondary items (Ask a question, Location) belong in mobile menu or footer, not crowded into desktop nav.
-- Hero: full-bleed real clinic poster under glass navbar; frosted glass cards (`.hero-main-card`, `.hero-info-stack`) keep copy readable without heavy gradient wash; keep the reception photo clearly visible.
-- Hero extends under the fixed navbar via `.hero-viewport` negative margin + padding (no separate nav spacer div).
-- Primary CTA (`.btn-primary`) hover should use solid off-white/surface background with dark text, not transparent; hero and navbar booking CTAs use `.btn-accent`, secondary hero actions use `.btn-hero-secondary`.
+- Navbar: clinic logo mark plus single-line wordmark (`clinic.nameShort`); `.glass-nav` white frosted bar; links Treatments, Hair restoration, Dermatology, Results, Contact; Book appointment uses `.btn-nav-cta` (primary-container); secondary items (Ask a question, Location) belong in mobile menu or footer, not crowded into desktop nav.
+- Hero: full-bleed `/images/hero/clinic-hero.png` with left `.hero-overlay` gradient wash; vertically centered 2-col grid (copy left, combined info card right on desktop); no frosted main headline card.
+- Primary hero CTA uses `.btn-primary` (teal); secondary hero action uses `.btn-secondary-outline` (warm brown border).
+- Floating CTAs: `.book-fab` (Book appointment, bottom-right) plus `.whatsapp-float`; stack on mobile so they do not overlap.
 - Section CTAs must be real buttons with consistent alignment; one primary conversion path to `#contact`, not per-card booking spam.
 - Harden the entire public site for mobile screens (touch targets, spacing, full-width CTAs where needed).
 - Public Staff login links to the separate admin app (production `/admin` on same domain, local dev port 5174); admin treats patient form data as read-only—staff may update status and internal notes only.
@@ -16,13 +16,14 @@
 ## Learned Workspace Facts
 
 - Single-page marketing site: React 19, Vite 7, Tailwind CSS 4, Framer Motion; no client-side router on the public site.
-- Clinical Light design tokens live in `src/index.css` (paper `#F7F8FA`, surface `#FFFFFF`, ink `#0D1117`, accent `#145C7A`, brand-green/navy on wordmark; Sora + IBM Plex Sans + IBM Plex Mono).
-- Public sections: Hero, Treatments (`#services`), CareStandards, ClinicDoctor (`#about`, `#doctor`), Outcomes (`#results`), SocialProof, Visit (`#contact`, `#location`), GeneralEnquiry (`#enquiry`), Footer.
+- Stitch design tokens live in `src/index.css` (background `#f9f9fc`, surface `#ffffff`, ink `#1a1c1e`, primary `#005f56`, primary-container `#0d7a6f`, secondary `#765842`; Manrope headlines + Work Sans body).
+- Public sections: Hero, Treatments (`#services`, `#hair-services`), CareStandards, ClinicDoctor (`#about`, `#doctor`), Outcomes (`#results`), SocialProof, Visit (`#contact`), GeneralEnquiry (`#enquiry`, `#location`), Footer, BookFab, WhatsAppFloat.
 - Clinic business content is centralized in `src/data/clinic.ts` (phones, hours, social, verified Google Maps embed/open URLs; brand assets `/clinic-logo-mark.png` and `/favicon.png`; floating WhatsApp uses `whatsappFloat` 984515246).
-- Hero: full-bleed `/images/hero/clinic-hero.png` with `.hero-overlay-subtle`; glass `.hero-main-card` plus bottom-right `.hero-info-stack`; `.hero-viewport` negative margin under fixed nav; doctor portrait at `/images/doctor/dr-prakash-acharya.png`.
-- Treatments section includes `#hair-services` anchor for the Hair restoration nav link.
+- Hero: full-bleed clinic poster; left gradient overlay; combined hours/location `.hero-info-card` on desktop; doctor portrait at `/images/doctor/dr-prakash-acharya.png`.
+- Treatments: image-top `.treatment-card` grid (skin + hair only); aesthetic services listed in Outcomes section.
 - Public build uses `vite-plugin-singlefile`; admin is a separate Vite project in `admin/` (dev port 5174); production deploys via `vercel.json` to Vercel (public at root, admin SPA at `/admin`, `pokhara-skin-and-hair-clinic.vercel.app`).
 - Supabase backs appointment persistence, admin Auth, and Resend email edge functions with separate patient vs admin HTML templates for bookings and enquiries.
 - Admin SPA routes: `/dashboard`, `/bookings`, `/enquiries`, `/analytics`; login via `src/lib/admin-url.ts` (`VITE_ADMIN_URL`); patient fields read-only, status/`internal_notes` editable.
-- Public booking (`#contact`) and general enquiry (`#enquiry`, `GeneralEnquiry.tsx`) forms persist to `appointments` with `form_type`; both use `.booking-form-panel` bordered card.
+- Public booking (`#contact`) and general enquiry (`#enquiry`, `GeneralEnquiry.tsx`) forms persist to `appointments` with `form_type`; forms use borderless `.field-input` on surface-container-low inside `.form-card` white panels.
+- Footer is light (`bg-surface-container-low`), four columns, secondary brand title.
 - GitHub repo: `catalyixacademia-hash/pokhara-skin-and-hair-clinic`.

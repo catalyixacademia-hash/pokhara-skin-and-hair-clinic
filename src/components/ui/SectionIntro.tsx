@@ -17,11 +17,9 @@ export default function SectionIntro({
   inverted = false,
 }: SectionIntroProps) {
   return (
-    <div className={cn('mb-10 md:mb-12 max-w-2xl', className)}>
+    <div className={cn('mb-10 md:mb-14 lg:mb-16 space-y-3 md:space-y-4 max-w-2xl', className)}>
       {index && (
-        <IndexMarker className="mb-4" inverted={inverted}>
-          {index}
-        </IndexMarker>
+        <IndexMarker inverted={inverted}>{index}</IndexMarker>
       )}
       <h2
         className={cn(
@@ -34,7 +32,7 @@ export default function SectionIntro({
       {lede && (
         <p
           className={cn(
-            'font-body text-base mt-4 leading-relaxed max-w-xl',
+            'font-body text-base leading-relaxed max-w-2xl',
             inverted ? 'text-paper/70' : 'text-muted',
           )}
         >

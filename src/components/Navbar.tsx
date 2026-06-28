@@ -19,12 +19,25 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ] as const;
 
+function PersonIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M5 20c0-3.314 3.134-6 7-6s7 2.686 7 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 type NavBrandProps = {
   onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  onHero: boolean;
 };
 
-function NavBrand({ onClick, onHero }: NavBrandProps) {
+function NavBrand({ onClick }: NavBrandProps) {
   return (
     <a
       href="#"
@@ -44,30 +57,17 @@ function NavBrand({ onClick, onHero }: NavBrandProps) {
         />
       </span>
       <span className="nav-brand__text">
-        <span
-          className={cn(
-            'nav-brand__title block',
-            onHero ? 'text-accent' : 'text-brand-green',
-          )}
-        >
-          {clinic.nameShort}
-        </span>
+        <span className="nav-brand__title block">{clinic.wordmarkLine1}</span>
+        <span className="nav-brand__subtitle block">{clinic.wordmarkLine2}</span>
       </span>
     </a>
   );
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState('#services');
   const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -77,6 +77,7 @@ export default function Navbar() {
   }, [menuOpen]);
 
   const handleNavClick = (href: string) => {
+    setActiveHref(href);
     setMenuOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -87,58 +88,40 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
-  const onHero = !scrolled && !menuOpen;
-
-  const linkClass = cn(
-    'nav-link font-body text-sm bg-transparent border-none cursor-pointer touch-target py-2',
-    onHero ? 'text-ink/80 hover:text-accent' : 'text-muted hover:text-ink',
-  );
+  const linkClass = (href: string) =>
+    cn(
+      'nav-link bg-transparent border-none cursor-pointer touch-target py-2 px-2 xl:px-3 text-muted hover:text-accent whitespace-nowrap',
+      activeHref === href && 'nav-link-active text-accent',
+    );
 
   return (
     <>
-      <header
-        className={cn(
-          'site-header fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] transition-all duration-200',
-          onHero
-            ? 'bg-white/25 backdrop-blur-md border-b border-white/30'
-            : 'bg-surface/95 backdrop-blur-sm border-b border-line',
-        )}
-      >
+      <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant shadow-sm">
         <Container>
-          <div className="flex items-center justify-between gap-3 min-h-14 py-1.5">
-            <NavBrand onClick={goHome} onHero={onHero} />
+          <div className="flex items-center justify-between gap-3 min-h-[var(--nav-height)] py-3">
+            <NavBrand onClick={goHome} />
 
-            <nav className="hidden lg:flex items-center justify-center flex-1 gap-1 xl:gap-2 min-w-0" aria-label="Main">
-              {navLinks.map((link, index) => (
+            <nav className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-6 min-w-0" aria-label="Main">
+              {navLinks.map((link) => (
                 <button
                   key={link.href}
                   type="button"
                   onClick={() => handleNavClick(link.href)}
-                  className={cn(
-                    linkClass,
-                    'px-2 xl:px-3 text-[13px] xl:text-sm whitespace-nowrap',
-                    index === 0 && onHero && 'nav-link-active text-accent',
-                  )}
+                  className={linkClass(link.href)}
                 >
                   {link.label}
                 </button>
               ))}
             </nav>
 
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <a
                 href={adminLoginUrl}
-                className="hidden xl:inline-flex btn-secondary text-sm py-2 px-3"
+                className="nav-staff-icon touch-target"
+                aria-label="Staff login"
               >
-                Staff login
+                <PersonIcon />
               </a>
-              <button
-                type="button"
-                onClick={() => handleNavClick('#contact')}
-                className="hidden sm:inline-flex btn-accent text-sm py-2 px-4 lg:px-5"
-              >
-                Book appointment
-              </button>
 
               <button
                 type="button"
@@ -197,12 +180,14 @@ export default function Navbar() {
             </button>
 
             <div className="mt-8 space-y-3">
-              <a href={adminLoginUrl} className="btn-secondary w-full text-center">
-                Staff login
+              <a
+                href={adminLoginUrl}
+                className="nav-staff-icon nav-staff-icon--menu w-full justify-center"
+                aria-label="Staff login"
+              >
+                <PersonIcon />
+                <span className="font-body text-sm">Staff login</span>
               </a>
-              <button type="button" onClick={() => handleNavClick('#contact')} className="btn-accent w-full">
-                Book appointment
-              </button>
               <a href={phoneHref(getPhone('main').number)} className="btn-secondary w-full text-center">
                 Call {formatPhoneDisplay(getPhone('main').number)}
               </a>

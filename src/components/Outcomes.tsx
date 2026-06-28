@@ -6,24 +6,21 @@ import { skinServices, hairServices, aestheticServices } from '../data/services'
 const outcomeGroups = [
   {
     label: 'Skin conditions',
-    category: 'skin' as const,
     items: skinServices.map((s) => s.title),
   },
   {
     label: 'Hair & scalp',
-    category: 'hair' as const,
     items: hairServices.map((s) => s.title),
   },
   {
     label: 'Aesthetic concerns',
-    category: 'aesthetic' as const,
     items: aestheticServices.map((s) => s.title),
   },
 ];
 
 export default function Outcomes() {
   return (
-    <section id="results" className="bg-paper section-padding-sm border-t border-line">
+    <section id="results" className="bg-surface-container-highest section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -33,25 +30,14 @@ export default function Outcomes() {
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid md:grid-cols-3 gap-6">
           {outcomeGroups.map((group, i) => (
             <Reveal key={group.label} delay={i * 0.06}>
-              <div>
-                <p
-                  className={
-                    group.category === 'hair'
-                      ? 'mono-label text-hair-accent mb-4'
-                      : 'mono-label mb-4'
-                  }
-                >
-                  {group.label}
-                </p>
-                <ul className="space-y-2">
+              <div className="space-y-6">
+                <h3 className="category-heading">{group.label}</h3>
+                <ul className="space-y-3">
                   {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="font-body text-sm text-ink py-2 border-b border-line last:border-0"
-                    >
+                    <li key={item} className="font-body text-base text-muted">
                       {item}
                     </li>
                   ))}

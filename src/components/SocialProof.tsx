@@ -8,7 +8,7 @@ export default function SocialProof() {
   const featured = testimonials.slice(0, 3);
 
   return (
-    <section className="bg-surface section-padding border-t border-line">
+    <section className="bg-surface section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -18,18 +18,14 @@ export default function SocialProof() {
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {featured.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.06}>
-              <blockquote className="quote-block">
-                <p className="font-body text-sm text-muted leading-relaxed mb-4">
-                  &ldquo;{item.quote}&rdquo;
-                </p>
+              <blockquote className="testimonial-card">
+                <p className="testimonial-card__quote">&ldquo;{item.quote}&rdquo;</p>
                 <footer>
-                  <cite className="font-display text-sm text-ink not-italic block">
-                    {item.name}
-                  </cite>
-                  <p className="font-mono text-xs text-muted mt-1">
+                  <cite className="text-label text-ink not-italic block">{item.name}</cite>
+                  <p className="font-body text-caption text-muted mt-1 not-italic">
                     {item.location} · {item.treatment}
                   </p>
                 </footer>

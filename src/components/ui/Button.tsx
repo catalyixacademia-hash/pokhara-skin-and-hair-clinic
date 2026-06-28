@@ -1,6 +1,6 @@
 import { cn } from '../../utils/cn';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline-frost' | 'ghost' | 'whatsapp';
+type ButtonVariant = 'primary' | 'secondary' | 'outline-frost' | 'ghost' | 'whatsapp' | 'nav-cta' | 'form-submit';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -11,9 +11,11 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const variantClass: Record<ButtonVariant, string> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
-  'outline-frost': 'btn-outline-frost',
+  'outline-frost': 'btn-secondary-outline',
   ghost: 'btn-ghost',
   whatsapp: 'btn-whatsapp',
+  'nav-cta': 'btn-nav-cta',
+  'form-submit': 'btn-form-submit',
 };
 
 export default function Button({

@@ -3,6 +3,8 @@ export const clinic = {
   nameShort: 'Pokhara Skin & Hair Clinic',
   nameLine1: 'Pokhara Skin',
   nameLine2: '& Hair Clinic',
+  wordmarkLine1: 'Pokhara',
+  wordmarkLine2: 'Skin & Hair Clinic',
   siteUrl: 'https://pokhara-skin-and-hair-clinic.vercel.app',
   tagline:
     'Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology.',

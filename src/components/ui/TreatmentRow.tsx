@@ -19,8 +19,8 @@ export default function TreatmentRow({
   onSelect,
   className,
 }: TreatmentRowProps) {
-  const categoryClass =
-    category === 'hair' ? 'category-tag--hair' : 'category-tag';
+  const categoryLabel =
+    category === 'skin' ? 'Skin care' : category === 'hair' ? 'Hair restoration' : 'Aesthetic';
 
   if (featured) {
     const CardTag = onSelect ? 'button' : 'article';
@@ -28,34 +28,28 @@ export default function TreatmentRow({
       <CardTag
         type={onSelect ? 'button' : undefined}
         onClick={onSelect}
-        className={cn(
-          'treatment-featured flex flex-col h-full text-left group transition-all duration-300',
-          onSelect && 'treatment-row--interactive hover:border-ink hover:shadow-sm cursor-pointer',
-          className
-        )}
+        className={cn('treatment-card', onSelect && 'cursor-pointer', className)}
       >
         {img && (
-          <div className="mb-4 overflow-hidden rounded-[var(--radius-sm)] border border-line aspect-[4/3] bg-paper w-full">
-            <img
-              src={img}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-              decoding="async"
-            />
+          <div className="treatment-card__image">
+            <img src={img} alt={title} loading="lazy" decoding="async" />
           </div>
         )}
-        <span className={cn('category-tag block mb-3', category === 'hair' && 'category-tag--hair')}>
-          {category === 'skin' ? 'Skin care' : category === 'hair' ? 'Hair restoration' : 'Aesthetic'}
-        </span>
-        <h3 className="font-display text-h3 text-ink mb-2">{title}</h3>
-        <p className="font-body text-sm text-muted leading-relaxed flex-grow">{description}</p>
-        {onSelect && (
-          <div className="mt-4 pt-3 border-t border-line w-full flex items-center justify-between font-mono text-xs text-muted group-hover:text-ink transition-colors duration-200">
-            <span>Request visit</span>
-            <span>→</span>
-          </div>
-        )}
+        <div className="treatment-card__body">
+          <span className={cn('category-tag', category === 'hair' && 'category-tag--hair')}>
+            {categoryLabel}
+          </span>
+          <h3 className="font-display text-xl text-ink">{title}</h3>
+          <p className="font-body text-base text-muted leading-relaxed line-clamp-2 flex-grow">
+            {description}
+          </p>
+          {onSelect && (
+            <span className="treatment-card__link">
+              Request visit
+              <span aria-hidden="true">→</span>
+            </span>
+          )}
+        </div>
       </CardTag>
     );
   }
@@ -73,25 +67,17 @@ export default function TreatmentRow({
       )}
     >
       {img && (
-        <div className="w-16 h-12 shrink-0 overflow-hidden rounded-[var(--radius-sm)] border border-line bg-paper">
-          <img
-            src={img}
-            alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
-            decoding="async"
-          />
+        <div className="w-16 h-12 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
+          <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <span className={cn('category-tag block mb-1', categoryClass)}>
-          {category === 'skin' ? 'Skin' : category === 'hair' ? 'Hair' : 'Aesthetic'}
-        </span>
+        <span className="category-tag block mb-1">{categoryLabel}</span>
         <h3 className="font-display text-base text-ink mb-1">{title}</h3>
         <p className="font-body text-sm text-muted leading-relaxed line-clamp-2">{description}</p>
       </div>
       {onSelect && (
-        <span className="font-mono text-sm text-muted shrink-0 pt-1" aria-hidden>
+        <span className="text-accent shrink-0 pt-1" aria-hidden>
           →
         </span>
       )}
