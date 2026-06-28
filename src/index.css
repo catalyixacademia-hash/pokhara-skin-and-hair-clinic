@@ -223,38 +223,158 @@
 .hero-viewport {
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - var(--nav-height));
+  min-height: 100dvh;
+  margin-top: calc(-1 * var(--nav-height));
+  padding-top: var(--nav-height);
 }
 
 .hero-section {
   position: relative;
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: calc(100dvh - var(--nav-height));
   overflow: hidden;
   background-color: var(--color-ink);
 }
 
-.hero-overlay-bottom {
+.hero-overlay-subtle {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    to top,
-    rgba(247, 248, 250, 0.75) 0%,
-    rgba(247, 248, 250, 0.25) 30%,
-    transparent 52%
+    105deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.08) 38%,
+    transparent 62%
   );
   pointer-events: none;
 }
 
-.hero-content-panel {
-  background: rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(18px) saturate(1.15);
-  -webkit-backdrop-filter: blur(18px) saturate(1.15);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius-md);
+.hero-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: calc(100dvh - var(--nav-height));
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .hero-shell {
+    display: block;
+    position: relative;
+    padding-top: clamp(2rem, 6vh, 4rem);
+    padding-bottom: 2.5rem;
+  }
+}
+
+.hero-main-card {
+  max-width: 34rem;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0.75rem;
   box-shadow:
-    0 8px 32px rgba(13, 17, 23, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    0 12px 40px rgba(13, 17, 23, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.hero-info-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 18rem;
+}
+
+@media (min-width: 1024px) {
+  .hero-info-stack {
+    position: absolute;
+    right: 0;
+    bottom: 2.5rem;
+    width: min(100%, 17.5rem);
+  }
+}
+
+.hero-info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 8px 28px rgba(13, 17, 23, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.hero-info-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+}
+
+.hero-info-card__icon--accent {
+  background: rgba(20, 92, 122, 0.12);
+  color: var(--color-accent);
+}
+
+.hero-info-card__icon--warm {
+  background: rgba(234, 88, 12, 0.12);
+  color: #c2410c;
+}
+
+.hero-info-card__label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-bottom: 0.125rem;
+}
+
+.hero-info-card__value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.hero-info-card__note {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 0.125rem;
+}
+
+.hero-content-panel {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 12px 40px rgba(13, 17, 23, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
   padding: clamp(1.25rem, 3vw, 1.75rem);
 }
 
@@ -328,13 +448,7 @@
 }
 
 .nav-brand__subtitle {
-  display: block;
-  margin-top: 0.125rem;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  display: none;
 }
 
 .site-header {
@@ -358,8 +472,74 @@
 }
 
 .nav-link:hover::after,
-.nav-link.active::after {
+.nav-link.active::after,
+.nav-link-active::after {
   width: 100%;
+}
+
+.nav-link-active::after {
+  background-color: var(--color-accent);
+}
+
+.nav-link-active {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-accent:hover {
+  background-color: #0f4a61;
+  border-color: #0f4a61;
+  color: var(--color-surface);
+}
+
+.btn-accent:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--color-line);
 }
 
 .btn-primary {

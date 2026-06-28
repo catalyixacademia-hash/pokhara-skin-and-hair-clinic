@@ -45,7 +45,7 @@ export default function Treatments() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="pt-8 border-t border-line">
+          <div id="hair-services" className="pt-8 border-t border-line scroll-mt-24">
             <p className="mono-label text-hair-accent mb-6">Hair restoration — complementary care</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {hairServices.map((service) => (

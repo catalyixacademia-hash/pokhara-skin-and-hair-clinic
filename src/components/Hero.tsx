@@ -1,14 +1,42 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  address,
-  clinic,
-  doctor,
-  formatPhoneDisplay,
-  getPhone,
-  hours,
-  phoneHref,
-} from '../data/clinic';
+import { address, hours } from '../data/clinic';
 import Container from './ui/Container';
+
+function ShieldIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5l8-3z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle cx="12" cy="10" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M12 8v4l3 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -37,66 +65,65 @@ export default function Hero() {
           decoding="async"
           fetchPriority="high"
         />
-        <div className="hero-overlay-bottom" aria-hidden="true" />
+        <div className="hero-overlay-subtle" aria-hidden="true" />
       </div>
 
-      <Container className="relative z-10 flex min-h-[calc(100dvh-var(--nav-height))] flex-col">
-        <div className="flex-1 min-h-[8rem] sm:min-h-[10rem] lg:min-h-[14rem]" aria-hidden="true" />
+      <Container className="hero-shell relative z-10">
+        <motion.div
+          className="hero-main-card"
+          {...stagger}
+          transition={{ ...stagger.transition, delay: 0 }}
+        >
+          <p className="hero-badge">
+            <ShieldIcon />
+            Board certified experts
+          </p>
 
-        <div className="grid gap-4 pb-6 pt-4 md:pb-10 md:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(260px,300px)] lg:items-end lg:gap-5">
-          <motion.div
-            className="hero-content-panel max-w-2xl"
-            {...stagger}
-            transition={{ ...stagger.transition, delay: 0 }}
-          >
-            <p className="mono-label mb-3">Nayabazar-8 · Pokhara, Nepal</p>
+          <h1 className="font-display text-h1 text-accent mb-4 leading-tight">
+            Expert care for skin &amp; hair
+          </h1>
 
-            <h1 className="font-display text-h1 text-ink mb-3 leading-tight">
-              Advanced dermatology for skin that deserves clinical care.
-            </h1>
+          <p className="font-body text-base text-muted leading-relaxed mb-6 max-w-md">
+            Leading dermatology and hair restoration in Pokhara. Experience clinical precision in a
+            serene environment.
+          </p>
 
-            <p className="font-body text-sm md:text-base text-muted leading-relaxed mb-5 max-w-lg">
-              Board-certified skin treatments in Pokhara — with specialized hair restoration when
-              you need it. Led by {doctor.name}, {doctor.titleShort}.
-            </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button type="button" onClick={() => scrollTo('#contact')} className="btn-accent w-full sm:w-auto">
+              Book appointment
+            </button>
+            <button type="button" onClick={() => scrollTo('#services')} className="btn-hero-secondary w-full sm:w-auto">
+              View treatments
+            </button>
+          </div>
+        </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button type="button" onClick={() => scrollTo('#contact')} className="btn-primary w-full sm:w-auto">
-                Book appointment
-              </button>
-              <button type="button" onClick={() => scrollTo('#services')} className="btn-outline-frost w-full sm:w-auto">
-                View treatments
-              </button>
+        <motion.div
+          className="hero-info-stack"
+          {...stagger}
+          transition={{ ...stagger.transition, delay: 0.12 }}
+        >
+          <div className="hero-info-card">
+            <span className="hero-info-card__icon hero-info-card__icon--accent">
+              <PinIcon />
+            </span>
+            <div>
+              <p className="hero-info-card__label">Location</p>
+              <p className="hero-info-card__value">{address.line1}</p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.aside
-            className="clinic-meta-panel w-full lg:justify-self-end"
-            aria-label="Clinic information"
-            {...stagger}
-            transition={{ ...stagger.transition, delay: 0.1 }}
-          >
-            <dl>
-              <dt>Hours</dt>
-              <dd>{hours.daily}</dd>
-              <dd className="text-[0.75rem]">{hours.saturdayNote}</dd>
-
-              <dt>Location</dt>
-              <dd>{address.line1}</dd>
-              <dd>{address.landmark}</dd>
-
-              <dt>Appointments</dt>
-              <dd>
-                <a href={phoneHref(getPhone('appointments').number)} className="text-accent hover:underline">
-                  {formatPhoneDisplay(getPhone('appointments').number)}
-                </a>
-              </dd>
-
-              <dt>Clinic</dt>
-              <dd>{clinic.nameShort}</dd>
-            </dl>
-          </motion.aside>
-        </div>
+          <div className="hero-info-card">
+            <span className="hero-info-card__icon hero-info-card__icon--warm">
+              <ClockIcon />
+            </span>
+            <div>
+              <p className="hero-info-card__label">Opening hours</p>
+              <p className="hero-info-card__value">{hours.summary}</p>
+              <p className="hero-info-card__note">{hours.saturdayNote}</p>
+            </div>
+          </div>
+        </motion.div>
       </Container>
     </section>
   );
