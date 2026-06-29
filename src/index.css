@@ -601,34 +601,20 @@
   line-height: 1.05;
 }
 
-.nav-brand__title {
+.nav-brand__name {
+  display: block;
   font-family: 'Manrope', sans-serif;
-  font-size: 1.125rem;
+  font-size: clamp(0.8125rem, 2.8vw, 1.125rem);
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.15;
   color: var(--color-brand-green);
+  white-space: nowrap;
 }
 
 @media (min-width: 768px) {
-  .nav-brand__title {
-    font-size: 1.25rem;
-  }
-}
-
-.nav-brand__subtitle {
-  margin-top: 0.125rem;
-  font-family: 'Work Sans', sans-serif;
-  font-size: 0.5625rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-brand-navy);
-}
-
-@media (min-width: 768px) {
-  .nav-brand__subtitle {
-    font-size: 0.625rem;
-    letter-spacing: 0.12em;
+  .nav-brand__name {
+    font-size: 1.125rem;
   }
 }
 
@@ -1161,20 +1147,18 @@
 
 @media (max-width: 1023px) {
   .book-fab {
-    left: max(1rem, env(safe-area-inset-left, 1rem));
-    right: auto;
-    bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
-    padding: 0.875rem 1rem;
+    right: max(1rem, env(safe-area-inset-right, 1rem));
+    left: auto;
+    bottom: max(5.25rem, calc(env(safe-area-inset-bottom, 0px) + 5.25rem));
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
   }
 
   .book-fab__label {
     display: none;
-  }
-}
-
-@media (max-width: 639px) {
-  .book-fab {
-    bottom: max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem));
   }
 }
 
@@ -1244,12 +1228,13 @@
     padding: 0.6875rem 0.75rem;
   }
 
-  .nav-brand__subtitle {
-    display: none;
+  .hero-bg-image {
+    object-position: 30% 42%;
   }
 
-  .nav-brand__title {
-    font-size: 1rem;
+  .nav-brand__name {
+    font-size: clamp(0.75rem, 3.1vw, 0.875rem);
+    white-space: normal;
   }
 
   .nav-brand__mark-wrap {
@@ -1292,14 +1277,6 @@
     height: 7.5rem;
   }
 
-  .book-fab {
-    left: max(1rem, env(safe-area-inset-left, 1rem));
-    right: auto;
-  }
-
-  .whatsapp-float {
-    right: max(1rem, env(safe-area-inset-right, 1rem));
-  }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
@@ -1319,6 +1296,10 @@
   .hero-shell {
     min-height: calc(min(860px, 94dvh) - var(--nav-height));
     padding-bottom: 1.5rem;
+  }
+
+  .hero-bg-image {
+    object-position: 34% 40%;
   }
 
   .hero-bottom-band {

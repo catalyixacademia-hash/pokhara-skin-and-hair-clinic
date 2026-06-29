@@ -57,8 +57,7 @@ function NavBrand({ onClick }: NavBrandProps) {
         />
       </span>
       <span className="nav-brand__text">
-        <span className="nav-brand__title block">{clinic.wordmarkLine1}</span>
-        <span className="nav-brand__subtitle block">{clinic.wordmarkLine2}</span>
+        <span className="nav-brand__name">{clinic.nameShort}</span>
       </span>
     </a>
   );
