@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   address,
   clinic,
@@ -9,7 +10,9 @@ import {
   phoneHref,
   social,
 } from '../data/clinic';
+import { legalDocuments, type LegalDocument } from '../data/legal';
 import Container from './ui/Container';
+import LegalModal from './LegalModal';
 
 const quickLinks = [
   { label: 'About', href: '#about' },
@@ -28,6 +31,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [activeLegal, setActiveLegal] = useState<LegalDocument | null>(null);
+
   const scrollTo = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -114,18 +119,21 @@ export default function Footer() {
             {doctor.title}
           </p>
           <div className="flex flex-wrap justify-center gap-6">
-            <a href="#" className="font-body text-caption text-muted hover:text-accent">
-              Privacy Policy
-            </a>
-            <a href="#" className="font-body text-caption text-muted hover:text-accent">
-              Medical Disclaimer
-            </a>
-            <a href="#" className="font-body text-caption text-muted hover:text-accent">
-              Terms of Service
-            </a>
+            {legalDocuments.map((doc) => (
+              <button
+                key={doc.id}
+                type="button"
+                onClick={() => setActiveLegal(doc)}
+                className="font-body text-caption text-muted hover:text-accent bg-transparent border-none cursor-pointer transition-colors"
+              >
+                {doc.label}
+              </button>
+            ))}
           </div>
         </div>
       </Container>
+
+      <LegalModal doc={activeLegal} onClose={() => setActiveLegal(null)} />
     </footer>
   );
 }
