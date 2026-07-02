@@ -17,6 +17,8 @@ export type CountEntry = {
 export type DailyCount = {
   date: string;
   count: number;
+  bookings: number;
+  enquiries: number;
 };
 
 function startOfDay(d: Date): Date {
@@ -36,23 +38,26 @@ function isInRange(iso: string, from: Date, to: Date): boolean {
   return t >= from.getTime() && t < to.getTime();
 }
 
-export function computeAnalytics(rows: Submission[]): {
+export function computeAnalytics(
+  rows: Submission[],
+  rangeDays = 30,
+): {
   summary: AnalyticsSummary;
   topTopics: CountEntry[];
   statusBreakdown: CountEntry[];
-  dailyLast30: DailyCount[];
+  dailyRange: DailyCount[];
 } {
   const now = new Date();
   const weekStart = daysAgo(7);
   const lastWeekStart = daysAgo(14);
-  const thirtyDaysAgo = daysAgo(30);
+  const rangeStart = daysAgo(rangeDays);
 
   const thisWeek = rows.filter((r) => isInRange(r.created_at, weekStart, now)).length;
   const lastWeek = rows.filter((r) => isInRange(r.created_at, lastWeekStart, weekStart)).length;
 
   const topicMap = new Map<string, number>();
   const statusMap = new Map<SubmissionStatus, number>();
-  const dailyMap = new Map<string, number>();
+  const dailyMap = new Map<string, { total: number; bookings: number; enquiries: number }>();
 
   for (const row of rows) {
     const topic = row.treatment.trim() || 'Unknown';
@@ -60,8 +65,12 @@ export function computeAnalytics(rows: Submission[]): {
     statusMap.set(row.status, (statusMap.get(row.status) ?? 0) + 1);
 
     const day = row.created_at.slice(0, 10);
-    if (new Date(row.created_at) >= thirtyDaysAgo) {
-      dailyMap.set(day, (dailyMap.get(day) ?? 0) + 1);
+    if (new Date(row.created_at) >= rangeStart) {
+      const current = dailyMap.get(day) ?? { total: 0, bookings: 0, enquiries: 0 };
+      current.total += 1;
+      if ((row.form_type as FormType) === 'general_query') current.enquiries += 1;
+      else current.bookings += 1;
+      dailyMap.set(day, current);
     }
   }
 
@@ -74,11 +83,17 @@ export function computeAnalytics(rows: Submission[]): {
     (label) => ({ label, count: statusMap.get(label) ?? 0 }),
   );
 
-  const dailyLast30: DailyCount[] = [];
-  for (let i = 29; i >= 0; i -= 1) {
+  const dailyRange: DailyCount[] = [];
+  for (let i = rangeDays - 1; i >= 0; i -= 1) {
     const d = daysAgo(i);
     const key = d.toISOString().slice(0, 10);
-    dailyLast30.push({ date: key, count: dailyMap.get(key) ?? 0 });
+    const entry = dailyMap.get(key) ?? { total: 0, bookings: 0, enquiries: 0 };
+    dailyRange.push({
+      date: key,
+      count: entry.total,
+      bookings: entry.bookings,
+      enquiries: entry.enquiries,
+    });
   }
 
   return {
@@ -92,7 +107,7 @@ export function computeAnalytics(rows: Submission[]): {
     },
     topTopics,
     statusBreakdown,
-    dailyLast30,
+    dailyRange,
   };
 }
 

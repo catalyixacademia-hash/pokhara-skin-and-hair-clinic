@@ -28,7 +28,7 @@ export default function Login() {
           <p className="text-[10px] uppercase tracking-widest text-accent mb-2">Staff only</p>
           <h1 className="font-serif text-2xl text-ink mb-1">Admin panel</h1>
           <p className="text-sm text-muted mb-6">
-            Sign in to manage bookings, enquiries, and analytics.
+            Sign in to manage bookings, enquiries, website content, and analytics.
           </p>
           {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
           <div className="space-y-4">

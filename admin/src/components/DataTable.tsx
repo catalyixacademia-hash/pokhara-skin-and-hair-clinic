@@ -12,7 +12,11 @@ type DataTableProps<T extends { id: string }> = {
   search: string;
   onSearchChange: (v: string) => void;
   onDelete: (row: T) => void;
-  onView: (row: T) => void;
+  onView?: (row: T) => void;
+  onEdit?: (row: T) => void;
+  viewLabel?: string;
+  editLabel?: string;
+  toolbar?: ReactNode;
 };
 
 export default function DataTable<T extends { id: string }>({
@@ -22,10 +26,14 @@ export default function DataTable<T extends { id: string }>({
   onSearchChange,
   onDelete,
   onView,
+  onEdit,
+  viewLabel = 'View',
+  editLabel = 'Edit',
+  toolbar,
 }: DataTableProps<T>) {
   return (
     <div className="admin-card">
-      <div className="mb-4">
+      <div className="mb-4 flex flex-wrap items-center gap-3 justify-between">
         <input
           type="search"
           placeholder="Search…"
@@ -33,6 +41,7 @@ export default function DataTable<T extends { id: string }>({
           onChange={(e) => onSearchChange(e.target.value)}
           className="admin-input max-w-xs"
         />
+        {toolbar}
       </div>
       <div className="overflow-x-auto">
         <table className="admin-table w-full text-sm">
@@ -58,13 +67,24 @@ export default function DataTable<T extends { id: string }>({
                 ))}
                 <td className="py-3.5">
                   <div className="flex gap-2 items-center justify-end">
-                    <button
-                      type="button"
-                      className="admin-btn-secondary text-xs py-1.5 px-3"
-                      onClick={() => onView(row)}
-                    >
-                      View
-                    </button>
+                    {onView && (
+                      <button
+                        type="button"
+                        className="admin-btn-secondary text-xs py-1.5 px-3"
+                        onClick={() => onView(row)}
+                      >
+                        {viewLabel}
+                      </button>
+                    )}
+                    {onEdit && (
+                      <button
+                        type="button"
+                        className="admin-btn-secondary text-xs py-1.5 px-3"
+                        onClick={() => onEdit(row)}
+                      >
+                        {editLabel}
+                      </button>
+                    )}
                     <button
                       type="button"
                       className="admin-btn-danger text-xs py-1.5 px-3"

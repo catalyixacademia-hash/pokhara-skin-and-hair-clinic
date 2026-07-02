@@ -2,6 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import StatusBadge from '@/components/StatusBadge';
+import ConfirmDelete from '@/components/ConfirmDelete';
+import { useDebouncedSave } from '@/hooks/useDebouncedSave';
+import {
+  formatPreferredDate,
+  phoneHref,
+  preferredDateUrgency,
+  urgencyStyles,
+  whatsappHref,
+} from '@/lib/contact-links';
 import {
   SUBMISSION_STATUSES,
   formTypeLabel,
@@ -22,11 +31,18 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
   const basePath = listBasePath(formType);
   const [row, setRow] = useState<Submission | null>(null);
   const [internalNotes, setInternalNotes] = useState('');
+  const [notesSaved, setNotesSaved] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState<SubmissionStatus | null>(null);
+
+  const [notesInitialized, setNotesInitialized] = useState(false);
 
   useEffect(() => {
     if (!id) return;
+    setNotesInitialized(false);
     supabase
       .from('appointments')
       .select('*')
@@ -38,6 +54,7 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
           const submission = data as Submission;
           setRow(submission);
           setInternalNotes(submission.internal_notes ?? '');
+          setNotesInitialized(true);
         }
       });
   }, [id]);
@@ -56,23 +73,59 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
     setSaving(false);
   };
 
+  useDebouncedSave(
+    notesInitialized ? internalNotes : null,
+    (value) => {
+      if (!row || value === null) return;
+      const trimmed = value.trim() || null;
+      if (trimmed === (row.internal_notes ?? null)) {
+        setNotesSaved(true);
+        return;
+      }
+      setNotesSaved(false);
+      void updateField({ internal_notes: trimmed }).then(() => setNotesSaved(true));
+    },
+  );
+
   const handleStatusChange = (status: SubmissionStatus) => {
+    if (status === 'cancelled' || status === 'completed') {
+      setPendingStatus(status);
+      return;
+    }
     void updateField({ status });
   };
 
-  const handleSaveNotes = () => {
-    void updateField({ internal_notes: internalNotes.trim() || null });
+  const confirmStatusChange = () => {
+    if (!pendingStatus) return;
+    void updateField({ status: pendingStatus });
+    setPendingStatus(null);
   };
 
   const handleDelete = async () => {
     if (!id || !row) return;
-    if (!confirm(`Delete submission from ${row.name}? This cannot be undone.`)) return;
+    setDeleting(true);
     const { error: deleteError } = await supabase.from('appointments').delete().eq('id', id);
     if (deleteError) {
       setError(deleteError.message);
+      setDeleting(false);
       return;
     }
     navigate(basePath);
+  };
+
+  const copySummary = async () => {
+    if (!row) return;
+    const lines = [
+      row.name,
+      row.phone,
+      row.email ?? 'No email',
+      `${topicLabel}: ${row.treatment}`,
+      formType === 'booking' && row.preferred_date
+        ? `Preferred date: ${formatPreferredDate(row.preferred_date)}`
+        : null,
+      row.message ? `Message: ${row.message}` : null,
+    ].filter(Boolean);
+    await navigator.clipboard.writeText(lines.join('\n'));
   };
 
   if (error && !row) {
@@ -109,6 +162,10 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
     );
   }
 
+  const urgency =
+    formType === 'booking' ? preferredDateUrgency(row.preferred_date) : 'none';
+  const waMessage = `Hello ${row.name}, this is Pokhara Skin & Hair Clinic regarding your ${formType === 'booking' ? 'appointment request' : 'enquiry'}.`;
+
   return (
     <div>
       <Link to={basePath} className="admin-link">
@@ -123,9 +180,30 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
             <StatusBadge status={row.status} />
           </div>
         </div>
-        <button type="button" onClick={handleDelete} className="admin-btn-danger">
-          Delete
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <a href={phoneHref(row.phone)} className="admin-btn-secondary">
+            Call
+          </a>
+          <a
+            href={whatsappHref(row.phone, waMessage)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="admin-btn-secondary"
+          >
+            WhatsApp
+          </a>
+          {row.email && (
+            <a href={`mailto:${row.email}`} className="admin-btn-secondary">
+              Email
+            </a>
+          )}
+          <button type="button" onClick={() => void copySummary()} className="admin-btn-secondary">
+            Copy summary
+          </button>
+          <button type="button" onClick={() => setDeleteOpen(true)} className="admin-btn-danger">
+            Delete
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
@@ -139,12 +217,16 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
 
           <div>
             <p className="admin-label">Phone</p>
-            <p className="text-ink">{row.phone}</p>
+            <a href={phoneHref(row.phone)} className="admin-link text-base">
+              {row.phone}
+            </a>
           </div>
           {row.email && (
             <div>
               <p className="admin-label">Email</p>
-              <p className="text-ink">{row.email}</p>
+              <a href={`mailto:${row.email}`} className="admin-link text-base">
+                {row.email}
+              </a>
             </div>
           )}
           <div>
@@ -154,7 +236,14 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
           {formType === 'booking' && row.preferred_date && (
             <div>
               <p className="admin-label">Preferred date</p>
-              <p className="text-ink">{row.preferred_date}</p>
+              <p
+                className={`inline-flex text-sm font-medium px-2.5 py-1 rounded border ${urgencyStyles[urgency]}`}
+              >
+                {formatPreferredDate(row.preferred_date)}
+                {urgency === 'past' && ' · Overdue'}
+                {urgency === 'today' && ' · Today'}
+                {urgency === 'soon' && ' · This week'}
+              </p>
             </div>
           )}
           {row.message && (
@@ -196,26 +285,52 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
             <label className="admin-label" htmlFor="internal_notes">
               Internal notes
             </label>
-            <p className="text-xs text-muted mb-2">Staff only — not visible to the patient.</p>
+            <p className="text-xs text-muted mb-2">Staff only — auto-saves as you type.</p>
             <textarea
               id="internal_notes"
               rows={5}
               value={internalNotes}
-              onChange={(e) => setInternalNotes(e.target.value)}
+              onChange={(e) => {
+                setInternalNotes(e.target.value);
+                setNotesSaved(false);
+              }}
               className="admin-input resize-y"
               placeholder="e.g. Called back, offered Tuesday slot…"
             />
-            <button
-              type="button"
-              disabled={saving}
-              onClick={handleSaveNotes}
-              className="admin-btn-primary mt-3"
-            >
-              {saving ? 'Saving…' : 'Save notes'}
-            </button>
+            <p className="text-xs text-muted mt-2">
+              {saving ? 'Saving…' : notesSaved ? 'Saved' : 'Saving changes…'}
+            </p>
           </div>
         </div>
       </div>
+
+      <ConfirmDelete
+        open={deleteOpen}
+        title="Delete submission?"
+        message={`Delete submission from ${row.name}? This cannot be undone.`}
+        deleting={deleting}
+        onConfirm={() => void handleDelete()}
+        onCancel={() => setDeleteOpen(false)}
+      />
+
+      {pendingStatus && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
+          <div className="admin-card max-w-md w-full">
+            <h3 className="font-serif text-lg mb-2">Change status to {pendingStatus}?</h3>
+            <p className="text-sm text-muted mb-6">
+              Confirm this submission is marked as {pendingStatus}.
+            </p>
+            <div className="flex gap-3">
+              <button type="button" className="admin-btn-primary" onClick={confirmStatusChange}>
+                Confirm
+              </button>
+              <button type="button" className="admin-btn-secondary" onClick={() => setPendingStatus(null)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

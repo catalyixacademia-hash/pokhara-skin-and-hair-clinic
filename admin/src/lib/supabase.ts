@@ -8,6 +8,8 @@ if (!url || !anonKey) {
   console.warn('Admin: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required.');
 }
 
+export const MEDIA_BUCKET = 'clinic-media';
+
 export const supabase = createClient(url ?? '', anonKey ?? '', {
   auth: {
     autoRefreshToken: true,
