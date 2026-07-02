@@ -13,28 +13,54 @@ type Settings = {
 
 type Phone = { id: string; number: string; role: string; label: string; sort_order: number };
 
+const DEFAULT_SETTINGS: Settings = {
+  name: 'Pokhara Skin and Hair Clinic',
+  name_short: 'Pokhara Skin & Hair Clinic',
+  tagline: '',
+  address: {},
+  hours: {},
+  maps_embed_url: '',
+  maps_open_url: '',
+};
+
 export default function ClinicSettings() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [addressJson, setAddressJson] = useState('');
   const [hoursJson, setHoursJson] = useState('');
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  const applySettings = (s: Settings) => {
+    setSettings(s);
+    setAddressJson(JSON.stringify(s.address ?? {}, null, 2));
+    setHoursJson(JSON.stringify(s.hours ?? {}, null, 2));
+  };
+
   useEffect(() => {
     async function load() {
+      setLoading(true);
       const [{ data: s }, { data: p }] = await Promise.all([
-        supabase.from('clinic_settings').select('*').eq('id', 1).single(),
+        supabase.from('clinic_settings').select('*').eq('id', 1).maybeSingle(),
         supabase.from('phones').select('*').order('sort_order'),
       ]);
+
       if (s) {
-        setSettings(s as Settings);
-        setAddressJson(JSON.stringify(s.address, null, 2));
-        setHoursJson(JSON.stringify(s.hours, null, 2));
+        applySettings(s as Settings);
+      } else {
+        // No singleton row yet — create one so the page renders and saves work.
+        const { data: created } = await supabase
+          .from('clinic_settings')
+          .upsert({ id: 1, ...DEFAULT_SETTINGS }, { onConflict: 'id' })
+          .select()
+          .maybeSingle();
+        applySettings((created as Settings) ?? DEFAULT_SETTINGS);
       }
       setPhones(p ?? []);
+      setLoading(false);
     }
-    load();
+    void load();
   }, []);
 
   const saveSettings = async (e: React.FormEvent) => {
@@ -62,14 +88,14 @@ export default function ClinicSettings() {
     setSaving(false);
   };
 
-  if (!settings) return <p className="text-warm-gray">Loading…</p>;
+  if (loading || !settings) return <p className="text-muted">Loading…</p>;
 
   return (
     <div>
       <h1 className="font-serif text-3xl mb-6">Clinic Settings</h1>
 
       <form onSubmit={saveSettings} className="admin-card max-w-2xl space-y-4 mb-10">
-        {message && <p className="text-sm text-bronze">{message}</p>}
+        {message && <p className="text-sm text-accent">{message}</p>}
         <div>
           <label className="admin-label">Clinic Name</label>
           <input className="admin-input" value={settings.name} onChange={(e) => setSettings({ ...settings, name: e.target.value })} />
@@ -104,14 +130,15 @@ export default function ClinicSettings() {
       <h2 className="font-serif text-xl mb-4">Phone Numbers</h2>
       <div className="admin-card max-w-2xl">
         <ul className="space-y-2 text-sm">
+          {phones.length === 0 && <li className="text-muted">No phone numbers yet.</li>}
           {phones.map((p) => (
-            <li key={p.id} className="flex justify-between border-b border-blush/50 pb-2">
+            <li key={p.id} className="flex justify-between border-b border-line pb-2">
               <span>{p.label}</span>
-              <span className="text-warm-gray">{p.number}</span>
+              <span className="text-muted">{p.number}</span>
             </li>
           ))}
         </ul>
-        <p className="text-xs text-warm-gray mt-4">Edit phones via Supabase dashboard or extend this page with inline CRUD.</p>
+        <p className="text-xs text-muted mt-4">Edit phones via Supabase dashboard or extend this page with inline CRUD.</p>
       </div>
     </div>
   );

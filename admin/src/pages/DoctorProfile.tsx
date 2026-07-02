@@ -11,22 +11,51 @@ type Doctor = {
   portrait_url: string | null;
 };
 
+const DEFAULT_DOCTOR: Doctor = {
+  name: 'Dr. Prakash Acharya',
+  title: 'Board Certified Dermatologist',
+  title_short: 'Board Certified Dermatologist · MD',
+  bio: [],
+  credentials: [],
+  portrait_url: null,
+};
+
 export default function DoctorProfile() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [bioText, setBioText] = useState('');
   const [credentialsJson, setCredentialsJson] = useState('');
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  const applyDoctor = (d: Doctor) => {
+    setDoctor(d);
+    setBioText((d.bio ?? []).join('\n\n'));
+    setCredentialsJson(JSON.stringify(d.credentials ?? [], null, 2));
+  };
+
   useEffect(() => {
-    supabase.from('doctor_profile').select('*').eq('id', 1).single().then(({ data }) => {
+    async function load() {
+      setLoading(true);
+      const { data } = await supabase
+        .from('doctor_profile')
+        .select('*')
+        .eq('id', 1)
+        .maybeSingle();
+
       if (data) {
-        const d = data as Doctor;
-        setDoctor(d);
-        setBioText((d.bio ?? []).join('\n\n'));
-        setCredentialsJson(JSON.stringify(d.credentials ?? [], null, 2));
+        applyDoctor(data as Doctor);
+      } else {
+        const { data: created } = await supabase
+          .from('doctor_profile')
+          .upsert({ id: 1, ...DEFAULT_DOCTOR }, { onConflict: 'id' })
+          .select()
+          .maybeSingle();
+        applyDoctor((created as Doctor) ?? DEFAULT_DOCTOR);
       }
-    });
+      setLoading(false);
+    }
+    void load();
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -52,13 +81,13 @@ export default function DoctorProfile() {
     setSaving(false);
   };
 
-  if (!doctor) return <p className="text-warm-gray">Loading…</p>;
+  if (loading || !doctor) return <p className="text-muted">Loading…</p>;
 
   return (
     <div>
       <h1 className="font-serif text-3xl mb-6">Doctor Profile</h1>
       <form onSubmit={handleSave} className="admin-card max-w-2xl space-y-4">
-        {message && <p className="text-sm text-bronze">{message}</p>}
+        {message && <p className="text-sm text-accent">{message}</p>}
         <div>
           <label className="admin-label">Name</label>
           <input className="admin-input" value={doctor.name} onChange={(e) => setDoctor({ ...doctor, name: e.target.value })} />
