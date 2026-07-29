@@ -77,9 +77,9 @@ export default function Hero() {
       </div>
 
       <Container className="hero-shell">
-        <div className="hero-grid">
+        <div className="hero-bottom-band">
           <motion.div
-            className="hero-copy"
+            className="hero-main-card"
             {...stagger}
             transition={{ ...stagger.transition, delay: 0 }}
           >
@@ -90,9 +90,9 @@ export default function Hero() {
               Board certified dermatology
             </p>
 
-            <h1 className="hero-title">Expert care for skin &amp; hair</h1>
+            <h1 className="hero-main-card__title">Expert care for skin &amp; hair</h1>
 
-            <p className="hero-lede">
+            <p className="hero-main-card__lede">
               Leading dermatology and aesthetic care in Pokhara — clinical precision in a calm,
               modern setting.
             </p>
