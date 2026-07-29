@@ -23,13 +23,8 @@ export default function TreatmentRow({
     category === 'skin' ? 'Skin care' : category === 'hair' ? 'Hair restoration' : 'Aesthetic';
 
   if (featured) {
-    const CardTag = onSelect ? 'button' : 'article';
     return (
-      <CardTag
-        type={onSelect ? 'button' : undefined}
-        onClick={onSelect}
-        className={cn('treatment-card', onSelect && 'cursor-pointer', className)}
-      >
+      <article className={cn('treatment-card', className)}>
         {img && (
           <div className="treatment-card__image">
             <img src={img} alt={title} loading="lazy" decoding="async" />
@@ -43,14 +38,8 @@ export default function TreatmentRow({
           <p className="font-body text-base text-muted leading-relaxed line-clamp-2 flex-grow">
             {description}
           </p>
-          {onSelect && (
-            <span className="treatment-card__link">
-              Request visit
-              <span aria-hidden="true">→</span>
-            </span>
-          )}
         </div>
-      </CardTag>
+      </article>
     );
   }
 

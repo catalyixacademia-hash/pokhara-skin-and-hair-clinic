@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { address, hours } from '../data/clinic';
+import { address, clinic, hours } from '../data/clinic';
 import Container from './ui/Container';
 
 function ShieldIcon() {
@@ -65,7 +65,7 @@ export default function Hero() {
           />
           <img
             src="/images/hero/clinic-hero.png?v=5"
-            alt=""
+            alt={`${clinic.nameShort} exterior — Nayabazar-8, opposite GMC Hospital, Pokhara`}
             className="hero-bg-image h-full w-full"
             width={1024}
             height={576}
@@ -73,27 +73,28 @@ export default function Hero() {
             fetchPriority="high"
           />
         </picture>
+        <div className="hero-overlay" aria-hidden="true" />
       </div>
 
       <Container className="hero-shell">
-        <div className="hero-bottom-band">
+        <div className="hero-grid">
           <motion.div
-            className="hero-main-card"
+            className="hero-copy"
             {...stagger}
             transition={{ ...stagger.transition, delay: 0 }}
           >
+            <p className="hero-brand">{clinic.nameShort}</p>
+
             <p className="hero-badge">
               <ShieldIcon />
-              Board certified experts
+              Board certified dermatology
             </p>
 
-            <h1 className="hero-main-card__title">
-              Expert care for skin &amp; hair
-            </h1>
+            <h1 className="hero-title">Expert care for skin &amp; hair</h1>
 
-            <p className="hero-main-card__lede">
-              Leading dermatology and hair restoration in Pokhara. Experience clinical precision in a
-              serene environment.
+            <p className="hero-lede">
+              Leading dermatology and aesthetic care in Pokhara — clinical precision in a calm,
+              modern setting.
             </p>
 
             <div className="hero-cta-row">
@@ -103,29 +104,33 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => scrollTo('#services')}
-                className="btn-hero-secondary"
+                className="btn-secondary-outline"
               >
                 View treatments
               </button>
             </div>
           </motion.div>
 
-          <motion.div
-            className="hero-info-stack"
+          <motion.aside
+            className="hero-info-card"
+            aria-label="Clinic hours and location"
             {...stagger}
             transition={{ ...stagger.transition, delay: 0.12 }}
           >
-            <div className="hero-info-card">
+            <div className="hero-info-card__row">
               <span className="hero-info-card__icon hero-info-card__icon--accent">
                 <PinIcon />
               </span>
               <div className="hero-info-card__body">
                 <p className="hero-info-card__label">Location</p>
                 <p className="hero-info-card__value">{address.line1}</p>
+                <p className="hero-info-card__note">{address.landmark}</p>
               </div>
             </div>
 
-            <div className="hero-info-card">
+            <div className="hero-info-card__divider" aria-hidden="true" />
+
+            <div className="hero-info-card__row">
               <span className="hero-info-card__icon hero-info-card__icon--warm">
                 <ClockIcon />
               </span>
@@ -135,7 +140,7 @@ export default function Hero() {
                 <p className="hero-info-card__note">{hours.saturdayNote}</p>
               </div>
             </div>
-          </motion.div>
+          </motion.aside>
         </div>
       </Container>
     </section>

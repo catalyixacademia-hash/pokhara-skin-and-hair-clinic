@@ -16,12 +16,14 @@ export function usePendingCounts(): PendingCounts {
         .from('appointments')
         .select('id', { count: 'exact', head: true })
         .eq('form_type', 'booking')
-        .eq('status', 'pending'),
+        .eq('status', 'pending')
+        .is('deleted_at', null),
       supabase
         .from('appointments')
         .select('id', { count: 'exact', head: true })
         .eq('form_type', 'general_query')
-        .eq('status', 'pending'),
+        .eq('status', 'pending')
+        .is('deleted_at', null),
     ]);
 
     const b = bookings.count ?? 0;

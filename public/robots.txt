@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pokhara-skin-and-hair-clinic.vercel.app/

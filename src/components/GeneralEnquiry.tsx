@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { submitAppointment } from '../lib/submit-appointment';
-import { address, maps } from '../data/clinic';
+import { useClinicSettings } from '../hooks/useClinicSettings';
 import Container from './ui/Container';
-import FormField from './ui/FormField';
 import Reveal from './motion/Reveal';
 
 export default function GeneralEnquiry() {
+  const { settings } = useClinicSettings();
+  const { address, maps } = settings;
   const [formData, setFormData] = useState({
     name: '',
     phone: '',

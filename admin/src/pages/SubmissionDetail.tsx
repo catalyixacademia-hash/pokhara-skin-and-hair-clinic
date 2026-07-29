@@ -47,7 +47,8 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
       .from('appointments')
       .select('*')
       .eq('id', id)
-      .single()
+      .is('deleted_at', null)
+      .maybeSingle()
       .then(({ data, error: fetchError }) => {
         if (fetchError) setError(fetchError.message);
         else if (data) {
@@ -55,6 +56,8 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
           setRow(submission);
           setInternalNotes(submission.internal_notes ?? '');
           setNotesInitialized(true);
+        } else {
+          setError('Submission not found or was removed.');
         }
       });
   }, [id]);
@@ -104,7 +107,10 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
   const handleDelete = async () => {
     if (!id || !row) return;
     setDeleting(true);
-    const { error: deleteError } = await supabase.from('appointments').delete().eq('id', id);
+    const { error: deleteError } = await supabase
+      .from('appointments')
+      .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .eq('id', id);
     if (deleteError) {
       setError(deleteError.message);
       setDeleting(false);
@@ -201,7 +207,7 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
             Copy summary
           </button>
           <button type="button" onClick={() => setDeleteOpen(true)} className="admin-btn-danger">
-            Delete
+            Remove
           </button>
         </div>
       </div>
@@ -306,8 +312,8 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
 
       <ConfirmDelete
         open={deleteOpen}
-        title="Delete submission?"
-        message={`Delete submission from ${row.name}? This cannot be undone.`}
+        title="Remove submission?"
+        message={`Remove submission from ${row.name}? It will be hidden from the inbox (soft-delete).`}
         deleting={deleting}
         onConfirm={() => void handleDelete()}
         onCancel={() => setDeleteOpen(false)}

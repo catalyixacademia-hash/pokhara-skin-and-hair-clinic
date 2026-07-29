@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { mutationResult } from '@/lib/supabase-result';
 import DataTable from '@/components/DataTable';
 import CrudForm, { FormField } from '@/components/CrudForm';
 import ConfirmDelete from '@/components/ConfirmDelete';
@@ -42,18 +43,25 @@ export default function ServicesManager() {
   const [form, setForm] = useState(emptyForm());
   const [benefitsText, setBenefitsText] = useState('');
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const [{ data: cats }, { data: services }] = await Promise.all([
-      supabase.from('service_categories').select('*').order('sort_order'),
-      supabase.from('services').select('*').order('sort_order'),
-    ]);
+    const [{ data: cats, error: catsError }, { data: services, error: servicesError }] =
+      await Promise.all([
+        supabase.from('service_categories').select('*').order('sort_order'),
+        supabase.from('services').select('*').order('sort_order'),
+      ]);
+    if (catsError || servicesError) {
+      setError(catsError?.message ?? servicesError?.message ?? 'Failed to load services');
+      return;
+    }
+    setError(null);
     setCategories(cats ?? []);
     setRows((services ?? []).map((s) => ({ ...s, benefits: s.benefits as string[] })));
   }, []);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   const filtered = useMemo(() => {
@@ -65,6 +73,7 @@ export default function ServicesManager() {
     setEditing(null);
     setForm({ ...emptyForm(), category_id: categories[0]?.id ?? '' });
     setBenefitsText('');
+    setError(null);
     setFormOpen(true);
   };
 
@@ -82,41 +91,67 @@ export default function ServicesManager() {
       is_published: row.is_published,
     });
     setBenefitsText(row.benefits.join('\n'));
+    setError(null);
     setFormOpen(true);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError(null);
     const payload = {
       ...form,
-      benefits: benefitsText.split('\n').map((b) => b.trim()).filter(Boolean),
+      benefits: benefitsText
+        .split('\n')
+        .map((b) => b.trim())
+        .filter(Boolean),
       updated_at: new Date().toISOString(),
     };
 
-    if (editing) {
-      await supabase.from('services').update(payload).eq('id', editing.id);
-    } else {
-      await supabase.from('services').insert(payload);
-    }
+    const { error: saveError } = editing
+      ? await supabase.from('services').update(payload).eq('id', editing.id)
+      : await supabase.from('services').insert(payload);
 
+    const result = mutationResult(saveError);
     setSaving(false);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
     setFormOpen(false);
-    load();
+    void load();
   };
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setSaving(true);
-    await supabase.from('services').delete().eq('id', deleteTarget.id);
+    setError(null);
+    const { error: deleteError } = await supabase
+      .from('services')
+      .delete()
+      .eq('id', deleteTarget.id);
+    const result = mutationResult(deleteError);
     setSaving(false);
     setDeleteTarget(null);
-    load();
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    void load();
   };
 
   const togglePublish = async (row: Service) => {
-    await supabase.from('services').update({ is_published: !row.is_published }).eq('id', row.id);
-    load();
+    setError(null);
+    const { error: publishError } = await supabase
+      .from('services')
+      .update({ is_published: !row.is_published })
+      .eq('id', row.id);
+    const result = mutationResult(publishError);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    void load();
   };
 
   const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.slug ?? id;
@@ -129,6 +164,12 @@ export default function ServicesManager() {
           Add Service
         </button>
       </div>
+
+      {error && (
+        <p className="text-sm text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
 
       <DataTable
         columns={[
@@ -147,7 +188,11 @@ export default function ServicesManager() {
         onEdit={openEdit}
         onDelete={setDeleteTarget}
         extraActions={(r) => (
-          <button type="button" className="admin-btn-secondary text-[10px] py-1 px-2" onClick={() => togglePublish(r)}>
+          <button
+            type="button"
+            className="admin-btn-secondary text-[10px] py-1 px-2"
+            onClick={() => void togglePublish(r)}
+          >
             {r.is_published ? 'Unpublish' : 'Publish'}
           </button>
         )}
@@ -157,7 +202,7 @@ export default function ServicesManager() {
         title={editing ? 'Edit Service' : 'Add Service'}
         open={formOpen}
         onClose={() => setFormOpen(false)}
-        onSubmit={handleSave}
+        onSubmit={(e) => void handleSave(e)}
         saving={saving}
       >
         <FormField label="Category">
@@ -175,29 +220,65 @@ export default function ServicesManager() {
           </select>
         </FormField>
         <FormField label="Title">
-          <input className="admin-input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+          <input
+            className="admin-input"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+          />
         </FormField>
         <FormField label="Description">
-          <textarea className="admin-input min-h-24" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
+          <textarea
+            className="admin-input min-h-24"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            required
+          />
         </FormField>
         <FormField label="Benefits (one per line)">
-          <textarea className="admin-input min-h-20" value={benefitsText} onChange={(e) => setBenefitsText(e.target.value)} />
+          <textarea
+            className="admin-input min-h-20"
+            value={benefitsText}
+            onChange={(e) => setBenefitsText(e.target.value)}
+          />
         </FormField>
         <FormField label="Result">
-          <input className="admin-input" value={form.result} onChange={(e) => setForm({ ...form, result: e.target.value })} required />
+          <input
+            className="admin-input"
+            value={form.result}
+            onChange={(e) => setForm({ ...form, result: e.target.value })}
+            required
+          />
         </FormField>
         <FormField label="Image">
-          <ImageUpload folder="services" value={form.image_url ?? ''} onChange={(url) => setForm({ ...form, image_url: url })} />
+          <ImageUpload
+            folder="services"
+            value={form.image_url ?? ''}
+            onChange={(url) => setForm({ ...form, image_url: url })}
+          />
         </FormField>
         <FormField label="Sort Order">
-          <input type="number" className="admin-input" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })} />
+          <input
+            type="number"
+            className="admin-input"
+            value={form.sort_order}
+            onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })}
+          />
         </FormField>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} />
+          <input
+            type="checkbox"
+            checked={form.featured}
+            onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+          />
           Featured (skin row)
         </label>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={form.is_published} onChange={(e) => setForm({ ...form, is_published: e.target.checked })} />
+          <input
+            type="checkbox"
+            checked={form.is_published}
+            onChange={(e) => setForm({ ...form, is_published: e.target.checked })}
+          />
           Published
         </label>
       </CrudForm>
@@ -206,7 +287,7 @@ export default function ServicesManager() {
         open={!!deleteTarget}
         title="Delete service?"
         message={`Remove "${deleteTarget?.title}"? This cannot be undone.`}
-        onConfirm={handleDelete}
+        onConfirm={() => void handleDelete()}
         onCancel={() => setDeleteTarget(null)}
         deleting={saving}
       />

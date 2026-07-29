@@ -47,6 +47,7 @@ export default function SubmissionsList({
       .from('appointments')
       .select('*')
       .eq('form_type', formType)
+      .is('deleted_at', null)
       .order('created_at', { ascending: false });
     if (fetchError) setError(fetchError.message);
     else setRows((data ?? []) as Submission[]);
@@ -113,7 +114,7 @@ export default function SubmissionsList({
     setDeleting(true);
     const { error: deleteError } = await supabase
       .from('appointments')
-      .delete()
+      .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
       .eq('id', deleteTarget.id);
     if (deleteError) {
       setError(deleteError.message);
@@ -219,8 +220,8 @@ export default function SubmissionsList({
 
       <ConfirmDelete
         open={!!deleteTarget}
-        title="Delete submission?"
-        message={`Delete submission from ${deleteTarget?.name}? This cannot be undone.`}
+        title="Remove submission?"
+        message={`Remove submission from ${deleteTarget?.name}? It will be hidden from the inbox (soft-delete).`}
         deleting={deleting}
         onConfirm={() => void handleDelete()}
         onCancel={() => setDeleteTarget(null)}

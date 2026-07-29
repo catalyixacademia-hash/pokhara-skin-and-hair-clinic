@@ -42,7 +42,7 @@ export default function Footer() {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
-            <p className="font-display text-xl text-secondary font-semibold">{clinic.nameLine1}</p>
+            <p className="font-display text-xl text-secondary font-semibold">{clinic.nameShort}</p>
             <p className="font-body text-base text-muted leading-relaxed">{clinic.tagline}</p>
           </div>
 

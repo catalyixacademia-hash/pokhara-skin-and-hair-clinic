@@ -14,9 +14,12 @@ import BookFab from './components/BookFab';
 export default function App() {
   return (
     <div className="bg-paper min-h-screen">
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
       <Navbar />
-      <Hero />
-      <main className="pb-24 md:pb-8">
+      <main id="main" className="pb-24 md:pb-8">
+        <Hero />
         <Treatments />
         <CareStandards />
         <ClinicDoctor />

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { mutationResult } from '@/lib/supabase-result';
 import StatusBadge from '@/components/StatusBadge';
 import {
   formatPreferredDate,
@@ -31,6 +32,29 @@ function queueSort(a: Submission, b: Submission): number {
   return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 }
 
+/** Actionable: overdue pending, preferred date past/today/soon, or confirmed with imminent preferred date. */
+function needsAction(row: Submission, now: number): boolean {
+  const twoDaysAgo = now - 2 * 86_400_000;
+  const created = new Date(row.created_at).getTime();
+  const urgency =
+    row.form_type === 'booking' ? preferredDateUrgency(row.preferred_date) : 'none';
+  const dateUrgent = urgency === 'past' || urgency === 'today' || urgency === 'soon';
+
+  if (row.status === 'pending') {
+    if (created < twoDaysAgo) return true;
+    if (dateUrgent) return true;
+    // Fresh pending with no urgent date — leave for "All open"
+    return false;
+  }
+
+  if (row.status === 'confirmed') {
+    // Confirmed that still need day-of / soon follow-through
+    return dateUrgent;
+  }
+
+  return false;
+}
+
 export default function FollowUpQueue() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<Submission[]>([]);
@@ -46,6 +70,7 @@ export default function FollowUpQueue() {
       .from('appointments')
       .select('*')
       .in('status', ['pending', 'confirmed'])
+      .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
     if (fetchError) setError(fetchError.message);
@@ -68,33 +93,25 @@ export default function FollowUpQueue() {
     };
   }, [load]);
 
-  const filtered = useMemo(() => {
-    const sorted = [...rows].sort(queueSort);
-    if (filter === 'all-open') return sorted;
-
+  const actionRows = useMemo(() => {
     const now = Date.now();
-    const twoDaysAgo = now - 2 * 86_400_000;
+    return [...rows].filter((row) => needsAction(row, now)).sort(queueSort);
+  }, [rows]);
 
-    return sorted.filter((row) => {
-      if (row.status === 'pending') {
-        const created = new Date(row.created_at).getTime();
-        if (created < twoDaysAgo) return true;
-        if (row.form_type === 'booking' && row.preferred_date) {
-          const urgency = preferredDateUrgency(row.preferred_date);
-          return urgency === 'past' || urgency === 'today' || urgency === 'soon';
-        }
-        return true;
-      }
-      return row.status === 'confirmed';
-    });
-  }, [rows, filter]);
+  const filtered = useMemo(() => {
+    if (filter === 'all-open') return [...rows].sort(queueSort);
+    return actionRows;
+  }, [rows, filter, actionRows]);
 
-  const markConfirmed = async (row: Submission) => {
+  const updateStatus = async (row: Submission, status: SubmissionStatus) => {
     setUpdatingId(row.id);
-    await supabase
+    setError(null);
+    const { error: updateError } = await supabase
       .from('appointments')
-      .update({ status: 'confirmed', updated_at: new Date().toISOString() })
+      .update({ status, updated_at: new Date().toISOString() })
       .eq('id', row.id);
+    const result = mutationResult(updateError);
+    if (!result.ok) setError(result.message);
     setUpdatingId(null);
     void load();
   };
@@ -121,7 +138,8 @@ export default function FollowUpQueue() {
         </div>
         <div className="admin-stat-card">
           <p className="admin-stat-label">Needs action</p>
-          <p className="admin-stat-value">{filtered.length}</p>
+          <p className="admin-stat-value">{actionRows.length}</p>
+          <p className="admin-stat-hint">Overdue, today/soon preferred date</p>
         </div>
         <div className="admin-stat-card">
           <p className="admin-stat-label">Pending &gt; 48h</p>
@@ -146,7 +164,11 @@ export default function FollowUpQueue() {
         </button>
       </div>
 
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+      {error && (
+        <p className="text-sm text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
       {loading ? (
         <p className="text-muted">Loading queue…</p>
       ) : filtered.length === 0 ? (
@@ -187,6 +209,7 @@ export default function FollowUpQueue() {
                         Preferred: {formatPreferredDate(row.preferred_date)}
                         {urgency === 'past' && ' · Overdue'}
                         {urgency === 'today' && ' · Today'}
+                        {urgency === 'soon' && ' · Soon'}
                       </p>
                     )}
                     <p className="text-xs text-muted mt-2">
@@ -218,9 +241,19 @@ export default function FollowUpQueue() {
                         type="button"
                         disabled={updatingId === row.id}
                         className="admin-btn-primary text-xs py-1.5 px-3"
-                        onClick={() => void markConfirmed(row)}
+                        onClick={() => void updateStatus(row, 'confirmed')}
                       >
                         {updatingId === row.id ? 'Saving…' : 'Confirm'}
+                      </button>
+                    )}
+                    {row.status === 'confirmed' && (
+                      <button
+                        type="button"
+                        disabled={updatingId === row.id}
+                        className="admin-btn-primary text-xs py-1.5 px-3"
+                        onClick={() => void updateStatus(row, 'completed')}
+                      >
+                        {updatingId === row.id ? 'Saving…' : 'Complete'}
                       </button>
                     )}
                   </div>

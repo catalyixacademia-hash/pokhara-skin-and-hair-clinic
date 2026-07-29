@@ -1,9 +1,14 @@
-import { address, clinic, doctor } from '../data/clinic';
+import { useClinicSettings } from '../hooks/useClinicSettings';
+import { useDoctorProfile } from '../hooks/useDoctorProfile';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 
 export default function ClinicDoctor() {
+  const { doctor } = useDoctorProfile();
+  const { settings } = useClinicSettings();
+  const { address } = settings;
+
   return (
     <section id="about" className="bg-surface section-padding">
       <Container>
@@ -11,7 +16,7 @@ export default function ClinicDoctor() {
           <SectionIntro
             index="03"
             title="The clinic & your dermatologist"
-            lede="Led by Dr. Prakash Acharya, MD — NMC specialist dermatologist — opposite GMC Hospital."
+            lede={`Led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}
           />
         </Reveal>
 
@@ -21,7 +26,7 @@ export default function ClinicDoctor() {
               <div className="clinic-image-frame aspect-square md:aspect-video lg:aspect-square">
                 <img
                   src="/images/clinic/interior-waiting.webp"
-                  alt="Pokhara Skin & Hair Clinic waiting and reception area"
+                  alt={`${settings.nameShort} waiting and reception area`}
                   className="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -30,7 +35,7 @@ export default function ClinicDoctor() {
               <div className="space-y-6">
                 <h3 className="font-display text-2xl text-ink">About the clinic</h3>
                 <p className="font-body text-base text-muted leading-relaxed">
-                  {clinic.name} is located in {address.area}, {address.line1} — {address.landmark}.
+                  {settings.name} is located in {address.area}, {address.line1} — {address.landmark}.
                   We serve patients across Pokhara and the wider Gandaki region with advanced skin care,
                   hair restoration, and aesthetic dermatology.
                 </p>
@@ -51,7 +56,7 @@ export default function ClinicDoctor() {
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="doctor-portrait">
                   <img
-                    src="/images/doctor/dr-prakash-acharya.png"
+                    src={doctor.portraitUrl}
                     alt={doctor.portraitAlt}
                     className="w-full h-full object-cover object-[center_20%]"
                     loading="lazy"

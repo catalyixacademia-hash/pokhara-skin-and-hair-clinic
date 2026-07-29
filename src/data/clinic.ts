@@ -1,9 +1,14 @@
 export const clinic = {
   name: 'Pokhara Skin and Hair Clinic',
+  /** Preferred public wordmark / brand string (nav, footer, hero). */
   nameShort: 'Pokhara Skin & Hair Clinic',
+  /** @deprecated Prefer nameShort — kept for legacy consumers. */
   nameLine1: 'Pokhara Skin',
+  /** @deprecated Prefer nameShort */
   nameLine2: '& Hair Clinic',
+  /** @deprecated Prefer nameShort — truncated on mobile; do not use in UI. */
   wordmarkLine1: 'Pokhara',
+  /** @deprecated Prefer nameShort */
   wordmarkLine2: 'Skin & Hair Clinic',
   siteUrl: 'https://pokhara-skin-and-hair-clinic.vercel.app',
   tagline:
@@ -18,6 +23,12 @@ export type ClinicPhone = {
   label: string;
 };
 
+/**
+ * Phone roles (do not invent numbers):
+ * - main: primary voice contact (also drives social.whatsapp)
+ * - appointments: booking line (Visit form placeholder / labeled calls)
+ * - landline / additional: listed in Visit + Footer contact blocks
+ */
 export const phones: ClinicPhone[] = [
   { role: 'main', number: '9706929329', label: 'Main Contact' },
   { role: 'appointments', number: '9845815246', label: 'Appointments' },
@@ -78,11 +89,19 @@ export const social = {
     url: 'https://www.tiktok.com/@pokharaskinandhairclinic',
     handle: '@pokharaskinandhairclinic',
   },
+  /**
+   * Main clinic WhatsApp — same digits as phones.main (9706929329).
+   * Use in Visit booking secondary CTA, Footer social, and in-page contact links.
+   */
   whatsapp: {
     url: 'https://wa.me/9779706929329',
     urlWithMessage:
       'https://wa.me/9779706929329?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20Pokhara%20Skin%20and%20Hair%20Clinic.',
   },
+  /**
+   * Floating chat button ONLY (984515246). Distinct from appointments phone (9845815246).
+   * WhatsAppFloat must use this; do not substitute social.whatsapp here.
+   */
   whatsappFloat: {
     number: '984515246',
     url: 'https://wa.me/977984515246',

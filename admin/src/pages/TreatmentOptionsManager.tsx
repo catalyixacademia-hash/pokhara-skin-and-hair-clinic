@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { mutationResult } from '@/lib/supabase-result';
 import DataTable from '@/components/DataTable';
 import CrudForm, { FormField } from '@/components/CrudForm';
 import ConfirmDelete from '@/components/ConfirmDelete';
@@ -26,10 +27,18 @@ export default function TreatmentOptionsManager() {
   const [form, setForm] = useState(empty());
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const { data } = await supabase.from('treatment_options').select('*').order('sort_order');
-    setRows(data ?? []);
+    const { data, error: fetchError } = await supabase
+      .from('treatment_options')
+      .select('*')
+      .order('sort_order');
+    if (fetchError) setError(fetchError.message);
+    else {
+      setError(null);
+      setRows(data ?? []);
+    }
   }, []);
 
   useEffect(() => {
@@ -44,6 +53,7 @@ export default function TreatmentOptionsManager() {
   const openCreate = () => {
     setEditing(null);
     setForm({ ...empty(), sort_order: rows.length + 1 });
+    setError(null);
     setFormOpen(true);
   };
 
@@ -54,12 +64,14 @@ export default function TreatmentOptionsManager() {
       sort_order: row.sort_order,
       is_published: row.is_published,
     });
+    setError(null);
     setFormOpen(true);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError(null);
     const payload = {
       label: form.label.trim(),
       sort_order: form.sort_order,
@@ -67,13 +79,16 @@ export default function TreatmentOptionsManager() {
       updated_at: new Date().toISOString(),
     };
 
-    if (editing) {
-      await supabase.from('treatment_options').update(payload).eq('id', editing.id);
-    } else {
-      await supabase.from('treatment_options').insert(payload);
-    }
+    const { error: saveError } = editing
+      ? await supabase.from('treatment_options').update(payload).eq('id', editing.id)
+      : await supabase.from('treatment_options').insert(payload);
 
+    const result = mutationResult(saveError);
     setSaving(false);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
     setFormOpen(false);
     void load();
   };
@@ -81,9 +96,18 @@ export default function TreatmentOptionsManager() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    await supabase.from('treatment_options').delete().eq('id', deleteTarget.id);
+    setError(null);
+    const { error: deleteError } = await supabase
+      .from('treatment_options')
+      .delete()
+      .eq('id', deleteTarget.id);
+    const result = mutationResult(deleteError);
     setDeleting(false);
     setDeleteTarget(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
     void load();
   };
 
@@ -96,6 +120,12 @@ export default function TreatmentOptionsManager() {
           appear in the dropdown on the public site.
         </p>
       </div>
+
+      {error && (
+        <p className="text-sm text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
 
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-muted">{rows.filter((r) => r.is_published).length} published</p>
@@ -126,7 +156,7 @@ export default function TreatmentOptionsManager() {
         title={editing ? 'Edit treatment option' : 'Add treatment option'}
         open={formOpen}
         onClose={() => setFormOpen(false)}
-        onSubmit={handleSave}
+        onSubmit={(e) => void handleSave(e)}
         saving={saving}
       >
         <FormField label="Label">

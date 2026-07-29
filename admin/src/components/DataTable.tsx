@@ -17,6 +17,7 @@ type DataTableProps<T extends { id: string }> = {
   viewLabel?: string;
   editLabel?: string;
   toolbar?: ReactNode;
+  extraActions?: (row: T) => ReactNode;
 };
 
 export default function DataTable<T extends { id: string }>({
@@ -30,6 +31,7 @@ export default function DataTable<T extends { id: string }>({
   viewLabel = 'View',
   editLabel = 'Edit',
   toolbar,
+  extraActions,
 }: DataTableProps<T>) {
   return (
     <div className="admin-card">
@@ -67,6 +69,7 @@ export default function DataTable<T extends { id: string }>({
                 ))}
                 <td className="py-3.5">
                   <div className="flex gap-2 items-center justify-end">
+                    {extraActions?.(row)}
                     {onView && (
                       <button
                         type="button"

@@ -108,6 +108,7 @@ export default function Analytics() {
     supabase
       .from('appointments')
       .select('*')
+      .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .then(({ data, error: fetchError }) => {
         if (fetchError) setError(fetchError.message);

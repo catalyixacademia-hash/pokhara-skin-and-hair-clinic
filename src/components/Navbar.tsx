@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import {
   address,
@@ -13,7 +13,6 @@ import { cn } from '../utils/cn';
 
 const navLinks = [
   { label: 'Treatments', href: '#services' },
-  { label: 'Hair restoration', href: '#hair-services' },
   { label: 'Dermatology', href: '#about' },
   { label: 'Results', href: '#results' },
   { label: 'Contact', href: '#contact' },
@@ -67,12 +66,27 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#services');
   const prefersReducedMotion = useReducedMotion();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, [menuOpen]);
 
   const handleNavClick = (href: string) => {
@@ -114,6 +128,14 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => handleNavClick('#contact')}
+                className="btn-nav-cta hidden lg:inline-flex"
+              >
+                Book appointment
+              </button>
+
               <a
                 href={adminLoginUrl}
                 className="nav-staff-icon touch-target"
@@ -123,6 +145,7 @@ export default function Navbar() {
               </a>
 
               <button
+                ref={menuButtonRef}
                 type="button"
                 className="lg:hidden touch-target flex flex-col gap-1.5 items-center justify-center w-11 h-11"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -179,6 +202,13 @@ export default function Navbar() {
             </button>
 
             <div className="mt-8 space-y-3">
+              <button
+                type="button"
+                onClick={() => handleNavClick('#contact')}
+                className="btn-nav-cta w-full"
+              >
+                Book appointment
+              </button>
               <a
                 href={adminLoginUrl}
                 className="nav-staff-icon nav-staff-icon--menu w-full justify-center"
