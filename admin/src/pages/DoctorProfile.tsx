@@ -15,8 +15,29 @@ const DEFAULT_DOCTOR: Doctor = {
   name: 'Dr. Prakash Acharya',
   title: 'Board Certified Dermatologist',
   title_short: 'Board Certified Dermatologist · MD',
-  bio: [],
-  credentials: [],
+  bio: [
+    'Dr. Prakash Acharya is a Board Certified Dermatologist and Nepal Medical Council specialist (NMC Reg. No. 12549). He holds an MD in Dermatology from Kathmandu University (2020) and an MBBS from Tribhuvan University, Maharajgunj Medical Campus (2011). He established Pokhara Skin and Hair Clinic to bring evidence-based dermatological care to patients across Pokhara and the Gandaki region.',
+    'His clinical work focuses on melasma and pigmentation, acne and scarring, hair loss, and regenerative anti-aging treatments tailored to South Asian skin. He has treated 10,000+ patients, authored 25+ peer-reviewed publications in journals including JAAD, BJD, and JEADV, and speaks at international meetings including IMCAS, MEIDAM, and ISAAH. He also practices in Kathmandu as founder of Reva Skin & Hair Clinic.',
+  ],
+  credentials: [
+    {
+      label: 'NMC Registration',
+      value: 'No. 12549 · Specialist (Dermatology) · Unlimited',
+    },
+    {
+      label: 'MD, Dermatology',
+      value: 'Kathmandu University, Nepal (2020)',
+    },
+    {
+      label: 'MBBS',
+      value: 'Tribhuvan University, Maharajgunj Medical Campus (2011)',
+    },
+    {
+      label: 'Focus Areas',
+      value:
+        'Melasma & pigmentation, acne & scars, anti-aging, hair loss, regenerative dermatology',
+    },
+  ],
   portrait_url: null,
 };
 

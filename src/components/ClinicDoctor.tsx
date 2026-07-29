@@ -11,7 +11,7 @@ export default function ClinicDoctor() {
           <SectionIntro
             index="03"
             title="The clinic & your dermatologist"
-            lede="Medically trusted dermatology in the heart of Pokhara, opposite GMC Hospital."
+            lede="Led by Dr. Prakash Acharya, MD — NMC specialist dermatologist — opposite GMC Hospital."
           />
         </Reveal>
 
@@ -61,7 +61,7 @@ export default function ClinicDoctor() {
                 <div className="space-y-2">
                   <p className="section-label">{doctor.name}</p>
                   <h3 className="font-display text-2xl text-ink">{doctor.title}</h3>
-                  <p className="text-label text-secondary">MD, Dermatology &amp; Venereology</p>
+                  <p className="text-label text-secondary">{doctor.qualificationLine}</p>
                 </div>
               </div>
 
