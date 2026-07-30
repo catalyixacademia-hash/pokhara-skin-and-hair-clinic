@@ -32,6 +32,20 @@ function PersonIcon() {
   );
 }
 
+function CalendarIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3 9h18M8 2v4M16 2v4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 type NavBrandProps = {
   onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
@@ -41,7 +55,7 @@ function NavBrand({ onClick }: NavBrandProps) {
     <a
       href="#"
       onClick={onClick}
-      className="nav-brand shrink-0"
+      className="nav-brand"
       aria-label={`${clinic.nameShort} home`}
     >
       <span className="nav-brand__mark-wrap">
@@ -111,7 +125,7 @@ export default function Navbar() {
     <>
       <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant shadow-sm">
         <Container>
-          <div className="flex items-center justify-between gap-3 min-h-[var(--nav-height)] py-3">
+          <div className="nav-row flex items-center justify-between gap-3 min-h-[var(--nav-height)]">
             <NavBrand onClick={goHome} />
 
             <nav className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-6 min-w-0" aria-label="Main">
@@ -131,14 +145,23 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
-                className="btn-nav-cta hidden lg:inline-flex"
+                className="btn-nav-cta nav-book-desktop"
               >
                 Book appointment
               </button>
 
+              <button
+                type="button"
+                onClick={() => handleNavClick('#contact')}
+                className="nav-book-mobile"
+                aria-label="Book appointment"
+              >
+                <CalendarIcon />
+              </button>
+
               <a
                 href={adminLoginUrl}
-                className="nav-staff-icon touch-target"
+                className="nav-staff-icon nav-staff-desktop touch-target"
                 aria-label="Staff login"
               >
                 <PersonIcon />
@@ -147,10 +170,11 @@ export default function Navbar() {
               <button
                 ref={menuButtonRef}
                 type="button"
-                className="lg:hidden touch-target flex flex-col gap-1.5 items-center justify-center w-11 h-11"
+                className="nav-menu-toggle touch-target"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={menuOpen}
+                aria-controls="mobile-site-menu"
               >
                 <span
                   className={cn(
@@ -174,14 +198,17 @@ export default function Navbar() {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-surface lg:hidden pt-[var(--nav-height)] overflow-y-auto">
-          <nav className="flex flex-col px-6 py-6 pb-safe" aria-label="Mobile">
+        <div
+          id="mobile-site-menu"
+          className="mobile-nav-panel fixed inset-0 z-40 lg:hidden pt-[var(--nav-height)] overflow-y-auto"
+        >
+          <nav className="mobile-nav-content" aria-label="Mobile">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 type="button"
                 onClick={() => handleNavClick(link.href)}
-                className="text-left font-display text-lg text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
+                className={cn('mobile-nav-link', activeHref === link.href && 'mobile-nav-link--active')}
               >
                 {link.label}
               </button>
@@ -189,19 +216,19 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => handleNavClick('#enquiry')}
-              className="text-left font-display text-lg text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
+              className="mobile-nav-link"
             >
               Ask a question
             </button>
             <button
               type="button"
               onClick={() => handleNavClick('#location')}
-              className="text-left font-display text-lg text-ink py-4 border-b border-line bg-transparent cursor-pointer touch-target w-full"
+              className="mobile-nav-link"
             >
               Location
             </button>
 
-            <div className="mt-8 space-y-3">
+            <div className="mobile-nav-actions">
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
