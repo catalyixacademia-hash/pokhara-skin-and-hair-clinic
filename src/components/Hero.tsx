@@ -57,7 +57,7 @@ export default function Hero() {
 
   return (
     <section className="hero-section" aria-label="Hero">
-      <div className="absolute inset-0 z-0">
+      <div className="hero-media absolute inset-0 z-0">
         <picture>
           <source
             media="(min-width: 1024px)"
