@@ -55,7 +55,7 @@ export function formatAppointmentWhatsAppMessage(data: AppointmentFormData): str
   return lines.join('\n');
 }
 
-/** Opens a prefilled chat to the floating WhatsApp number (984515246 by default). */
+/** Opens a prefilled chat to the clinic WhatsApp number (9706929329 by default). */
 export function openAppointmentWhatsApp(
   data: AppointmentFormData,
   phoneDigits: string = social.whatsappFloat.number,

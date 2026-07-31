@@ -58,7 +58,7 @@ const DEFAULT_SETTINGS: Settings = {
   hours: { ...DEFAULT_HOURS },
   maps_embed_url: '',
   maps_open_url: '',
-  whatsapp_float_number: '984515246',
+  whatsapp_float_number: '9706929329',
   maps_reviews_url: '',
   social_instagram_url: 'https://www.instagram.com/pokharaskinandhairclinic/',
   social_facebook_url: 'https://www.facebook.com/profile.php?id=61561770561179',
@@ -453,7 +453,7 @@ export default function ClinicSettings() {
               className="admin-input"
               value={settings.whatsapp_float_number}
               onChange={(e) => setSettings({ ...settings, whatsapp_float_number: e.target.value })}
-              placeholder="984515246"
+              placeholder="9706929329"
             />
           </div>
           <div>
