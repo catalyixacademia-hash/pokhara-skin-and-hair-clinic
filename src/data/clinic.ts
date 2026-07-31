@@ -259,6 +259,9 @@ const mapLocation = {
 export const maps = {
   embedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(`${mapLocation.placeName}, ${mapLocation.address}`)}&ll=${mapLocation.lat},${mapLocation.lng}&z=${mapLocation.zoom}&hl=en&output=embed`,
   openUrl: `https://www.google.com/maps/place/${encodeURIComponent(mapLocation.placeName)}/@${mapLocation.lat},${mapLocation.lng},${mapLocation.zoom}z`,
+  /** Google Business Profile / Knowledge Panel reviews for the clinic */
+  reviewsUrl:
+    'https://www.google.com/search?q=pokhara+skin+and+hair+clinic&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_4wTJVhQ__q_w4jYcYiQlFHvBxT6dldvP8ZamDtHTk4xu--gB5GNyG222s0UziRMWA3SbfTKO4J-XuyUXRqBf9w0z4ar77RwNPlQRhJeGs0sSsJ5Yg%3D%3D',
 } as const;
 
 function digitsOnly(number: string): string {

@@ -2,6 +2,7 @@ import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 import { useTestimonials } from '../hooks/useTestimonials';
+import { maps } from '../data/clinic';
 
 export default function SocialProof() {
   const { testimonials } = useTestimonials();
@@ -18,9 +19,9 @@ export default function SocialProof() {
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 items-stretch">
           {featured.map((item, i) => (
-            <Reveal key={item.name} delay={i * 0.06}>
+            <Reveal key={item.name} className="h-full" delay={i * 0.06}>
               <blockquote className="testimonial-card">
                 <p className="testimonial-card__quote">&ldquo;{item.quote}&rdquo;</p>
                 <footer>
@@ -33,6 +34,20 @@ export default function SocialProof() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.12}>
+          <div className="mt-10 flex justify-center">
+            <a
+              href={maps.reviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary-outline inline-flex items-center gap-2"
+            >
+              Read Google reviews
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

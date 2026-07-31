@@ -32,9 +32,9 @@ export default function CareStandards() {
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 items-stretch">
           {standards.map((item, i) => (
-            <Reveal key={item.index} delay={i * 0.06}>
+            <Reveal key={item.index} className="h-full" delay={i * 0.06}>
               <article className="standard-card space-y-6">
                 <div className="standard-card__badge">{item.index}</div>
                 <h3 className="font-display text-xl text-ink">{item.title}</h3>
