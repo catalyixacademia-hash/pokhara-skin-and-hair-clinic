@@ -7,7 +7,6 @@ import {
   hours,
   phones,
   phoneHref,
-  social,
 } from '../data/clinic';
 import { isPastDate, todayISODate } from '../lib/dates';
 import { submitAppointment } from '../lib/submit-appointment';
@@ -229,22 +228,14 @@ export default function Visit() {
                     </p>
                   )}
 
-                  <div className="flex flex-col md:flex-row gap-4">
+                  <div>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="btn-form-submit flex-1 disabled:opacity-60"
+                      className="btn-primary w-full sm:w-auto disabled:opacity-60"
                     >
                       {submitting ? 'Submitting…' : 'Request appointment'}
                     </button>
-                    <a
-                      href={social.whatsapp.urlWithMessage}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-whatsapp flex-1 text-center"
-                    >
-                      WhatsApp
-                    </a>
                   </div>
                 </form>
               )}
