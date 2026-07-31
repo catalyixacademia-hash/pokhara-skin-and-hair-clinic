@@ -9,7 +9,6 @@ import Visit from './components/Visit';
 import GeneralEnquiry from './components/GeneralEnquiry';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
-import BookFab from './components/BookFab';
 
 export default function App() {
   return (
@@ -30,7 +29,6 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppFloat />
-      <BookFab />
     </div>
   );
 }

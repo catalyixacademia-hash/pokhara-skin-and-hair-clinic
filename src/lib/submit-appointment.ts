@@ -5,8 +5,8 @@ export type AppointmentFormData = {
   phone: string;
   email: string;
   treatment: string;
-  date: string;
-  message: string;
+  date?: string;
+  message?: string;
   formType?: 'booking' | 'general_query';
 };
 
@@ -43,8 +43,8 @@ export async function submitAppointment(
     phone: formData.phone,
     email: formData.email || null,
     treatment: formData.treatment,
-    date: formData.date || null,
-    message: formData.message || null,
+    date: formData.date?.trim() || null,
+    message: formData.message?.trim() || null,
     formType: formData.formType ?? 'booking',
   };
 

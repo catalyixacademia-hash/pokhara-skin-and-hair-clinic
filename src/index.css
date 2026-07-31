@@ -1395,47 +1395,7 @@
   border-bottom: none;
 }
 
-/* FAB — Book stacks above WhatsApp on all breakpoints (right side) */
-.book-fab {
-  position: fixed;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  background: var(--color-accent);
-  color: var(--color-on-secondary);
-  border: none;
-  border-radius: 9999px;
-  box-shadow: 0 8px 32px rgba(0, 95, 86, 0.3);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  right: max(1rem, env(safe-area-inset-right, 1rem));
-  left: auto;
-  /* Sit above the 3rem WhatsApp circle + gap */
-  bottom: max(5.25rem, calc(env(safe-area-inset-bottom, 0px) + 5.25rem));
-}
-
-.book-fab:hover {
-  transform: scale(1.05);
-}
-
-.book-fab:active {
-  transform: scale(0.95);
-}
-
-.book-fab__label {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .book-fab {
-    bottom: max(6.5rem, calc(env(safe-area-inset-bottom, 0px) + 6.5rem));
-  }
-}
-
+/* FAB — WhatsApp only (bottom-right) */
 .whatsapp-float {
   position: fixed;
   z-index: 99;

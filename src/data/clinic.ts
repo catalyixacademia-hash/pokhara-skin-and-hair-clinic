@@ -99,8 +99,8 @@ export const social = {
       'https://wa.me/9779706929329?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20Pokhara%20Skin%20and%20Hair%20Clinic.',
   },
   /**
-   * Floating chat button ONLY (984515246). Distinct from appointments phone (9845815246).
-   * WhatsAppFloat must use this; do not substitute social.whatsapp here.
+   * Floating chat + form handoff WhatsApp (984515246). Distinct from appointments phone (9845815246).
+   * WhatsAppFloat and post-submit booking/enquiry prefill use this; do not substitute social.whatsapp here.
    */
   whatsappFloat: {
     number: '984515246',

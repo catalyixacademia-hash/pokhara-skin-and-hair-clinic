@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { submitAppointment } from '../lib/submit-appointment';
+import { openAppointmentWhatsApp } from '../lib/whatsapp';
 import { useClinicSettings } from '../hooks/useClinicSettings';
 import Container from './ui/Container';
 import Reveal from './motion/Reveal';
@@ -31,14 +32,15 @@ export default function GeneralEnquiry() {
     setSubmitting(true);
     setSubmitError(null);
 
-    const result = await submitAppointment({
+    const payload = {
       name: formData.name,
       phone: formData.phone,
       email: formData.email,
       treatment: formData.topic,
       message: formData.message,
-      formType: 'general_query',
-    });
+      formType: 'general_query' as const,
+    };
+    const result = await submitAppointment(payload);
 
     if (!result.ok) {
       setSubmitError(result.error);
@@ -46,6 +48,7 @@ export default function GeneralEnquiry() {
       return;
     }
 
+    openAppointmentWhatsApp(payload);
     setUserEmailSent(Boolean(result.userEmailSent));
     setEmailWarning(result.emailWarning ?? null);
     setSubmitted(true);
@@ -110,6 +113,9 @@ export default function GeneralEnquiry() {
                 <h3 className="font-display text-h3 text-ink mb-2">Enquiry received</h3>
                 <p className="font-body text-muted">
                   Thank you. Our care team will review your message and contact you within 24 hours.
+                  <span className="block mt-2">
+                    WhatsApp opened with your details — tap Send to message the clinic.
+                  </span>
                   {userEmailSent && (
                     <span className="block mt-2">A confirmation email has been sent to your inbox.</span>
                   )}
