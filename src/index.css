@@ -1102,6 +1102,201 @@
   line-height: 1.55;
 }
 
+/* Branded preferred-date picker */
+.date-picker {
+  position: relative;
+}
+
+.date-picker-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.date-picker-trigger.is-open {
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.date-picker-value {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-ink);
+}
+
+.date-picker-value.is-placeholder {
+  color: var(--color-muted);
+}
+
+.date-picker-icon {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  display: inline-flex;
+}
+
+.date-picker-popover {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: min(100%, 20.5rem);
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-container-high);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 12px 32px rgba(26, 28, 30, 0.12);
+}
+
+.date-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.date-picker-month {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.date-picker-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-low);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.date-picker-nav:hover:not(:disabled) {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.date-picker-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.date-picker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.date-picker-weekdays span {
+  text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding: 0.25rem 0;
+}
+
+.date-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.date-picker-day {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-ink);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.date-picker-day.is-empty {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.date-picker-day:hover:not(:disabled):not(.is-selected) {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.date-picker-day.is-today:not(.is-selected) {
+  border-color: var(--color-primary-container);
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.date-picker-day.is-selected {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.date-picker-day.is-disabled,
+.date-picker-day:disabled {
+  color: #b0b5b4;
+  background: transparent;
+  border-color: transparent;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.date-picker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-surface-container);
+}
+
+.date-picker-footer-btn {
+  border: none;
+  background: transparent;
+  padding: 0.35rem 0.5rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.date-picker-footer-btn:hover:not(:disabled) {
+  color: var(--color-ink);
+  background: var(--color-surface-container-low);
+}
+
+.date-picker-footer-btn.is-accent {
+  color: var(--color-accent);
+}
+
+.date-picker-footer-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .field-label {
   display: block;
   font-family: 'Work Sans', sans-serif;

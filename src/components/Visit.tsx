@@ -9,12 +9,14 @@ import {
   phoneHref,
   social,
 } from '../data/clinic';
+import { isPastDate, todayISODate } from '../lib/dates';
 import { submitAppointment } from '../lib/submit-appointment';
 import { openAppointmentWhatsApp } from '../lib/whatsapp';
 import { useTreatmentOptions } from '../hooks/useTreatmentOptions';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import FormField from './ui/FormField';
+import DatePicker from './ui/DatePicker';
 import TreatmentSelect from './ui/TreatmentSelect';
 import Reveal from './motion/Reveal';
 
@@ -45,7 +47,9 @@ export default function Visit() {
   const [userEmailSent, setUserEmailSent] = useState(false);
   const [emailWarning, setEmailWarning] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [dateError, setDateError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const minDate = todayISODate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -53,10 +57,26 @@ export default function Visit() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleDateChange = (date: string) => {
+    setFormData({ ...formData, date });
+    if (date && isPastDate(date, minDate)) {
+      setDateError('Please choose today or a future date.');
+      return;
+    }
+    setDateError(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setSubmitError(null);
+
+    if (formData.date && isPastDate(formData.date, todayISODate())) {
+      setDateError('Please choose today or a future date.');
+      setSubmitError('Preferred date cannot be in the past.');
+      setSubmitting(false);
+      return;
+    }
 
     const payload = { ...formData, formType: 'booking' as const };
     const result = await submitAppointment(payload);
@@ -72,6 +92,7 @@ export default function Visit() {
     setEmailWarning(result.emailWarning ?? null);
     setSubmitted(true);
     setSubmitting(false);
+    setDateError(null);
     setTimeout(() => {
       setSubmitted(false);
       setUserEmailSent(false);
@@ -173,14 +194,18 @@ export default function Visit() {
                     </FormField>
                   </div>
 
-                  <FormField label="Preferred date" htmlFor="visit-date">
-                    <input
+                  <FormField
+                    label="Preferred date"
+                    htmlFor="visit-date"
+                    hint="Today or a future date only."
+                    error={dateError ?? undefined}
+                  >
+                    <DatePicker
                       id="visit-date"
-                      type="date"
                       name="date"
                       value={formData.date}
-                      onChange={handleChange}
-                      className="field-input"
+                      onChange={handleDateChange}
+                      minDate={minDate}
                     />
                   </FormField>
 

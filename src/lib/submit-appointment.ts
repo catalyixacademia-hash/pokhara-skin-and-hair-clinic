@@ -1,4 +1,5 @@
 import { getSupabase, isSupabaseConfigured } from './supabase';
+import { isPastDate, todayISODate } from './dates';
 
 export type AppointmentFormData = {
   name: string;
@@ -38,12 +39,24 @@ export async function submitAppointment(
     };
   }
 
+  const preferredDate = formData.date?.trim() || null;
+  if (
+    (formData.formType ?? 'booking') === 'booking' &&
+    preferredDate &&
+    isPastDate(preferredDate, todayISODate())
+  ) {
+    return {
+      ok: false,
+      error: 'Preferred date cannot be in the past. Please choose today or a future date.',
+    };
+  }
+
   const requestBody = {
     name: formData.name,
     phone: formData.phone,
     email: formData.email || null,
     treatment: formData.treatment,
-    date: formData.date?.trim() || null,
+    date: preferredDate,
     message: formData.message?.trim() || null,
     formType: formData.formType ?? 'booking',
   };
