@@ -10,6 +10,7 @@ import {
   phoneHref,
   social,
 } from '../data/clinic';
+import { useClinicSettings } from '../hooks/useClinicSettings';
 import { legalDocuments, type LegalDocument } from '../data/legal';
 import Container from './ui/Container';
 import LegalModal from './LegalModal';
@@ -19,19 +20,22 @@ const quickLinks = [
   { label: 'Treatments', href: '#services' },
   { label: 'Doctor', href: '#doctor' },
   { label: 'Results', href: '#results' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
   { label: 'Location', href: '#location' },
 ];
 
-const socialLinks = [
-  { label: 'Instagram', href: social.instagram.url },
-  { label: 'Facebook', href: social.facebook.url },
-  { label: 'TikTok', href: social.tiktok.url },
-  { label: 'WhatsApp', href: social.whatsapp.url },
-];
-
 export default function Footer() {
   const [activeLegal, setActiveLegal] = useState<LegalDocument | null>(null);
+  const { settings } = useClinicSettings();
+
+  const socialLinks = [
+    { label: 'Instagram', href: settings.social.instagramUrl || social.instagram.url },
+    { label: 'Facebook', href: settings.social.facebookUrl || social.facebook.url },
+    { label: 'TikTok', href: settings.social.tiktokUrl || social.tiktok.url },
+    { label: 'WhatsApp', href: settings.social.whatsappMainUrl || social.whatsapp.url },
+  ];
 
   const scrollTo = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
@@ -67,12 +71,15 @@ export default function Footer() {
             <nav className="flex flex-col gap-2">
               {footerServiceLinks.map((s) => (
                 <button
-                  key={s}
+                  key={s.label}
                   type="button"
-                  onClick={() => scrollTo('#services')}
+                  onClick={() => {
+                    scrollTo(s.href);
+                    window.location.hash = s.href;
+                  }}
                   className="font-body text-base text-muted hover:text-accent hover:underline bg-transparent border-none cursor-pointer text-left transition-colors"
                 >
-                  {s}
+                  {s.label}
                 </button>
               ))}
             </nav>

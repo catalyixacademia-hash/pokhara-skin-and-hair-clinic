@@ -2,14 +2,15 @@ import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 import { useTestimonials } from '../hooks/useTestimonials';
-import { maps } from '../data/clinic';
+import { useClinicSettings } from '../hooks/useClinicSettings';
 
 export default function SocialProof() {
   const { testimonials } = useTestimonials();
+  const { settings } = useClinicSettings();
   const featured = testimonials.slice(0, 3);
 
   return (
-    <section className="bg-surface section-padding">
+    <section id="testimonials" className="bg-surface section-padding">
       <Container>
         <Reveal>
           <SectionIntro
@@ -38,7 +39,7 @@ export default function SocialProof() {
         <Reveal delay={0.12}>
           <div className="mt-10 flex justify-center">
             <a
-              href={maps.reviewsUrl}
+              href={settings.maps.reviewsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary-outline inline-flex items-center gap-2"

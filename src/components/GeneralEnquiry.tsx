@@ -48,7 +48,7 @@ export default function GeneralEnquiry() {
       return;
     }
 
-    openAppointmentWhatsApp(payload);
+    openAppointmentWhatsApp(payload, settings.social.whatsappFloatNumber);
     setUserEmailSent(Boolean(result.userEmailSent));
     setEmailWarning(result.emailWarning ?? null);
     setSubmitted(true);

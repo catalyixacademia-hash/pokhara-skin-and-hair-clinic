@@ -25,6 +25,12 @@ type Settings = {
   hours: Record<string, string>;
   maps_embed_url: string;
   maps_open_url: string;
+  whatsapp_float_number: string;
+  maps_reviews_url: string;
+  social_instagram_url: string;
+  social_facebook_url: string;
+  social_tiktok_url: string;
+  whatsapp_main_url: string;
 };
 
 type Phone = { id: string; number: string; role: string; label: string; sort_order: number };
@@ -52,6 +58,12 @@ const DEFAULT_SETTINGS: Settings = {
   hours: { ...DEFAULT_HOURS },
   maps_embed_url: '',
   maps_open_url: '',
+  whatsapp_float_number: '984515246',
+  maps_reviews_url: '',
+  social_instagram_url: 'https://www.instagram.com/pokharaskinandhairclinic/',
+  social_facebook_url: 'https://www.facebook.com/profile.php?id=61561770561179',
+  social_tiktok_url: 'https://www.tiktok.com/@pokharaskinandhairclinic',
+  whatsapp_main_url: 'https://wa.me/9779706929329',
 };
 
 const PHONE_ROLES = ['main', 'appointments', 'landline', 'additional'] as const;
@@ -95,10 +107,27 @@ export default function ClinicSettings() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const applySettings = (s: Settings) => {
-    setSettings(s);
-    setAddress(toAddressFields(s.address));
-    setHours(toHoursFields(s.hours));
+  const applySettings = (s: Partial<Settings> & Pick<Settings, 'name'>) => {
+    const merged: Settings = {
+      ...DEFAULT_SETTINGS,
+      ...s,
+      name: s.name ?? DEFAULT_SETTINGS.name,
+      name_short: s.name_short ?? DEFAULT_SETTINGS.name_short,
+      tagline: s.tagline ?? '',
+      address: s.address ?? DEFAULT_SETTINGS.address,
+      hours: s.hours ?? DEFAULT_SETTINGS.hours,
+      maps_embed_url: s.maps_embed_url ?? '',
+      maps_open_url: s.maps_open_url ?? '',
+      whatsapp_float_number: s.whatsapp_float_number ?? DEFAULT_SETTINGS.whatsapp_float_number,
+      maps_reviews_url: s.maps_reviews_url ?? '',
+      social_instagram_url: s.social_instagram_url ?? DEFAULT_SETTINGS.social_instagram_url,
+      social_facebook_url: s.social_facebook_url ?? DEFAULT_SETTINGS.social_facebook_url,
+      social_tiktok_url: s.social_tiktok_url ?? DEFAULT_SETTINGS.social_tiktok_url,
+      whatsapp_main_url: s.whatsapp_main_url ?? DEFAULT_SETTINGS.whatsapp_main_url,
+    };
+    setSettings(merged);
+    setAddress(toAddressFields(merged.address));
+    setHours(toHoursFields(merged.hours));
   };
 
   const loadPhones = async () => {
@@ -187,6 +216,12 @@ export default function ClinicSettings() {
         hours: hoursPayload,
         maps_embed_url: settings.maps_embed_url.trim(),
         maps_open_url: settings.maps_open_url.trim(),
+        whatsapp_float_number: settings.whatsapp_float_number.trim(),
+        maps_reviews_url: settings.maps_reviews_url.trim(),
+        social_instagram_url: settings.social_instagram_url.trim(),
+        social_facebook_url: settings.social_facebook_url.trim(),
+        social_tiktok_url: settings.social_tiktok_url.trim(),
+        whatsapp_main_url: settings.whatsapp_main_url.trim(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', 1);
@@ -409,6 +444,61 @@ export default function ClinicSettings() {
             onChange={(e) => setSettings({ ...settings, maps_open_url: e.target.value })}
           />
         </div>
+
+        <fieldset className="space-y-3 border border-line rounded p-4">
+          <legend className="text-sm font-medium text-ink px-1">Contact channels</legend>
+          <div>
+            <label className="admin-label">WhatsApp float number (digits)</label>
+            <input
+              className="admin-input"
+              value={settings.whatsapp_float_number}
+              onChange={(e) => setSettings({ ...settings, whatsapp_float_number: e.target.value })}
+              placeholder="984515246"
+            />
+          </div>
+          <div>
+            <label className="admin-label">Main WhatsApp URL</label>
+            <input
+              className="admin-input"
+              value={settings.whatsapp_main_url}
+              onChange={(e) => setSettings({ ...settings, whatsapp_main_url: e.target.value })}
+              placeholder="https://wa.me/9779706929329"
+            />
+          </div>
+          <div>
+            <label className="admin-label">Google reviews URL</label>
+            <input
+              className="admin-input"
+              value={settings.maps_reviews_url}
+              onChange={(e) => setSettings({ ...settings, maps_reviews_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="admin-label">Instagram URL</label>
+            <input
+              className="admin-input"
+              value={settings.social_instagram_url}
+              onChange={(e) => setSettings({ ...settings, social_instagram_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="admin-label">Facebook URL</label>
+            <input
+              className="admin-input"
+              value={settings.social_facebook_url}
+              onChange={(e) => setSettings({ ...settings, social_facebook_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="admin-label">TikTok URL</label>
+            <input
+              className="admin-input"
+              value={settings.social_tiktok_url}
+              onChange={(e) => setSettings({ ...settings, social_tiktok_url: e.target.value })}
+            />
+          </div>
+        </fieldset>
+
         <button type="submit" disabled={saving} className="admin-btn-primary">
           {saving ? 'Saving…' : 'Save Settings'}
         </button>

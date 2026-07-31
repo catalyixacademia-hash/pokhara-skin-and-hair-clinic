@@ -13,6 +13,7 @@ import { isPastDate, todayISODate } from '../lib/dates';
 import { submitAppointment } from '../lib/submit-appointment';
 import { openAppointmentWhatsApp } from '../lib/whatsapp';
 import { useTreatmentOptions } from '../hooks/useTreatmentOptions';
+import { useClinicSettings } from '../hooks/useClinicSettings';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import FormField from './ui/FormField';
@@ -35,6 +36,7 @@ function CallIcon() {
 
 export default function Visit() {
   const { treatmentGroups, loading: treatmentsLoading } = useTreatmentOptions();
+  const { settings } = useClinicSettings();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -87,7 +89,7 @@ export default function Visit() {
       return;
     }
 
-    openAppointmentWhatsApp(payload);
+    openAppointmentWhatsApp(payload, settings.social.whatsappFloatNumber);
     setUserEmailSent(Boolean(result.userEmailSent));
     setEmailWarning(result.emailWarning ?? null);
     setSubmitted(true);

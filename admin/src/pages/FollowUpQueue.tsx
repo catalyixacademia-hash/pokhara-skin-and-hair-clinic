@@ -10,6 +10,12 @@ import {
   urgencyStyles,
   whatsappHref,
 } from '@/lib/contact-links';
+import {
+  defaultScriptForStatus,
+  followUpWhatsAppMessage,
+  scriptLabel,
+  type FollowUpScriptKind,
+} from '@/lib/follow-up-scripts';
 import { formTypeLabel, listBasePath, type Submission, type SubmissionStatus } from '@/types/submission';
 
 function queueSort(a: Submission, b: Submission): number {
@@ -182,7 +188,8 @@ export default function FollowUpQueue() {
             const urgency =
               row.form_type === 'booking' ? preferredDateUrgency(row.preferred_date) : 'none';
             const detailPath = `${listBasePath(row.form_type)}/${row.id}`;
-            const waMessage = `Hello ${row.name}, this is Pokhara Skin & Hair Clinic regarding your ${row.form_type === 'booking' ? 'appointment request' : 'enquiry'}.`;
+            const scriptKind: FollowUpScriptKind = defaultScriptForStatus(row.status);
+            const waMessage = followUpWhatsAppMessage(row, scriptKind);
 
             return (
               <article key={row.id} className="admin-card">
@@ -226,6 +233,7 @@ export default function FollowUpQueue() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="admin-btn-secondary text-xs py-1.5 px-3"
+                      title={scriptLabel(scriptKind)}
                     >
                       WhatsApp
                     </a>

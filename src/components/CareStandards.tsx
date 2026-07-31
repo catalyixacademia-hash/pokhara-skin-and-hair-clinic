@@ -22,7 +22,7 @@ const standards = [
 
 export default function CareStandards() {
   return (
-    <section className="bg-surface-container-low section-padding">
+    <section id="care-standards" className="bg-surface-container-low section-padding">
       <Container>
         <Reveal>
           <SectionIntro

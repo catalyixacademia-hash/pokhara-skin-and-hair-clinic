@@ -12,6 +12,11 @@ import {
   whatsappHref,
 } from '@/lib/contact-links';
 import {
+  followUpWhatsAppMessage,
+  scriptLabel,
+  type FollowUpScriptKind,
+} from '@/lib/follow-up-scripts';
+import {
   SUBMISSION_STATUSES,
   formTypeLabel,
   listBasePath,
@@ -37,6 +42,7 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<SubmissionStatus | null>(null);
+  const [waScript, setWaScript] = useState<FollowUpScriptKind>('default');
 
   const [notesInitialized, setNotesInitialized] = useState(false);
 
@@ -47,7 +53,6 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
       .from('appointments')
       .select('*')
       .eq('id', id)
-      .is('deleted_at', null)
       .maybeSingle()
       .then(({ data, error: fetchError }) => {
         if (fetchError) setError(fetchError.message);
@@ -170,7 +175,22 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
 
   const urgency =
     formType === 'booking' ? preferredDateUrgency(row.preferred_date) : 'none';
-  const waMessage = `Hello ${row.name}, this is Pokhara Skin & Hair Clinic regarding your ${formType === 'booking' ? 'appointment request' : 'enquiry'}.`;
+  const waMessage = followUpWhatsAppMessage(row, waScript);
+  const isTrashed = Boolean(row.deleted_at);
+
+  const restore = async () => {
+    if (!id) return;
+    setSaving(true);
+    const { data, error: restoreError } = await supabase
+      .from('appointments')
+      .update({ deleted_at: null, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    if (restoreError) setError(restoreError.message);
+    else if (data) setRow(data as Submission);
+    setSaving(false);
+  };
 
   return (
     <div>
@@ -182,8 +202,13 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
         <div>
           <p className="text-xs uppercase tracking-widest text-accent mb-1">Patient submission</p>
           <h1 className="font-serif text-3xl text-ink">{row.name}</h1>
-          <div className="mt-2">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <StatusBadge status={row.status} />
+            {isTrashed && (
+              <span className="text-xs font-medium px-2 py-1 rounded border border-red-200 bg-red-50 text-red-800">
+                In trash
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -206,10 +231,35 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
           <button type="button" onClick={() => void copySummary()} className="admin-btn-secondary">
             Copy summary
           </button>
-          <button type="button" onClick={() => setDeleteOpen(true)} className="admin-btn-danger">
-            Remove
-          </button>
+          {isTrashed ? (
+            <button type="button" onClick={() => void restore()} className="admin-btn-primary" disabled={saving}>
+              Restore
+            </button>
+          ) : (
+            <button type="button" onClick={() => setDeleteOpen(true)} className="admin-btn-danger">
+              Remove
+            </button>
+          )}
         </div>
+      </div>
+
+      <div className="admin-card max-w-5xl mb-6">
+        <p className="admin-label mb-2">WhatsApp script</p>
+        <div className="flex flex-wrap gap-2 mb-3">
+          {(['default', 'confirm', 'missed', 'completed'] as FollowUpScriptKind[]).map((kind) => (
+            <button
+              key={kind}
+              type="button"
+              className={waScript === kind ? 'admin-btn-primary text-xs py-1.5 px-3' : 'admin-btn-secondary text-xs py-1.5 px-3'}
+              onClick={() => setWaScript(kind)}
+            >
+              {scriptLabel(kind)}
+            </button>
+          ))}
+        </div>
+        <p className="text-sm text-muted whitespace-pre-wrap border border-line rounded p-3 bg-surface-container-low">
+          {waMessage}
+        </p>
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}

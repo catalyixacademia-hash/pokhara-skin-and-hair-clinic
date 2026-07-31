@@ -2,9 +2,12 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Treatments from './components/Treatments';
 import CareStandards from './components/CareStandards';
+import Gallery from './components/Gallery';
 import ClinicDoctor from './components/ClinicDoctor';
 import Outcomes from './components/Outcomes';
+import Aesthetics from './components/Aesthetics';
 import SocialProof from './components/SocialProof';
+import Faq from './components/Faq';
 import Visit from './components/Visit';
 import GeneralEnquiry from './components/GeneralEnquiry';
 import Footer from './components/Footer';
@@ -21,9 +24,12 @@ export default function App() {
         <Hero />
         <Treatments />
         <CareStandards />
+        <Gallery />
         <ClinicDoctor />
         <Outcomes />
+        <Aesthetics />
         <SocialProof />
+        <Faq />
         <Visit />
         <GeneralEnquiry />
       </main>

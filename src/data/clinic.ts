@@ -235,15 +235,15 @@ export function groupTreatmentOptions(labels: string[]): { label: string; option
 }
 
 export const footerServiceLinks = [
-  'Acne & Pigmentation',
-  'Chemical Peels',
-  'Microneedling',
-  'Laser Treatments',
-  'Skin Analyzer',
-  'PRP Hair Therapy',
-  'GFC Therapy',
-  'Botox & Fillers',
-  'Laser Hair Reduction',
+  { label: 'Acne & Pigmentation', href: '#acne-pigmentation' },
+  { label: 'Chemical Peels', href: '#chemical-peels' },
+  { label: 'Microneedling', href: '#microneedling' },
+  { label: 'Laser Treatments', href: '#laser-procedures' },
+  { label: 'Skin Analyzer', href: '#skin-analyzer-skin-tests' },
+  { label: 'PRP Hair Therapy', href: '#prp-therapy' },
+  { label: 'GFC Therapy', href: '#gfc-therapy' },
+  { label: 'Aesthetic care', href: '#aesthetics' },
+  { label: 'Laser Hair Reduction', href: '#aesthetics' },
 ] as const;
 
 /** Google Maps pin — Pokhara Skin and Hair Clinic, Nayabazar Rd (plus code 6X6P+MP5). */

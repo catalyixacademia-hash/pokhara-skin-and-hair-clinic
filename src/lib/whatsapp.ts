@@ -55,9 +55,12 @@ export function formatAppointmentWhatsAppMessage(data: AppointmentFormData): str
   return lines.join('\n');
 }
 
-/** Opens a prefilled chat to the floating WhatsApp number (984515246). */
-export function openAppointmentWhatsApp(data: AppointmentFormData): void {
+/** Opens a prefilled chat to the floating WhatsApp number (984515246 by default). */
+export function openAppointmentWhatsApp(
+  data: AppointmentFormData,
+  phoneDigits: string = social.whatsappFloat.number,
+): void {
   const message = formatAppointmentWhatsAppMessage(data);
-  const href = buildWhatsAppHref(social.whatsappFloat.number, message);
+  const href = buildWhatsAppHref(phoneDigits, message);
   window.open(href, '_blank', 'noopener,noreferrer');
 }

@@ -4,6 +4,7 @@ import {
   clinic as staticClinic,
   hours as staticHours,
   maps as staticMaps,
+  social as staticSocial,
 } from '../data/clinic';
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase';
 
@@ -28,6 +29,14 @@ export type ClinicSettingsView = {
   maps: {
     embedUrl: string;
     openUrl: string;
+    reviewsUrl: string;
+  };
+  social: {
+    instagramUrl: string;
+    facebookUrl: string;
+    tiktokUrl: string;
+    whatsappMainUrl: string;
+    whatsappFloatNumber: string;
   };
 };
 
@@ -52,6 +61,14 @@ const fallback: ClinicSettingsView = {
   maps: {
     embedUrl: staticMaps.embedUrl,
     openUrl: staticMaps.openUrl,
+    reviewsUrl: staticMaps.reviewsUrl,
+  },
+  social: {
+    instagramUrl: staticSocial.instagram.url,
+    facebookUrl: staticSocial.facebook.url,
+    tiktokUrl: staticSocial.tiktok.url,
+    whatsappMainUrl: staticSocial.whatsapp.url,
+    whatsappFloatNumber: staticSocial.whatsappFloat.number,
   },
 };
 
@@ -66,15 +83,7 @@ function str(value: unknown, fallbackValue: string): string {
   return typeof value === 'string' && value.trim() ? value.trim() : fallbackValue;
 }
 
-function mapRow(row: {
-  name: string;
-  name_short: string | null;
-  tagline: string | null;
-  address: unknown;
-  hours: unknown;
-  maps_embed_url: string | null;
-  maps_open_url: string | null;
-}): ClinicSettingsView {
+function mapRow(row: Record<string, unknown>): ClinicSettingsView {
   const addr = asRecord(row.address);
   const hrs = asRecord(row.hours);
   const fullFromDb = addr.full;
@@ -104,6 +113,14 @@ function mapRow(row: {
     maps: {
       embedUrl: str(row.maps_embed_url, fallback.maps.embedUrl),
       openUrl: str(row.maps_open_url, fallback.maps.openUrl),
+      reviewsUrl: str(row.maps_reviews_url, fallback.maps.reviewsUrl),
+    },
+    social: {
+      instagramUrl: str(row.social_instagram_url, fallback.social.instagramUrl),
+      facebookUrl: str(row.social_facebook_url, fallback.social.facebookUrl),
+      tiktokUrl: str(row.social_tiktok_url, fallback.social.tiktokUrl),
+      whatsappMainUrl: str(row.whatsapp_main_url, fallback.social.whatsappMainUrl),
+      whatsappFloatNumber: str(row.whatsapp_float_number, fallback.social.whatsappFloatNumber),
     },
   };
 }
@@ -126,8 +143,8 @@ export function useClinicSettings() {
       .eq('id', 1)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (!error && data?.name) {
-          setSettings(mapRow(data));
+        if (!error && data && typeof (data as { name?: string }).name === 'string') {
+          setSettings(mapRow(data as Record<string, unknown>));
           setFromDb(true);
         }
         setLoading(false);

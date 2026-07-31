@@ -13,7 +13,8 @@ import { cn } from '../utils/cn';
 
 const navLinks = [
   { label: 'Treatments', href: '#services' },
-  { label: 'Dermatology', href: '#about' },
+  { label: 'Hair restoration', href: '#hair-services' },
+  { label: 'Dermatology', href: '#doctor' },
   { label: 'Results', href: '#results' },
   { label: 'Contact', href: '#contact' },
 ] as const;

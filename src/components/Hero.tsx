@@ -97,6 +97,14 @@ export default function Hero() {
               modern setting.
             </p>
 
+            <p className="hero-credential-ribbon" aria-label="Doctor credentials">
+              <span>NMC 12549</span>
+              <span className="hero-credential-ribbon__sep" aria-hidden="true" />
+              <span>MD Dermatology</span>
+              <span className="hero-credential-ribbon__sep" aria-hidden="true" />
+              <span>10,000+ patients</span>
+            </p>
+
             <div className="hero-cta-row">
               <button type="button" onClick={() => scrollTo('#contact')} className="btn-primary">
                 Book appointment

@@ -1,9 +1,16 @@
-import { social } from '../data/clinic';
+import { useClinicSettings } from '../hooks/useClinicSettings';
+import { buildWhatsAppHref } from '../lib/whatsapp';
+
+const DEFAULT_FLOAT_MESSAGE =
+  'Hello, I would like to contact Pokhara Skin and Hair Clinic.';
 
 export default function WhatsAppFloat() {
+  const { settings } = useClinicSettings();
+  const href = buildWhatsAppHref(settings.social.whatsappFloatNumber, DEFAULT_FLOAT_MESSAGE);
+
   return (
     <a
-      href={social.whatsappFloat.urlWithMessage}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
