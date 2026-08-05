@@ -2,10 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokhara Skin and Hair Clinic — Advanced Dermatology & Aesthetic Care</title>
-    <meta name="description" content="Pokhara Skin and Hair Clinic — advanced dermatology and hair restoration in Nayabazar-8, Pokhara. Led by Board Certified Dermatologist Dr. Prakash Acharya, MD (NMC Reg. No. 12549)." />
-    <meta name="keywords" content="dermatologist Pokhara, skin clinic Pokhara, hair treatment Pokhara, PRP treatment Nepal, acne treatment Pokhara, cosmetology clinic Pokhara, aesthetic clinic Nepal, Dr Prakash Acharya, GMC Hospital Pokhara, Nayabazar skin clinic" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#005f56" />
+    <title>Dermatologist in Pokhara | Pokhara Skin and Hair Clinic</title>
+    <meta name="description" content="Dermatologist-led skin, hair, and aesthetic care in Nayabazar-8, Pokhara — opposite GMC Hospital. Led by Dr. Prakash Acharya, MD Dermatology, NMC Reg. No. 12549. Open daily 8AM–7PM." />
+    <meta property="og:site_name" content="Pokhara Skin and Hair Clinic" />
+    <meta property="og:locale" content="en_NP" />
     <meta property="og:title" content="Pokhara Skin and Hair Clinic — Advanced Dermatology & Aesthetic Care" />
     <meta property="og:description" content="Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology. Located in Nayabazar-8, opposite GMC Hospital, Pokhara, Nepal." />
     <meta property="og:type" content="website" />
@@ -20,10 +22,45 @@
     <link rel="canonical" href="https://pokhara-skin-and-hair-clinic.vercel.app/" />
     <link rel="icon" type="image/png" href="/favicon.png?v=3" />
     <link rel="apple-touch-icon" href="/favicon.png?v=3" />
-    <link rel="preload" as="image" href="/images/hero/clinic-hero.png?v=5" fetchpriority="high" />
+    <!--
+      Hero preload is media-scoped so each viewport fetches exactly one file.
+      Previously a single unconditional preload of the 130KB PNG meant desktop
+      downloaded it *and* the 341KB JPEG that <picture> actually rendered.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/clinic-hero@1920.jpg?v=5"
+      media="(min-width: 1024px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/clinic-hero.webp?v=5"
+      type="image/webp"
+      media="(max-width: 1023px)"
+      fetchpriority="high"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Work+Sans:wght@400;600&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Work+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Work+Sans:wght@400;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -47,6 +84,38 @@
       },
       "telephone": ["+9779706929329", "+9779845815246", "+97761586227"],
       "openingHours": "Mo-Su 08:00-19:00",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "08:00",
+          "closes": "19:00"
+        }
+      ],
+      "hasMap": "https://www.google.com/maps/place/Pokhara%20Skin%20and%20Hair%20Clinic/@28.211638,83.986859,17z",
+      "areaServed": [
+        { "@type": "City", "name": "Pokhara" },
+        { "@type": "AdministrativeArea", "name": "Gandaki Province" }
+      ],
+      "availableService": [
+        { "@type": "MedicalProcedure", "name": "Acne and pigmentation treatment" },
+        { "@type": "MedicalProcedure", "name": "Chemical peels" },
+        { "@type": "MedicalProcedure", "name": "Microneedling" },
+        { "@type": "MedicalProcedure", "name": "Laser skin procedures" },
+        { "@type": "MedicalProcedure", "name": "PRP hair therapy" },
+        { "@type": "MedicalProcedure", "name": "GFC hair therapy" },
+        { "@type": "MedicalProcedure", "name": "Exosome hair therapy" },
+        { "@type": "MedicalProcedure", "name": "Botox and dermal fillers" },
+        { "@type": "MedicalProcedure", "name": "Laser hair reduction" }
+      ],
       "medicalSpecialty": ["Dermatology", "Cosmetology", "Trichology"],
       "sameAs": [
         "https://www.instagram.com/pokharaskinandhairclinic/",
@@ -66,6 +135,54 @@
         "url": "https://drprakashacharya.com.np/",
         "description": "Board Certified Dermatologist and Nepal Medical Council specialist (NMC Reg. No. 12549). MD Dermatology, Kathmandu University (2020); MBBS, Tribhuvan University, Maharajgunj Medical Campus (2011). Focus on melasma, acne, hair loss, and regenerative dermatology."
       }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need an appointment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We recommend booking ahead so we can allocate enough time for assessment and treatment planning. Walk-ins are accommodated when the schedule allows."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I bring to my first visit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bring a list of current skincare or medications, any prior dermatology reports or photos of your concern, and questions about your goals. Arrive with a clean face when possible (minimal makeup)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are treatment prices determined?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fees depend on the condition, protocol, and number of sessions. We discuss options and approximate ranges during consultation and only recommend what is medically appropriate for you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there downtime after procedures?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It varies by treatment. Peels and lasers may involve temporary redness or flaking; injectables and many hair protocols have little to no downtime. We explain aftercare before you proceed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you treat both skin and hair concerns?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Skin care is our primary specialty; hair restoration and selected aesthetic procedures complement comprehensive dermatology under Dr. Prakash Acharya."
+          }
+        }
+      ]
     }
     </script>
   </head>

@@ -300,8 +300,7 @@ export function formatPhoneDisplay(number: string): string {
 export function getPhone(role: PhoneRole): ClinicPhone {
   const phone = phones.find((p) => p.role === role);
   if (!phone) {
-    const _exhaustive: never = role;
-    throw new Error(`Unknown phone role: ${_exhaustive}`);
+    throw new Error(`Unknown phone role: ${role}`);
   }
   return phone;
 }

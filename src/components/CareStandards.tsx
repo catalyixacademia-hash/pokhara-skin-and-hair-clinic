@@ -22,22 +22,27 @@ const standards = [
 
 export default function CareStandards() {
   return (
-    <section id="care-standards" className="bg-surface-container-low section-padding">
+    <section
+      id="care-standards"
+      className="bg-surface-container-low section-padding"
+      aria-labelledby="care-standards-heading"
+    >
       <Container>
         <Reveal>
           <SectionIntro
             index="02"
             title="How we practice"
+            titleId="care-standards-heading"
             lede="Three principles that guide every patient interaction at the clinic."
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
           {standards.map((item, i) => (
             <Reveal key={item.index} className="h-full" delay={i * 0.06}>
-              <article className="standard-card space-y-6">
+              <article className="standard-card">
                 <div className="standard-card__badge">{item.index}</div>
-                <h3 className="font-display text-xl text-ink">{item.title}</h3>
+                <h3 className="font-display text-h3 text-ink mt-5 mb-3">{item.title}</h3>
                 <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
               </article>
             </Reveal>

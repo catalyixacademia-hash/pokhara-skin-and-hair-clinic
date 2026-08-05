@@ -14,12 +14,17 @@ export default function Outcomes() {
   };
 
   return (
-    <section id="results" className="bg-surface-container-highest section-padding">
+    <section
+      id="results"
+      className="bg-surface-container-highest section-padding"
+      aria-labelledby="results-heading"
+    >
       <Container>
         <Reveal>
           <SectionIntro
             index="04"
             title="Patient results"
+            titleId="results-heading"
             lede={
               isLive
                 ? 'Selected clinical outcomes from our dermatology practice. Individual results vary.'
@@ -28,7 +33,7 @@ export default function Outcomes() {
           />
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8 items-stretch">
           {display.map((result, i) => (
             <Reveal key={result.id} className="h-full" delay={i * 0.05}>
               <article className="result-card h-full">
@@ -39,6 +44,8 @@ export default function Outcomes() {
                       alt={`${result.label} — before`}
                       loading="lazy"
                       decoding="async"
+                      width={600}
+                      height={800}
                     />
                     <figcaption>Before</figcaption>
                   </figure>
@@ -48,6 +55,8 @@ export default function Outcomes() {
                       alt={`${result.label} — after`}
                       loading="lazy"
                       decoding="async"
+                      width={600}
+                      height={800}
                     />
                     <figcaption>After</figcaption>
                   </figure>

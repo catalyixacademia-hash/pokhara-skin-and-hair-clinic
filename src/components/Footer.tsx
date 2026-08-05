@@ -42,33 +42,30 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-surface-container-low border-t border-line pt-12 pb-8 pb-safe">
+    <footer className="bg-surface-container border-t border-outline-variant pt-12 pb-8 pb-safe">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          <div className="space-y-4">
-            <p className="font-display text-xl text-secondary font-semibold">{clinic.nameShort}</p>
-            <p className="font-body text-base text-muted leading-relaxed">{clinic.tagline}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] gap-8 lg:gap-10 mb-10">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <p className="font-display text-h3 text-secondary font-semibold">{clinic.nameShort}</p>
+            <p className="font-body text-base text-muted leading-relaxed mt-3 max-w-sm">
+              {clinic.tagline}
+            </p>
           </div>
 
-          <div className="space-y-4">
-            <p className="text-label text-ink">Navigation</p>
-            <nav className="flex flex-col gap-2">
+          <div>
+            <h2 className="footer-heading">Navigation</h2>
+            <nav aria-label="Footer navigation" className="footer-links">
               {quickLinks.map((link) => (
-                <button
-                  key={link.href}
-                  type="button"
-                  onClick={() => scrollTo(link.href)}
-                  className="font-body text-base text-muted hover:text-accent hover:underline bg-transparent border-none cursor-pointer text-left transition-colors"
-                >
+                <button key={link.href} type="button" onClick={() => scrollTo(link.href)}>
                   {link.label}
                 </button>
               ))}
             </nav>
           </div>
 
-          <div className="space-y-4">
-            <p className="text-label text-ink">Treatments</p>
-            <nav className="flex flex-col gap-2">
+          <div>
+            <h2 className="footer-heading">Treatments</h2>
+            <nav aria-label="Treatment links" className="footer-links">
               {footerServiceLinks.map((s) => (
                 <button
                   key={s.label}
@@ -77,7 +74,6 @@ export default function Footer() {
                     scrollTo(s.href);
                     window.location.hash = s.href;
                   }}
-                  className="font-body text-base text-muted hover:text-accent hover:underline bg-transparent border-none cursor-pointer text-left transition-colors"
                 >
                   {s.label}
                 </button>
@@ -85,33 +81,30 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="space-y-4">
-            <p className="text-label text-ink">Contact</p>
-            <p className="font-body text-caption text-muted leading-relaxed">
+          <div>
+            <h2 className="footer-heading">Contact</h2>
+            <address className="font-body text-caption text-muted leading-relaxed not-italic mb-2">
               {address.line1}
               <br />
               {address.landmark}
-              <br />
-              <br />
+            </address>
+            <div className="footer-links">
               {phones.map((phone) => (
-                <span key={phone.role}>
-                  <a href={phoneHref(phone.number)} className="hover:text-accent">
-                    {formatPhoneDisplay(phone.number)}
-                  </a>
-                  <br />
-                </span>
+                <a key={phone.role} href={phoneHref(phone.number)}>
+                  {formatPhoneDisplay(phone.number)}
+                  <span className="text-muted/70"> · {phone.label}</span>
+                </a>
               ))}
-              <br />
-              {hoursSummaryWithNote()}
-            </p>
-            <div className="flex flex-wrap gap-4 pt-2">
+            </div>
+            <p className="font-body text-caption text-muted mt-3">{hoursSummaryWithNote()}</p>
+            <div className="flex flex-wrap gap-1 mt-3 -ml-2">
               {socialLinks.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-body text-caption text-muted hover:text-accent"
+                  className="footer-social"
                 >
                   {s.label}
                 </a>
@@ -120,18 +113,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-line pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-caption text-muted opacity-70 text-center md:text-left">
+        <div className="border-t border-outline-variant pt-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+          <p className="font-body text-caption text-muted text-center md:text-left">
             © {new Date().getFullYear()} {clinic.name}. All rights reserved. · {doctor.name} —{' '}
             {doctor.title}
           </p>
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-wrap justify-center gap-1 -mx-2">
             {legalDocuments.map((doc) => (
               <button
                 key={doc.id}
                 type="button"
                 onClick={() => setActiveLegal(doc)}
-                className="font-body text-caption text-muted hover:text-accent bg-transparent border-none cursor-pointer transition-colors"
+                className="footer-social"
               >
                 {doc.label}
               </button>

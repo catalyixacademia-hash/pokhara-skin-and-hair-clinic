@@ -8,6 +8,9 @@ type TreatmentDetailSheetProps = {
   onClose: () => void;
 };
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export default function TreatmentDetailSheet({
   service,
   category,
@@ -16,19 +19,49 @@ export default function TreatmentDetailSheet({
 }: TreatmentDetailSheetProps) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
+
+    // Remember where focus came from so it can be handed back on close.
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
+      restoreFocusRef.current?.focus();
     };
   }, [open, onClose]);
 
@@ -53,6 +86,7 @@ export default function TreatmentDetailSheet({
         onClick={onClose}
       />
       <div
+        ref={panelRef}
         className="treatment-sheet__panel"
         role="dialog"
         aria-modal="true"

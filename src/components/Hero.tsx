@@ -56,12 +56,24 @@ export default function Hero() {
       };
 
   return (
-    <section className="hero-section" aria-label="Hero">
+    <section className="hero-section" aria-labelledby="hero-heading">
       <div className="hero-media absolute inset-0 z-0">
         <picture>
           <source
             media="(min-width: 1024px)"
             srcSet="/images/hero/clinic-hero@1920.jpg?v=5"
+            width={1920}
+            height={1080}
+          />
+          {/*
+            Below 1024px the 44KB WebP is served instead of the 130KB PNG. The
+            PNG stays as the final fallback for browsers without WebP support.
+          */}
+          <source
+            srcSet="/images/hero/clinic-hero.webp?v=5"
+            type="image/webp"
+            width={1024}
+            height={576}
           />
           <img
             src="/images/hero/clinic-hero.png?v=5"
@@ -90,11 +102,13 @@ export default function Hero() {
               Board certified dermatology
             </p>
 
-            <h1 className="hero-main-card__title">Expert care for skin &amp; hair</h1>
+            <h1 id="hero-heading" className="hero-main-card__title">
+              Dermatologist-led skin &amp; hair care in Pokhara
+            </h1>
 
             <p className="hero-main-card__lede">
-              Leading dermatology and aesthetic care in Pokhara — clinical precision in a calm,
-              modern setting.
+              Evidence-based dermatology, hair restoration, and aesthetic treatment — opposite GMC
+              Hospital, Nayabazar-8.
             </p>
 
             <p className="hero-credential-ribbon" aria-label="Doctor credentials">

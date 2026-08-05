@@ -103,13 +103,14 @@ export default function Visit() {
   };
 
   return (
-    <section id="contact" className="bg-surface-container-low section-padding">
+    <section id="contact" className="bg-surface section-padding" aria-labelledby="contact-heading">
       <Container>
         <Reveal>
           <SectionIntro
-            index="06"
-            title="Visit the clinic"
-            lede="Request an appointment or find us opposite GMC Hospital, Nayabazar-8."
+            index="09"
+            title="Book your visit"
+            titleId="contact-heading"
+            lede="Request an appointment and we will confirm by phone or WhatsApp within 24 hours."
           />
         </Reveal>
 
@@ -117,8 +118,8 @@ export default function Visit() {
           <Reveal delay={0.05}>
             <div className="form-card">
               {submitted ? (
-                <div className="py-4">
-                  <h3 className="font-display text-h3 text-ink mb-2">Request received</h3>
+                <div className="form-success" role="status" aria-live="polite">
+                  <h3 className="font-display text-h3 text-ink">Request received</h3>
                   <p className="font-body text-muted">
                     Thank you. We will contact you within 24 hours to confirm your appointment.
                     <span className="block mt-2">
@@ -223,51 +224,53 @@ export default function Visit() {
                   </FormField>
 
                   {submitError && (
-                    <p className="text-sm text-[var(--color-error)]" role="alert">
+                    <p className="form-error" role="alert">
                       {submitError}
                     </p>
                   )}
 
-                  <div>
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="btn-primary w-full sm:w-auto disabled:opacity-60"
-                    >
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <button type="submit" disabled={submitting} className="btn-primary">
                       {submitting ? 'Submitting…' : 'Request appointment'}
                     </button>
+                    <p className="font-body text-caption text-muted">
+                      No payment required. We confirm every request by phone or WhatsApp.
+                    </p>
                   </div>
                 </form>
               )}
             </div>
           </Reveal>
 
-          <Reveal className="space-y-12" delay={0.1}>
-            <div className="space-y-6">
-              <h3 className="font-display text-xl text-ink">Contact</h3>
-              <p className="font-body text-base text-muted">
+          <Reveal className="space-y-8 md:space-y-10" delay={0.1}>
+            <div className="info-panel">
+              <h3 className="font-display text-h3 text-ink mb-4">Contact</h3>
+              <p className="font-body text-base text-muted mb-4">
                 {address.line1}
                 <br />
                 {address.landmark}
               </p>
-              <div className="space-y-2">
+              <ul className="contact-list">
                 {phones.map((phone) => (
-                  <a
-                    key={phone.role}
-                    href={phoneHref(phone.number)}
-                    className="flex items-center gap-3 font-body text-base text-muted hover:text-accent"
-                  >
-                    <span className="text-accent">
-                      <CallIcon />
-                    </span>
-                    {formatPhoneDisplay(phone.number)} · {phone.label}
-                  </a>
+                  <li key={phone.role}>
+                    <a href={phoneHref(phone.number)} className="contact-list__link">
+                      <span className="contact-list__icon" aria-hidden="true">
+                        <CallIcon />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="contact-list__number">
+                          {formatPhoneDisplay(phone.number)}
+                        </span>
+                        <span className="contact-list__role">{phone.label}</span>
+                      </span>
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="font-display text-xl text-ink">Hours</h3>
+            <div className="info-panel">
+              <h3 className="font-display text-h3 text-ink mb-4">Opening hours</h3>
               <div>
                 {clinicHours.map((h) => (
                   <div key={h.day} className="hours-row">
@@ -276,7 +279,7 @@ export default function Visit() {
                   </div>
                 ))}
               </div>
-              <p className="font-body text-caption text-accent">{hours.saturdayNote}</p>
+              <p className="font-body text-caption text-accent mt-4">{hours.saturdayNote}</p>
             </div>
           </Reveal>
         </div>

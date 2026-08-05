@@ -1,11 +1,12 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import TrustStrip from './components/TrustStrip';
 import Treatments from './components/Treatments';
 import CareStandards from './components/CareStandards';
-import Gallery from './components/Gallery';
 import ClinicDoctor from './components/ClinicDoctor';
 import Outcomes from './components/Outcomes';
 import Aesthetics from './components/Aesthetics';
+import Gallery from './components/Gallery';
 import SocialProof from './components/SocialProof';
 import Faq from './components/Faq';
 import Visit from './components/Visit';
@@ -20,14 +21,15 @@ export default function App() {
         Skip to main content
       </a>
       <Navbar />
-      <main id="main" className="pb-24 md:pb-8">
+      <main id="main">
         <Hero />
+        <TrustStrip />
         <Treatments />
         <CareStandards />
-        <Gallery />
         <ClinicDoctor />
         <Outcomes />
         <Aesthetics />
+        <Gallery />
         <SocialProof />
         <Faq />
         <Visit />

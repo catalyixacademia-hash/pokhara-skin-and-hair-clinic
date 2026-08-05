@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import {
   address,
@@ -8,6 +8,7 @@ import {
   phoneHref,
 } from '../data/clinic';
 import { adminLoginUrl } from '../lib/admin-url';
+import { useActiveSection } from '../hooks/useActiveSection';
 import Container from './ui/Container';
 import { cn } from '../utils/cn';
 
@@ -18,6 +19,12 @@ const navLinks = [
   { label: 'Results', href: '#results' },
   { label: 'Contact', href: '#contact' },
 ] as const;
+
+const navHrefs = navLinks.map((l) => l.href);
+
+/** Elements that can hold focus inside the mobile sheet. */
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 function PersonIcon() {
   return (
@@ -42,6 +49,19 @@ function CalendarIcon() {
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -79,9 +99,21 @@ function NavBrand({ onClick }: NavBrandProps) {
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeHref, setActiveHref] = useState('#services');
   const prefersReducedMotion = useReducedMotion();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * Active state is derived from scroll position. It used to be plain state set
+   * only on click, defaulting to "#services" — so the header claimed the
+   * visitor was in Treatments while they were still reading the hero.
+   */
+  const activeHref = useActiveSection(navHrefs);
+
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    menuButtonRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -90,24 +122,59 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
+  // Move focus into the sheet, trap it there, and restore it on close.
   useEffect(() => {
     if (!menuOpen) return;
 
+    const panel = panelRef.current;
+    panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setMenuOpen(false);
-        menuButtonRef.current?.focus();
+        e.preventDefault();
+        closeMenu();
+        return;
+      }
+
+      if (e.key !== 'Tab' || !panel) return;
+
+      const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (el) => el.offsetParent !== null,
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
+  }, [menuOpen, closeMenu]);
+
+  // Close the sheet if the viewport grows into the desktop layout.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const list = window.matchMedia('(min-width: 1024px)');
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setMenuOpen(false);
+    };
+    list.addEventListener('change', onChange);
+    return () => list.removeEventListener('change', onChange);
   }, [menuOpen]);
 
   const handleNavClick = (href: string) => {
-    setActiveHref(href);
     setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    document.querySelector(href)?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
   };
 
   const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -118,24 +185,28 @@ export default function Navbar() {
 
   const linkClass = (href: string) =>
     cn(
-      'nav-link bg-transparent border-none cursor-pointer touch-target py-2 px-2 xl:px-3 text-muted hover:text-accent whitespace-nowrap',
-      activeHref === href && 'nav-link-active text-accent',
+      'nav-link',
+      activeHref === href && 'nav-link-active',
     );
 
   return (
     <>
-      <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant shadow-sm">
+      <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant">
         <Container>
           <div className="nav-row flex items-center justify-between gap-3 min-h-[var(--nav-height)]">
             <NavBrand onClick={goHome} />
 
-            <nav className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-6 min-w-0" aria-label="Main">
+            <nav
+              className="hidden lg:flex items-center justify-center flex-1 gap-1 xl:gap-2 min-w-0"
+              aria-label="Main"
+            >
               {navLinks.map((link) => (
                 <button
                   key={link.href}
                   type="button"
                   onClick={() => handleNavClick(link.href)}
                   className={linkClass(link.href)}
+                  aria-current={activeHref === link.href ? 'true' : undefined}
                 >
                   {link.label}
                 </button>
@@ -162,7 +233,7 @@ export default function Navbar() {
 
               <a
                 href={adminLoginUrl}
-                className="nav-staff-icon nav-staff-desktop touch-target"
+                className="nav-staff-icon nav-staff-desktop"
                 aria-label="Staff login"
               >
                 <PersonIcon />
@@ -171,24 +242,22 @@ export default function Navbar() {
               <button
                 ref={menuButtonRef}
                 type="button"
-                className="nav-menu-toggle touch-target"
-                onClick={() => setMenuOpen(!menuOpen)}
+                className="nav-menu-toggle"
+                onClick={() => setMenuOpen((open) => !open)}
                 aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={menuOpen}
                 aria-controls="mobile-site-menu"
               >
                 <span
                   className={cn(
-                    'block w-5 h-px bg-ink transition-all',
+                    'nav-menu-toggle__bar',
                     menuOpen && 'rotate-45 translate-y-[7px]',
                   )}
                 />
-                <span
-                  className={cn('block w-5 h-px bg-ink transition-all', menuOpen && 'opacity-0')}
-                />
+                <span className={cn('nav-menu-toggle__bar', menuOpen && 'opacity-0')} />
                 <span
                   className={cn(
-                    'block w-5 h-px bg-ink transition-all',
+                    'nav-menu-toggle__bar',
                     menuOpen && '-rotate-45 -translate-y-[7px]',
                   )}
                 />
@@ -200,57 +269,67 @@ export default function Navbar() {
 
       {menuOpen && (
         <div
+          ref={panelRef}
           id="mobile-site-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
           className="mobile-nav-panel fixed inset-0 z-40 lg:hidden pt-[var(--nav-height)] overflow-y-auto"
         >
-          <nav className="mobile-nav-content" aria-label="Mobile">
-            {navLinks.map((link) => (
+          <div className="mobile-nav-content">
+            <nav aria-label="Mobile" className="mobile-nav-links">
+              {navLinks.map((link) => (
+                <button
+                  key={link.href}
+                  type="button"
+                  onClick={() => handleNavClick(link.href)}
+                  className={cn(
+                    'mobile-nav-link',
+                    activeHref === link.href && 'mobile-nav-link--active',
+                  )}
+                  aria-current={activeHref === link.href ? 'true' : undefined}
+                >
+                  {link.label}
+                </button>
+              ))}
               <button
-                key={link.href}
                 type="button"
-                onClick={() => handleNavClick(link.href)}
-                className={cn('mobile-nav-link', activeHref === link.href && 'mobile-nav-link--active')}
+                onClick={() => handleNavClick('#enquiry')}
+                className="mobile-nav-link"
               >
-                {link.label}
+                Ask a question
               </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => handleNavClick('#enquiry')}
-              className="mobile-nav-link"
-            >
-              Ask a question
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick('#location')}
-              className="mobile-nav-link"
-            >
-              Location
-            </button>
+              <button
+                type="button"
+                onClick={() => handleNavClick('#location')}
+                className="mobile-nav-link"
+              >
+                Location
+              </button>
+            </nav>
 
             <div className="mobile-nav-actions">
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
-                className="btn-nav-cta w-full"
+                className="btn-primary w-full"
               >
                 Book appointment
               </button>
               <a
-                href={adminLoginUrl}
-                className="nav-staff-icon nav-staff-icon--menu w-full justify-center"
-                aria-label="Staff login"
+                href={phoneHref(getPhone('main').number)}
+                className="btn-secondary w-full"
               >
-                <PersonIcon />
-                <span className="font-body text-sm">Staff login</span>
-              </a>
-              <a href={phoneHref(getPhone('main').number)} className="btn-secondary w-full text-center">
+                <PhoneIcon />
                 Call {formatPhoneDisplay(getPhone('main').number)}
               </a>
-              <p className="font-body text-muted text-xs text-center pt-3">{address.short}</p>
+              <a href={adminLoginUrl} className="mobile-nav-staff">
+                <PersonIcon />
+                <span>Staff login</span>
+              </a>
+              <p className="font-body text-muted text-caption text-center pt-2">{address.short}</p>
             </div>
-          </nav>
+          </div>
         </div>
       )}
     </>

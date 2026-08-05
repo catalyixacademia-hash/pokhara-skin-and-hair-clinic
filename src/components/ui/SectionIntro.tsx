@@ -4,6 +4,8 @@ import IndexMarker from './IndexMarker';
 type SectionIntroProps = {
   index?: string;
   title: React.ReactNode;
+  /** Wire this to the section's `aria-labelledby` so the landmark is named. */
+  titleId?: string;
   lede?: string;
   className?: string;
   inverted?: boolean;
@@ -12,18 +14,18 @@ type SectionIntroProps = {
 export default function SectionIntro({
   index,
   title,
+  titleId,
   lede,
   className,
   inverted = false,
 }: SectionIntroProps) {
   return (
-    <div className={cn('mb-10 md:mb-14 lg:mb-16 space-y-3 md:space-y-4 max-w-2xl', className)}>
-      {index && (
-        <IndexMarker inverted={inverted}>{index}</IndexMarker>
-      )}
+    <div className={cn('mb-8 md:mb-12 lg:mb-14 max-w-2xl', className)}>
+      {index && <IndexMarker inverted={inverted}>{index}</IndexMarker>}
       <h2
+        id={titleId}
         className={cn(
-          'font-display text-h2',
+          'font-display text-h2 mt-2',
           inverted ? 'text-paper' : 'text-ink',
         )}
       >
@@ -32,7 +34,7 @@ export default function SectionIntro({
       {lede && (
         <p
           className={cn(
-            'font-body text-base leading-relaxed max-w-2xl',
+            'font-body text-body-lg leading-relaxed max-w-2xl mt-3 md:mt-4',
             inverted ? 'text-paper/70' : 'text-muted',
           )}
         >

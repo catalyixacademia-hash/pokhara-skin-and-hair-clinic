@@ -10,17 +10,22 @@ export default function SocialProof() {
   const featured = testimonials.slice(0, 3);
 
   return (
-    <section id="testimonials" className="bg-surface section-padding">
+    <section
+      id="testimonials"
+      className="bg-surface section-padding"
+      aria-labelledby="testimonials-heading"
+    >
       <Container>
         <Reveal>
           <SectionIntro
-            index="05"
+            index="07"
             title="Patient experiences"
+            titleId="testimonials-heading"
             lede="Selected feedback from patients who visited the clinic."
           />
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
           {featured.map((item, i) => (
             <Reveal key={item.name} className="h-full" delay={i * 0.06}>
               <blockquote className="testimonial-card">

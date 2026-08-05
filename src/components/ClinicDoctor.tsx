@@ -10,12 +10,13 @@ export default function ClinicDoctor() {
   const { address } = settings;
 
   return (
-    <section id="about" className="bg-surface section-padding">
+    <section id="about" className="bg-surface section-padding" aria-labelledby="about-heading">
       <Container>
         <Reveal>
           <SectionIntro
             index="03"
             title="The clinic & your dermatologist"
+            titleId="about-heading"
             lede={`Led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}
           />
         </Reveal>
@@ -30,6 +31,8 @@ export default function ClinicDoctor() {
                   className="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
+                  width={1024}
+                  height={1024}
                 />
               </div>
               <div className="space-y-6">
@@ -61,6 +64,8 @@ export default function ClinicDoctor() {
                     className="w-full h-full object-cover object-[center_20%]"
                     loading="lazy"
                     decoding="async"
+                    width={432}
+                    height={464}
                   />
                 </div>
                 <div className="space-y-2">

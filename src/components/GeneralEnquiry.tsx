@@ -3,6 +3,7 @@ import { submitAppointment } from '../lib/submit-appointment';
 import { openAppointmentWhatsApp } from '../lib/whatsapp';
 import { useClinicSettings } from '../hooks/useClinicSettings';
 import Container from './ui/Container';
+import FormField from './ui/FormField';
 import Reveal from './motion/Reveal';
 
 export default function GeneralEnquiry() {
@@ -62,7 +63,11 @@ export default function GeneralEnquiry() {
   };
 
   return (
-    <section id="enquiry" className="bg-surface section-padding border-t border-outline-variant">
+    <section
+      id="enquiry"
+      className="bg-surface-container-low section-padding"
+      aria-labelledby="enquiry-heading"
+    >
       <Container>
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           <Reveal className="lg:col-span-7 space-y-6" delay={0.05}>
@@ -70,13 +75,15 @@ export default function GeneralEnquiry() {
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
                 <div>
                   <span className="section-label">Location</span>
-                  <h3 className="font-display text-2xl text-ink mt-2">Find the clinic</h3>
+                  <h2 id="enquiry-heading" className="font-display text-h3 text-ink mt-2">
+                    Find the clinic
+                  </h2>
                 </div>
                 <a
                   href={maps.openUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-label text-accent inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 min-h-11 text-label text-accent hover:underline underline-offset-4"
                 >
                   Open in Google Maps
                   <span aria-hidden="true">↗</span>
@@ -99,12 +106,23 @@ export default function GeneralEnquiry() {
             </div>
           </Reveal>
 
-          <Reveal className="lg:col-span-5 lg:pl-12 lg:border-l border-outline-variant space-y-6" delay={0.1}>
+          <Reveal className="lg:col-span-5 lg:pl-10 xl:pl-12 lg:border-l border-outline-variant space-y-6" delay={0.1}>
             <div>
               <span className="section-label">Inquiries</span>
-              <h3 className="font-display text-2xl text-ink mt-2 mb-2">Have a question?</h3>
+              <h2 className="font-display text-h3 text-ink mt-2 mb-2">Have a question?</h2>
               <p className="font-body text-base text-muted leading-relaxed">
                 General enquiries about treatments, pricing, or hours — no appointment required.
+                To book a visit, use the{' '}
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                  className="text-accent underline underline-offset-4 bg-transparent border-none p-0 cursor-pointer font-inherit"
+                >
+                  appointment form
+                </button>{' '}
+                above.
               </p>
             </div>
 
@@ -128,68 +146,91 @@ export default function GeneralEnquiry() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    autoComplete="name"
-                    className="field-input"
-                    placeholder="Full name *"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    autoComplete="tel"
-                    className="field-input"
-                    placeholder="Phone *"
-                  />
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/*
+                  These fields were previously placeholder-only, which fails
+                  WCAG 3.3.2 — the label vanishes the moment the visitor types.
+                */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <FormField label="Full name" htmlFor="enquiry-name" required>
+                    <input
+                      id="enquiry-name"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      autoComplete="name"
+                      className="field-input"
+                      placeholder="Your name"
+                    />
+                  </FormField>
+                  <FormField label="Phone" htmlFor="enquiry-phone" required>
+                    <input
+                      id="enquiry-phone"
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      autoComplete="tel"
+                      inputMode="tel"
+                      className="field-input"
+                      placeholder="We reply on this number"
+                    />
+                  </FormField>
                 </div>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                  className="field-input"
-                  placeholder="Email"
-                />
-                <input
-                  type="text"
-                  name="topic"
-                  value={formData.topic}
-                  onChange={handleChange}
-                  required
-                  className="field-input"
-                  placeholder="Topic (e.g. Acne, Hair loss, Pricing)"
-                />
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="field-textarea"
-                  placeholder="Describe your concern or question…"
-                />
+
+                <FormField label="Email" htmlFor="enquiry-email" hint="Optional — for a written reply.">
+                  <input
+                    id="enquiry-email"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    autoComplete="email"
+                    className="field-input"
+                    placeholder="you@example.com"
+                  />
+                </FormField>
+
+                <FormField label="Topic" htmlFor="enquiry-topic" required>
+                  <input
+                    id="enquiry-topic"
+                    type="text"
+                    name="topic"
+                    value={formData.topic}
+                    onChange={handleChange}
+                    required
+                    className="field-input"
+                    placeholder="e.g. Acne, Hair loss, Pricing"
+                  />
+                </FormField>
+
+                <FormField label="Your question" htmlFor="enquiry-message" required>
+                  <textarea
+                    id="enquiry-message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    className="field-textarea"
+                    placeholder="Describe your concern or question…"
+                  />
+                </FormField>
 
                 {submitError && (
-                  <p className="text-sm text-[var(--color-error)]" role="alert">
+                  <p className="form-error" role="alert">
                     {submitError}
                   </p>
                 )}
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <button type="submit" disabled={submitting} className="btn-form-submit disabled:opacity-60">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  <button type="submit" disabled={submitting} className="btn-form-submit">
                     {submitting ? 'Sending…' : 'Send enquiry'}
                   </button>
-                  <p className="font-body text-caption text-muted italic">
+                  <p className="font-body text-caption text-muted">
                     We typically reply within one business day.
                   </p>
                 </div>

@@ -1,4 +1,4 @@
-import type { TreatmentOptionGroup } from '../hooks/useTreatmentOptions';
+import type { TreatmentOptionGroup } from '../../hooks/useTreatmentOptions';
 
 type TreatmentSelectProps = {
   id?: string;

@@ -22,6 +22,8 @@
   --color-brand-green: #1b6636;
   --color-brand-navy: #1a4470;
   --color-error: #ba1a1a;
+  /* Alias — several components referenced --color-primary before it existed. */
+  --color-primary: #005f56;
 }
 
 @layer base {
@@ -29,21 +31,37 @@
     --nav-height: 4.5rem;
     --max-width: 80rem;
     --gutter: 1.5rem;
-    --section-y: 6rem;
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 0.75rem;
-    --radius-2xl: 1rem;
-    --radius-3xl: 1.5rem;
-    --text-display: clamp(2rem, 4.5vw, 3rem);
-    --text-h1: clamp(1.75rem, 3.5vw, 3rem);
-    --text-h2: clamp(1.5rem, 2.5vw, 2rem);
-    --text-h3: clamp(1.125rem, 1.8vw, 1.375rem);
+
+    /*
+     * Section rhythm is fluid rather than stepped at three breakpoints, so the
+     * vertical cadence stays proportional on every screen between 320 and 1920.
+     */
+    --section-y: clamp(3.25rem, 7vw, 6.5rem);
+    --section-y-sm: clamp(2.5rem, 5vw, 4rem);
+
+    /* Radius family — each step is visibly distinct from its neighbours. */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.875rem;
+    --radius-xl: 1.125rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 2rem;
+    --radius-pill: 9999px;
+
+    /*
+     * Type scale — mobile-first minimums with a genuine display tier. Previously
+     * h1 and h2 both capped at 2rem, which left the page with no headline
+     * hierarchy at any viewport.
+     */
+    --text-display: clamp(2.125rem, 1.35rem + 3.9vw, 4rem);
+    --text-h1: clamp(1.875rem, 1.3rem + 2.9vw, 3.25rem);
+    --text-h2: clamp(1.5rem, 1.22rem + 1.4vw, 2.125rem);
+    --text-h3: clamp(1.125rem, 1.03rem + 0.5vw, 1.5rem);
     --text-body: 1rem;
-    --text-body-lg: 1.125rem;
-    --text-caption: 0.75rem;
+    --text-body-lg: clamp(1.0625rem, 1.02rem + 0.22vw, 1.1875rem);
+    --text-caption: 0.8125rem;
     --text-label: 0.875rem;
+
     --space-1: 0.25rem;
     --space-2: 0.5rem;
     --space-3: 0.75rem;
@@ -54,6 +72,18 @@
     --space-16: 4rem;
     --space-20: 5rem;
     --space-24: 6rem;
+
+    /*
+     * Elevation scale. The old sheet repeated one hand-written shadow verbatim
+     * in seven places, so nothing could sit visually above anything else.
+     */
+    --shadow-1: 0 1px 2px rgba(13, 40, 37, 0.04), 0 2px 8px rgba(13, 122, 111, 0.045);
+    --shadow-2: 0 2px 4px rgba(13, 40, 37, 0.04), 0 8px 24px rgba(13, 122, 111, 0.07);
+    --shadow-3: 0 4px 8px rgba(13, 40, 37, 0.05), 0 16px 40px rgba(13, 122, 111, 0.1);
+    --shadow-4: 0 8px 16px rgba(13, 40, 37, 0.06), 0 28px 64px rgba(13, 40, 37, 0.14);
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-accent);
   }
 
   * {
@@ -82,6 +112,30 @@
     font-weight: 600;
     color: var(--color-ink);
     letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img, picture, svg, video {
+    max-width: 100%;
+  }
+
+  /*
+   * A single visible focus treatment for every interactive element. The sheet
+   * previously styled focus only on form fields, so keyboard users had no
+   * reliable indicator on buttons, nav links, or cards.
+   */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Pointer interactions should not paint the ring. */
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 
   ::selection {
@@ -148,8 +202,12 @@
   .border-outline-variant { border-color: color-mix(in srgb, var(--color-line) 40%, transparent); }
 
   .atmospheric-shadow {
-    box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+    box-shadow: var(--shadow-2);
   }
+
+  .elev-1 { box-shadow: var(--shadow-1); }
+  .elev-2 { box-shadow: var(--shadow-2); }
+  .elev-3 { box-shadow: var(--shadow-3); }
 
   .glass-nav {
     background: rgba(255, 255, 255, 0.8);
@@ -193,8 +251,13 @@
   }
 
   .section-padding-sm {
-    padding-top: var(--space-12);
-    padding-bottom: var(--space-12);
+    padding-top: var(--section-y-sm);
+    padding-bottom: var(--section-y-sm);
+  }
+
+  /* Hairline divider between two sections that share a background tone. */
+  .section-divide {
+    border-top: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
   }
 
   .text-display {
@@ -352,6 +415,16 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .hero-bottom-band {
+    grid-template-columns: minmax(0, 31rem) minmax(17rem, 20rem);
+  }
+}
+
+.hero-info-card {
+  border-radius: var(--radius-xl);
+}
+
 .hero-main-card,
 .hero-info-card {
   background: linear-gradient(
@@ -371,12 +444,19 @@
   max-width: 28rem;
   width: 100%;
   padding: 1.125rem 1.25rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
 }
 
 @media (min-width: 640px) {
   .hero-main-card {
-    padding: 1.25rem 1.5rem;
+    padding: 1.375rem 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-main-card {
+    max-width: 31rem;
+    padding: 1.75rem 1.875rem;
   }
 }
 
@@ -391,47 +471,48 @@
 
 .hero-main-card__title {
   font-family: 'Manrope', sans-serif;
-  font-size: clamp(1.375rem, 2.2vw, 2rem);
+  /* Must outrank --text-h2 at every viewport so the page has one clear apex. */
+  font-size: clamp(1.625rem, 1.2rem + 2.1vw, 2.5rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   color: var(--color-accent);
   margin-bottom: 0.5rem;
+  text-wrap: balance;
 }
 
 .hero-main-card__lede {
   font-family: 'Work Sans', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: 0.9375rem;
+  line-height: 1.5;
   color: var(--color-muted);
-  margin-bottom: 0.625rem;
-  max-width: 22rem;
+  margin-bottom: 0.75rem;
+  max-width: 24rem;
 }
 
 .hero-credential-ribbon {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 0.65rem;
-  margin-bottom: 0.875rem;
+  gap: 0.4rem 0.65rem;
+  margin-bottom: 0.9rem;
   font-family: 'Manrope', sans-serif;
   font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .hero-credential-ribbon__sep {
   width: 1px;
   height: 0.75rem;
-  background: color-mix(in srgb, var(--color-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 @media (min-width: 640px) {
   .hero-main-card__lede {
-    font-size: 0.9375rem;
-    margin-bottom: 0.75rem;
+    font-size: 1rem;
   }
 }
 
@@ -445,8 +526,8 @@
 
 .hero-main-card .btn-primary,
 .hero-main-card .btn-secondary-outline {
-  min-height: 2.625rem;
-  padding: 0.5625rem 1.125rem;
+  min-height: 2.875rem;
+  padding: 0.6875rem 1.25rem;
   font-size: 0.8125rem;
   width: auto;
   flex: 1 1 auto;
@@ -541,6 +622,80 @@
   line-height: 1.3;
 }
 
+/*
+ * Trust strip — the clinic's credentials previously lived only in an 11px hero
+ * ribbon that rendered black because --color-primary was undefined. This band
+ * puts the registration, qualification, and patient volume immediately below
+ * the fold where they can do conversion work.
+ */
+.trust-strip {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.trust-strip__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: color-mix(in srgb, #ffffff 16%, transparent);
+}
+
+@media (min-width: 900px) {
+  .trust-strip__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.trust-strip__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.875rem;
+  background: var(--color-accent);
+}
+
+@media (min-width: 640px) {
+  .trust-strip__item {
+    padding: 1.25rem 1.25rem;
+  }
+}
+
+.trust-strip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+  color: var(--color-on-primary-container);
+}
+
+.trust-strip__value {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.trust-strip__label {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  /* Opaque tint rather than translucent white: at 78% alpha this measured
+     2.75:1 against the teal band, well under the 4.5:1 floor. */
+  color: #d3e8e4;
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;
@@ -618,6 +773,8 @@
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+  /* Home link must clear the touch floor even where the mark shrinks to 32px. */
+  min-height: 2.75rem;
   text-decoration: none;
 }
 
@@ -674,17 +831,69 @@
 }
 
 .nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
   font-family: 'Work Sans', sans-serif;
   font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.05em;
-  transition: color 0.2s ease;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+@media (min-width: 1280px) {
+  .nav-link {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+}
+
+.nav-link:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+/*
+ * Underline is drawn with a pseudo-element rather than a real border so the
+ * active state does not change the button's box and shift its neighbours.
+ */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.375rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s var(--ease-out);
 }
 
 .nav-link-active {
   color: var(--color-accent);
-  border-bottom: 2px solid var(--color-accent);
-  padding-bottom: 0.25rem;
+}
+
+.nav-link-active::after {
+  transform: scaleX(1);
+}
+
+.nav-menu-toggle__bar {
+  display: block;
+  width: 1.25rem;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--color-ink);
+  transition: transform 0.2s var(--ease-out), opacity 0.15s var(--ease-out);
 }
 
 .nav-staff-icon {
@@ -731,9 +940,10 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 9999px;
+  /* 44px minimum so both header controls clear the touch-target floor. */
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
   cursor: pointer;
 }
 
@@ -750,10 +960,16 @@
 
 .nav-menu-toggle {
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 0.3125rem;
   color: var(--color-ink);
   background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--color-line);
+  border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+  transition: background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.nav-menu-toggle:hover {
+  background: #ffffff;
+  border-color: var(--color-accent);
 }
 
 .mobile-nav-panel {
@@ -769,23 +985,34 @@
   width: min(100%, 32rem);
   min-height: calc(100dvh - var(--nav-height));
   margin: 0 auto;
-  padding: 1rem 1rem max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+  padding: 0.75rem 1rem max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
 }
 
 .mobile-nav-link {
   position: relative;
   width: 100%;
-  min-height: 3.25rem;
-  padding: 0.875rem 1rem;
+  min-height: 3.5rem;
+  padding: 0.875rem 0.75rem 0.875rem 1rem;
   color: var(--color-ink);
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
+  border-radius: var(--radius-md);
   font-family: 'Manrope', sans-serif;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
+  transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.mobile-nav-link:active {
+  background: var(--color-accent-soft);
 }
 
 .mobile-nav-link--active {
@@ -797,17 +1024,39 @@
   position: absolute;
   left: 0;
   top: 50%;
-  width: 0.25rem;
+  width: 0.1875rem;
   height: 1.5rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--color-accent);
   transform: translateY(-50%);
 }
 
 .mobile-nav-actions {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 0.625rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.mobile-nav-staff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--color-muted);
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.mobile-nav-staff:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
 @keyframes mobile-nav-enter {
@@ -883,210 +1132,159 @@
   }
 }
 
-/* Buttons */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 1rem 2rem;
-  background-color: var(--color-accent);
-  color: var(--color-on-secondary);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border: none;
-  border-radius: var(--radius-xl);
-  transition: box-shadow 0.2s ease, opacity 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-primary:hover {
-  box-shadow: 0 8px 24px rgba(0, 95, 86, 0.2);
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/*
+ * Buttons
+ *
+ * Every variant shares one base so height, type, radius, and motion stay in
+ * lockstep. Previously each of the eight classes redeclared the same twelve
+ * properties by hand and three of them were byte-for-byte duplicates.
+ */
+.btn-primary,
+.btn-secondary,
+.btn-secondary-outline,
+.btn-outline-frost,
+.btn-accent,
+.btn-form-submit,
+.btn-whatsapp,
+.btn-ghost,
 .btn-nav-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 2.5rem;
-  padding: 0.625rem 1.5rem;
-  background-color: var(--color-primary-container);
-  color: var(--color-on-primary-container);
+  min-height: 3rem;
+  padding: 0.875rem 1.75rem;
   font-family: 'Work Sans', sans-serif;
   font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
   border: none;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  border-radius: var(--radius-xl);
   cursor: pointer;
   text-decoration: none;
+  text-align: center;
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    transform 0.12s var(--ease-out);
 }
 
-.btn-nav-cta:hover {
-  opacity: 0.9;
-}
-
+.btn-primary:active,
+.btn-secondary:active,
+.btn-secondary-outline:active,
+.btn-outline-frost:active,
+.btn-accent:active,
+.btn-form-submit:active,
+.btn-whatsapp:active,
 .btn-nav-cta:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
 }
 
-.btn-secondary-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 1rem 2rem;
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-secondary-outline:disabled,
+.btn-accent:disabled,
+.btn-form-submit:disabled,
+.btn-whatsapp:disabled,
+.btn-nav-cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Primary — the single conversion path. */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-on-secondary);
+  box-shadow: var(--shadow-1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-container);
+  box-shadow: 0 8px 24px rgba(0, 95, 86, 0.24);
+}
+
+/* Secondary — warm brown outline, pairs with primary in the hero. */
+.btn-secondary-outline,
+.btn-outline-frost {
   background: transparent;
   color: var(--color-secondary);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border: 2px solid var(--color-secondary);
-  border-radius: var(--radius-xl);
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
+  border: 1.5px solid var(--color-secondary);
 }
 
-.btn-secondary-outline:hover {
-  background: color-mix(in srgb, var(--color-secondary) 5%, transparent);
+.btn-secondary-outline:hover:not(:disabled),
+.btn-outline-frost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-secondary) 8%, transparent);
+  border-color: var(--color-secondary);
 }
 
-.btn-accent,
-.btn-form-submit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 1rem 2rem;
-  background-color: var(--color-ink);
-  color: var(--color-surface);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border: none;
-  border-radius: var(--radius-xl);
-  transition: opacity 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-accent:hover,
-.btn-form-submit:hover {
-  opacity: 0.9;
-}
-
-.btn-accent:disabled,
-.btn-form-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* Neutral surface button. */
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   min-height: 2.75rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background-color: var(--color-surface);
   color: var(--color-ink);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-xl);
-  transition: border-color 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Dark submit — used by the secondary enquiry form so it never competes
+   with the teal primary booking CTA. */
+.btn-accent,
+.btn-form-submit {
+  background-color: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.btn-accent:hover:not(:disabled),
+.btn-form-submit:hover:not(:disabled) {
+  background-color: #2f3335;
+  box-shadow: var(--shadow-2);
 }
 
 .btn-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 1rem 2rem;
-  background-color: #25d366;
+  background-color: #128c7e;
   color: #ffffff;
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border: none;
-  border-radius: var(--radius-xl);
-  transition: opacity 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
 }
 
-.btn-whatsapp:hover {
-  opacity: 0.9;
+.btn-whatsapp:hover:not(:disabled) {
+  background-color: #0e7368;
   color: #ffffff;
 }
 
 .btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   min-height: 2.75rem;
   padding: 0.75rem 1rem;
   background: transparent;
   color: var(--color-muted);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  border: none;
   border-radius: var(--radius-lg);
-  transition: color 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
 }
 
 .btn-ghost:hover {
   color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
-.btn-outline-frost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3.25rem;
-  padding: 1rem 2rem;
-  background: transparent;
-  color: var(--color-secondary);
-  font-family: 'Work Sans', sans-serif;
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border: 2px solid var(--color-secondary);
-  border-radius: var(--radius-xl);
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
+/* Compact header CTA. */
+.btn-nav-cta {
+  min-height: 2.5rem;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+}
+
+.btn-nav-cta:hover:not(:disabled) {
+  background-color: var(--color-accent);
 }
 
 /* Forms */
@@ -1095,28 +1293,70 @@
 .field-textarea,
 .treatment-select {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.75rem 1rem;
+  /* 48px so fields clear the touch-target floor with room for the label. */
+  min-height: 3rem;
+  padding: 0.8125rem 1rem;
   background: var(--color-surface-container-low);
-  border: none;
-  border-radius: var(--radius-xl);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
   color: var(--color-ink);
   font-family: 'Work Sans', sans-serif;
+  /* 16px minimum stops iOS Safari zooming the viewport on focus. */
   font-size: 1rem;
   outline: none;
-  transition: box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
+}
+
+.field-input:hover:not(:focus),
+.field-textarea:hover:not(:focus),
+.treatment-select:hover:not(:focus) {
+  background: var(--color-surface-container);
 }
 
 .field-input:focus,
 .field-select:focus,
 .field-textarea:focus,
 .treatment-select:focus {
-  box-shadow: 0 0 0 2px var(--color-accent);
+  background: var(--color-surface);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .field-input::placeholder,
 .field-textarea::placeholder {
-  color: var(--color-muted);
+  color: color-mix(in srgb, var(--color-muted) 72%, transparent);
+}
+
+.field-input[aria-invalid='true'],
+.field-textarea[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+.form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  background: color-mix(in srgb, var(--color-error) 8%, transparent);
+  border-left: 3px solid var(--color-error);
+  border-radius: var(--radius-sm);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #8c1414;
+}
+
+.form-success {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  background: var(--color-accent-soft);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
 }
 
 .field-textarea {
@@ -1354,41 +1594,72 @@
   pointer-events: none;
 }
 
-/* Cards */
+/*
+ * Cards
+ *
+ * The card is an <article> and the only interactive element is the heading
+ * button, stretched over the whole card. That keeps the heading in the document
+ * outline and the accessible name short, while the entire surface stays
+ * tappable — the previous markup nested an <article> and an <h3> inside a
+ * <button>, which is invalid and made screen readers announce the full card
+ * body as one button label.
+ */
 .treatment-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-line) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-1);
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
   text-align: left;
+}
+
+.treatment-card:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-2);
 }
 
 @media (hover: hover) {
   .treatment-card:hover {
     transform: translateY(-4px);
+    box-shadow: var(--shadow-3);
+    border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 }
 
 .treatment-card__image {
-  height: 16rem;
+  position: relative;
   overflow: hidden;
+  /* Wider crop on phones keeps a single-column card from eating a whole
+     viewport; squarer crop once cards sit side by side. */
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface-container-low);
+}
+
+@media (min-width: 640px) {
+  .treatment-card__image {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 .treatment-card__image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  display: block;
+  transition: transform 0.6s var(--ease-out);
 }
 
 @media (hover: hover) {
   .treatment-card:hover .treatment-card__image img {
-    transform: scale(1.1);
+    transform: scale(1.06);
   }
 }
 
@@ -1396,30 +1667,320 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 1.5rem;
-  gap: 0.75rem;
+  padding: 1.125rem 1.25rem 1.25rem;
+  gap: 0.5rem;
 }
 
-.treatment-card__link {
+@media (min-width: 640px) {
+  .treatment-card__body {
+    padding: 1.375rem 1.5rem 1.5rem;
+  }
+}
+
+/* Heading button stretched across the card. */
+.treatment-card__title {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.treatment-card__trigger {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.treatment-card__trigger::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.treatment-card__trigger:focus-visible {
+  outline: none;
+}
+
+.treatment-card:focus-within .treatment-card__title {
+  color: var(--color-accent);
+}
+
+.treatment-card__desc {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.treatment-card__cue {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
   margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
   font-family: 'Work Sans', sans-serif;
   font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.05em;
   color: var(--color-accent);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: gap 0.2s ease;
+}
+
+.treatment-card__cue svg {
+  transition: transform 0.25s var(--ease-out);
 }
 
 @media (hover: hover) {
-  .treatment-card__link:hover {
+  .treatment-card:hover .treatment-card__cue svg {
+    transform: translateX(3px);
+  }
+}
+
+/*
+ * Compact row — used for hair restoration and aesthetics so they read as
+ * complementary to the skin specialty rather than competing with it, and so the
+ * two secondary groups cost ~500px of mobile scroll each instead of ~2,200px.
+ */
+.treatment-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
+  border-radius: var(--radius-lg);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    background-color 0.2s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .treatment-row:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+    box-shadow: var(--shadow-1);
+  }
+}
+
+.treatment-row__thumb {
+  flex-shrink: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-container-low);
+}
+
+@media (min-width: 640px) {
+  .treatment-row {
+    gap: 1rem;
+    padding: 0.875rem;
+  }
+
+  .treatment-row__thumb {
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+}
+
+.treatment-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.treatment-row__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.treatment-row__title {
+  margin: 0 0 0.15rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.treatment-row__trigger {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.treatment-row__trigger::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.treatment-row__trigger:focus-visible {
+  outline: none;
+}
+
+.treatment-row:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-1);
+}
+
+.treatment-row:focus-within .treatment-row__title {
+  color: var(--color-accent);
+}
+
+.treatment-row__desc {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.treatment-row__chev {
+  flex-shrink: 0;
+  color: var(--color-outline);
+  transition: transform 0.2s var(--ease-out), color 0.2s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .treatment-row:hover .treatment-row__chev {
+    color: var(--color-accent);
+    transform: translateX(2px);
+  }
+}
+
+/* Grid used by both card and row collections. */
+.treatment-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .treatment-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .treatment-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+.treatment-grid--rows {
+  gap: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .treatment-grid--rows {
     gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .treatment-grid--rows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+  }
+}
+
+/* Group header shared by the three treatment families. */
+.treatment-group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.875rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
+}
+
+.treatment-group__eyebrow {
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.treatment-group__eyebrow--secondary {
+  color: var(--color-secondary);
+}
+
+.treatment-group__note {
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+/* Progressive disclosure control for long treatment lists. */
+.disclosure-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-label);
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.disclosure-btn:hover {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+}
+
+.disclosure-btn svg {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.disclosure-btn[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 640px) {
+  .disclosure-btn {
+    width: auto;
   }
 }
 
@@ -1514,46 +2075,108 @@
   margin-top: 0.35rem;
 }
 
+/*
+ * Gallery
+ *
+ * On phones this is a swipeable rail rather than a stack. The CMS can hold any
+ * number of photos, and eight stacked 4:3 images cost ~2,000px of scroll in the
+ * middle of the page — a horizontal rail shows the same set in one screen and
+ * matches how people expect to browse photos on a phone.
+ */
 .gallery-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-auto-flow: column;
+  grid-auto-columns: 78%;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Bleed to the viewport edges so the rail reads as scrollable. */
+  margin-inline: calc(var(--space-4) * -1);
+  padding-inline: var(--space-4);
+  padding-bottom: 0.25rem;
+}
+
+.gallery-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-grid > * {
+  scroll-snap-align: center;
 }
 
 @media (min-width: 640px) {
   .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    gap: 1rem;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 }
 
 @media (min-width: 1024px) {
   .gallery-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.25rem;
   }
 }
 
-.gallery-grid__item--tall {
-  grid-row: span 1;
+.gallery-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+@media (min-width: 640px) {
+  .gallery-hint {
+    display: none;
+  }
 }
 
 .gallery-card {
   position: relative;
   margin: 0;
   height: 100%;
-  min-height: 14rem;
-  border-radius: var(--radius-3xl);
+  /*
+   * The card previously had no intrinsic height, so `height: 100%` on the image
+   * collapsed to the file's natural aspect ratio and a portrait photo could
+   * render ~600px tall on a phone. An explicit ratio keeps the grid even.
+   */
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
-  background: var(--color-surface);
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  background: var(--color-surface-container-low);
+  box-shadow: var(--shadow-1);
+}
+
+@media (min-width: 640px) {
+  .gallery-card {
+    aspect-ratio: 3 / 4;
+  }
 }
 
 .gallery-card img {
   width: 100%;
   height: 100%;
-  min-height: 14rem;
   object-fit: cover;
   display: block;
+  transition: transform 0.6s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .gallery-card:hover img {
+    transform: scale(1.04);
+  }
 }
 
 .gallery-card figcaption {
@@ -1590,9 +2213,20 @@
 
 .faq-item {
   background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
-  border-radius: var(--radius-2xl, 1.25rem);
-  padding: 0.25rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
+  border-radius: var(--radius-xl);
+  padding: 0 1.125rem;
+  transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+}
+
+.faq-item--open {
+  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  box-shadow: var(--shadow-1);
+}
+
+.faq-item__question {
+  margin: 0;
+  font-size: inherit;
 }
 
 .faq-item__trigger {
@@ -1601,11 +2235,22 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 0;
+  min-height: 3.5rem;
+  padding: 0.875rem 0;
   border: none;
   background: transparent;
   cursor: pointer;
   text-align: left;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.faq-item__trigger:hover {
+  color: var(--color-accent);
 }
 
 .faq-item__icon {
@@ -1615,16 +2260,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-primary-container) 12%, transparent);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
   color: var(--color-accent);
-  font-size: 1.125rem;
-  font-weight: 600;
+  transition: transform 0.25s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.faq-item__trigger[aria-expanded='true'] .faq-item__icon {
+  transform: rotate(45deg);
+  background: var(--color-accent);
+  color: #ffffff;
 }
 
 .faq-item__answer {
-  padding: 0 0 1.15rem;
+  padding: 0 0 1.125rem;
   margin: 0;
+  max-width: 60ch;
 }
 
 .standard-card {
@@ -1632,45 +2283,60 @@
   flex-direction: column;
   height: 100%;
   background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-line) 10%, transparent);
-  border-radius: var(--radius-3xl);
-  padding: 2.5rem;
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  border: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
+  border-radius: var(--radius-2xl);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  box-shadow: var(--shadow-1);
 }
 
 .standard-card__badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-primary-container) 10%, transparent);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
   font-family: 'Manrope', sans-serif;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   color: var(--color-accent);
 }
 
 .testimonial-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  padding: 2rem;
+  padding: clamp(1.375rem, 3vw, 1.875rem);
   background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-line) 10%, transparent);
-  border-radius: var(--radius-3xl);
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  border: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-1);
+}
+
+/* Quotation mark set as decoration rather than italicising the whole quote,
+   which was hurting readability at body size. */
+.testimonial-card::before {
+  content: '“';
+  position: absolute;
+  top: 0.25rem;
+  right: 1.25rem;
+  font-family: 'Manrope', serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--color-accent-soft);
+  pointer-events: none;
 }
 
 .testimonial-card__quote {
+  position: relative;
   font-family: 'Work Sans', sans-serif;
   font-size: var(--text-body);
-  font-style: italic;
-  color: var(--color-muted);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  color: var(--color-ink);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
 }
 
 .form-card {
@@ -1678,7 +2344,7 @@
   border: 1px solid color-mix(in srgb, var(--color-line) 10%, transparent);
   border-radius: var(--radius-3xl);
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  box-shadow: var(--shadow-2);
 }
 
 .booking-form-panel {
@@ -1686,7 +2352,7 @@
   border: 1px solid color-mix(in srgb, var(--color-line) 10%, transparent);
   border-radius: var(--radius-3xl);
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  box-shadow: var(--shadow-2);
 }
 
 .clinic-panel {
@@ -1708,7 +2374,7 @@
 .clinic-image-frame {
   border-radius: var(--radius-3xl);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  box-shadow: var(--shadow-2);
 }
 
 .legal-modal-overlay {
@@ -1796,7 +2462,7 @@
 .map-frame {
   border-radius: var(--radius-3xl);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+  box-shadow: var(--shadow-2);
 }
 
 .map-frame iframe {
@@ -1806,15 +2472,149 @@
   border: 0;
 }
 
+/*
+ * Footer
+ *
+ * Every footer link was a 24px-tall row. These are now 44px rows with a
+ * negative inline offset so the enlarged hit area does not visually indent the
+ * list.
+ */
+.footer-heading {
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-ink);
+  margin-bottom: 0.5rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  margin-left: -0.5rem;
+}
+
+.footer-links > a,
+.footer-links > button {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.375rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9375rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s var(--ease-out), background-color 0.15s var(--ease-out);
+}
+
+.footer-links > a:hover,
+.footer-links > button:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.625rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-caption);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s var(--ease-out), background-color 0.15s var(--ease-out);
+}
+
+.footer-social:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.info-panel {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-2xl);
+}
+
 .hours-row {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-line) 10%, transparent);
+  gap: 1rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
 }
 
 .hours-row:last-child {
   border-bottom: none;
+}
+
+/*
+ * Phone links were 24px tall rows — well under the 44px touch floor and hard to
+ * hit accurately on a phone, which matters for a clinic's primary contact path.
+ */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-list__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.625rem;
+  margin-left: -0.625rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color 0.2s var(--ease-out);
+}
+
+.contact-list__link:hover {
+  background: var(--color-surface-container);
+}
+
+.contact-list__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.contact-list__number {
+  display: block;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.contact-list__link:hover .contact-list__number {
+  color: var(--color-accent);
+}
+
+.contact-list__role {
+  display: block;
+  font-family: 'Work Sans', sans-serif;
+  font-size: var(--text-caption);
+  color: var(--color-muted);
 }
 
 /* FAB — WhatsApp only (bottom-right) */
@@ -1865,6 +2665,13 @@
     padding-bottom: var(--section-y);
   }
 
+  /*
+   * Mobile hero: the photo block is sized by aspect ratio and the card stack is
+   * pushed below it with a matching ratio-based spacer, so the receptionist and
+   * clinic sign stay in frame from 320px to 430px. The previous version paired a
+   * fixed 30rem image with a fixed 23rem padding-top, which drifted out of
+   * alignment on anything but a 375px screen.
+   */
   .hero-section {
     min-height: auto;
     background: var(--color-surface-container-low);
@@ -1872,22 +2679,24 @@
 
   .hero-media {
     bottom: auto;
-    height: 30rem;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    max-height: 32rem;
   }
 
   .hero-overlay {
     background: linear-gradient(
       180deg,
-      transparent 66%,
-      rgba(243, 243, 246, 0.18) 82%,
-      rgba(243, 243, 246, 0.92) 100%
+      transparent 60%,
+      rgba(243, 243, 246, 0.2) 78%,
+      rgba(243, 243, 246, 0.95) 100%
     );
   }
 
   .hero-shell {
     justify-content: flex-start;
     min-height: 0;
-    padding-top: 23rem;
+    padding-top: min(calc(100vw * 4 / 3 - 5.5rem), 26.5rem);
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
   }
 
@@ -1921,10 +2730,6 @@
   .hero-main-card .btn-secondary-outline {
     width: 100%;
     flex: 1 1 100%;
-  }
-
-  .treatment-card__image {
-    height: 12rem;
   }
 
   .standard-card {
@@ -1972,10 +2777,6 @@
 
   .hero-bg-image {
     object-position: 42% 40%;
-  }
-
-  .treatment-card__image {
-    height: 14rem;
   }
 }
 
