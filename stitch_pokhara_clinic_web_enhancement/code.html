@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pokhara Skin &amp; Hair Clinic | Advanced Dermatology</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&amp;family=Work+Sans:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc5",
+                        "inverse-surface": "#2f3133",
+                        "secondary-container": "#fed5b9",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#1b1c1b",
+                        "background": "#f9f9fc",
+                        "tertiary-container": "#6d6d6c",
+                        "surface": "#f9f9fc",
+                        "secondary-fixed-dim": "#e6bfa4",
+                        "outline-variant": "#bdc9c6",
+                        "on-primary-container": "#acfff2",
+                        "primary-container": "#0d7a6f",
+                        "on-surface-variant": "#3e4947",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e2e2e5",
+                        "on-error-container": "#93000a",
+                        "outline": "#6e7977",
+                        "tertiary": "#555553",
+                        "surface-tint": "#006a60",
+                        "on-surface": "#1a1c1e",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-variant": "#e2e2e5",
+                        "surface-container-low": "#f3f3f6",
+                        "on-tertiary-container": "#f2f0ee",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#795a45",
+                        "primary": "#005f56",
+                        "on-secondary-fixed-variant": "#5c412d",
+                        "inverse-primary": "#7dd6c9",
+                        "surface-dim": "#dadadc",
+                        "primary-fixed": "#99f3e5",
+                        "on-secondary-fixed": "#2b1606",
+                        "on-background": "#1a1c1e",
+                        "secondary": "#765842",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201c",
+                        "surface-container": "#eeeef0",
+                        "surface-bright": "#f9f9fc",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "on-tertiary-fixed-variant": "#464746",
+                        "inverse-on-surface": "#f0f0f3",
+                        "tertiary-fixed": "#e4e2e0",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#7dd6c9",
+                        "on-primary-fixed-variant": "#005048"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "margin-desktop": "64px",
+                        "base": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Work Sans"],
+                        "body-md": ["Work Sans"],
+                        "headline-xl": ["Manrope"],
+                        "caption": ["Work Sans"],
+                        "body-lg": ["Work Sans"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .atmospheric-shadow {
+            box-shadow: 0 10px 30px rgba(13, 122, 111, 0.05);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav border-b border-outline-variant/10 shadow-sm">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-max-width mx-auto">
+<div class="font-headline-lg text-primary font-bold tracking-tight">
+                Pokhara Skin &amp; Hair Clinic
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary font-bold pb-1" href="#treatments">Treatments</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#about">Dermatology</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#results">Results</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#contact">Contact</a>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md px-6 py-2.5 rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                Book Appointment
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative pt-24 min-h-[921px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-1000 hover:scale-105" data-alt="A professional and welcoming medical clinic reception area in Pokhara, featuring a clean minimalist desk with warm wood accents and soft marble floors. The lighting is bright and high-key, creating a sterile yet comfortable atmosphere with indoor plants and modern furniture. In the background, a patient coordinator is visible in a professional clinical uniform, emphasizing the high-end medical-grade care and expertise of the clinic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCpkcVHoycThq29VPSbfkFTBjEFLN-ip1FWJl8KSNJAg6q5bq7gmg-IhP0Npe7k8rZZZsdm-O8rZM8pAdGK10ydVHaHu3iVAh2o-vU2ydL1NNn1BoJzTO8DI5uY6vgOzN-qov5ENn9sFiX9suxQWF6IISrKh0vx1W1wvBaT0K1BxXbPgBBLYeffH9L-GdOQibWKqCKWMvzv6ZhOCewqYza6Pj8YeQUMgpLeBttFlKeWEdWdgz3zq9yV8DYXO4AUBvwp0YldI-Zt_uRY')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
+</div>
+<div class="relative z-10 px-margin-desktop max-w-max-width mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="space-y-8 animate-fade-in">
+<div class="space-y-4">
+<span class="text-primary font-label-md uppercase tracking-widest bg-primary-container/10 px-3 py-1 rounded-full">Dermatology &amp; Hair Restoration</span>
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Advanced dermatology for skin that deserves clinical care.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                        Board-certified skin treatments in Pokhara — with specialized hair restoration when you need it. Led by Dr. Prakash Acharya, Board Certified Dermatologist - MD.
+                    </p>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary text-on-primary font-label-md px-8 py-4 rounded-xl hover:shadow-lg transition-all">Book appointment</button>
+<button class="border-2 border-secondary text-secondary font-label-md px-8 py-4 rounded-xl hover:bg-secondary/5 transition-all">View treatments</button>
+</div>
+</div>
+<div class="hidden md:flex flex-col justify-end items-end space-y-6">
+<div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl atmospheric-shadow border border-outline-variant/10 space-y-4 max-w-xs">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<div>
+<p class="font-label-md">Hours</p>
+<p class="text-caption">8:00 AM - 7:00 PM</p>
+<p class="text-caption">Saturday OPD Available</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<div>
+<p class="font-label-md">Location</p>
+<p class="text-caption">Nayabazar-8, Pokhara</p>
+<p class="text-caption">Opposite GMC Hospital</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Treatments Section -->
+<section class="py-24 px-margin-desktop max-w-max-width mx-auto" id="treatments">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">01</span>
+<h2 class="font-headline-lg text-headline-lg">Treatments</h2>
+<p class="text-on-surface-variant max-w-2xl">Skin care is our core specialty. Hair restoration and aesthetic procedures complement comprehensive dermatology.</p>
+</div>
+<!-- Skin Care Category -->
+<div class="space-y-8 mb-20">
+<h3 class="font-label-md text-primary uppercase tracking-widest border-b border-outline-variant pb-2">Skin care — primary specialty</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Treatment Card 1 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Close-up of a professional facial skin treatment being performed by a dermatologist in a clean, white clinical setting. The lighting is soft and focused, highlighting the precision of the skin-care procedure and the sterile medical equipment used." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd86NTdqeeDE6KyOhVotVwl6qAP_hp6fNXvmi0sNCLFLgkdzEz8aTm3YpgikX_Ud4siu7N2EfamflEUgTFd7Z0P68esL-3ov5YXgwOo1ehUj-RhsHJ3wvOXZ827Wx-k8oBQvL6m_mclOuFR_-_2NKHiI62Yw5zxg9ZOVnlMDqiuu3VcAJUYZczR_wAnuxr-oVsln7CrvM3hlHSM5YEe2MsVw6ptbEgrsLyj2UyQrt-ypw6AfNeL4lwjTaIGjPUGFYTqe3BIQsXlG2J"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Skin care</span>
+<h4 class="font-headline-lg text-xl">Acne &amp; Pigmentation</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Comprehensive medical treatment for acne, acne scars, melasma, and post-acne marks.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+<!-- Treatment Card 2 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A dermatologist applying a medical-grade chemical peel solution to a patient's face using a specialized applicator. The environment is a brightly lit, high-end clinic room with modern medical cabinetry in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy_0KtpWpONozvJrb_dzDItXSuDlnsXOAwWe78I5S7JrtrncX_2VEbbFrETnbQVxBoyi7wuz4HPn3RsTv1-fn4m-TChAW_SihlCB4LY7TPDzkxcX95f9fx7HhGGWd4CnA6_yFVU_KvvjnrZNYyHh02-1Vi6SYCC1IBHnHDQbTwVYBSWtiJfk2Y4kU1Fg6sgjbW60agqbNub81PzE8X9fexenXyvn_vzR4uO2D_I8X8vSgcb3obv3F_x7kEk-MvGeB_umCLIxBzw9EY"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Skin care</span>
+<h4 class="font-headline-lg text-xl">Chemical Peels</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Medical-grade peels tailored to your skin type, targeting texture, tone, and radiance.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+<!-- Treatment Card 3 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A high-tech digital skin analyzer machine showing a detailed 3D mapping of facial skin health on a large monitor. A specialist is pointing to specific areas of concern like hydration and UV damage for a patient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBtT2ge2F8RFobB6N49uCMmYyuUNpQdLJV9DkVqr0TYS-mLo8P2AHjHfU_l2wig2p_YgNHDezkZVZkClmjGWGOdw1yV44SJdszmM4ankAV1z79bTk-983kIbEA_dKhRlHnpD55H5PX0WwEelSP2Gf2nRJkfNChdweW9RCvA0vR0TLvSp5MdLNe3E8E1KBPdkTp2HT1bInUS5n4aUPHrGqnn7OfGGW00lqmXtMSYdu1JlU6iADYVQzzWuBYmNnC_dVsyWLP0vLgAY8Z"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Skin care</span>
+<h4 class="font-headline-lg text-xl">Skin Analyzer &amp; Skin Tests</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Advanced Skin Analyzer diagnostics and clinical skin tests to accurately assess your condition.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Hair Restoration Category -->
+<div class="space-y-8">
+<h3 class="font-label-md text-primary uppercase tracking-widest border-b border-outline-variant pb-2">Hair restoration — complementary care</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Hair Card 1 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A medical professional performing a PRP therapy session for hair restoration. The focus is on the precision and hygiene of the clinical procedure, with soft clinic lighting and high-end medical equipment visible." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbkbVH-L3GFQoI4J4Dm_nhorwvWcIai8mMe_67xls7AMxB_IiIytN5DQHvretRxHtFJLL7GK8ju3cshUt_8as83RNV4yR27M3v5Rvf6F_vJBsIEE5GhJ6tdclxg4OHef8R009pfJd3VfMw5b41_v74B1jQnvJ--DDWEBPEYF8nrU3L2UTabfJPsIpg_vrbCMtIOKo7TMU8xgAKdHNCmt7Evc_mTbihg2fLZPfrmdqXAWSfvRIDZA2B4Oje_diuSYbCpiyqOF-ZdZcT"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Hair restoration</span>
+<h4 class="font-headline-lg text-xl">PRP Therapy</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Platelet-Rich Plasma therapy using your own growth factors to stimulate dormant hair follicles.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+<!-- Hair Card 2 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A high-tech laboratory setting where hair growth factor concentrates are being prepared. The imagery emphasizes scientific precision, sterile environments, and the advanced medical technology used in hair restoration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVnmkEe0ECIV6VKphiEdJnlhfOkOywKdF5hxHCTe5kbjJmzrkMb97cW42UoJSEw-DFg4g9GDWhbmzwnFrJvNQed5F5aLHVyDU3xqzkPzhCf_T9yqv_R3uEjka-yL0pgoDEKNKl-gtv6ZTzh9VFz1O6RFvkfhRBd3XDNZTBVRSKXTrje3AoZU9IFx9hpYxMGeeG2oPv0FMaN1TptN74M7C0Kgm-LFkzmilNDOH3xB9NbVONW7v6yGTe5PZXxTDclj2T0HnRdayct8s8"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Hair restoration</span>
+<h4 class="font-headline-lg text-xl">GFC Therapy</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Growth Factor Concentrate therapy, a next-generation advancement over PRP with higher concentrations.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+<!-- Hair Card 3 -->
+<div class="group bg-white rounded-2xl overflow-hidden atmospheric-shadow border border-outline-variant/5 hover:-translate-y-1 transition-all duration-300">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A microscopic view of healthy hair follicles and scalp tissue, emphasizing the cellular level of exosome therapy treatments. The visual style is scientific, clean, and high-tech, reinforcing the clinic's medical expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW_HXfE3Yx5Yat_WLH1ViD5jo0hx40kvMos8eyVqikZ09JSQ3McstGgKM_L0zu3Mi9upXaTe0Vn-Xh_1JdKYirqc1LMPba7FBQdh0fbSmkD8YXL3td0UIszL7tgDczkSZ-u6cKPHUNCL5Gn5Thie5mYZ479IJcIiuUzaFUt223K7gIdDOSYBgSHWRgzkkGU4KBgIKPUkrqepihm3R0gIGKFXnHvwjctil1tNQX2YQUMbmxF3dW4DWxElp1oqwwevsPeJkeM-icpyXm"/>
+</div>
+<div class="p-6 space-y-3">
+<span class="text-secondary font-caption uppercase tracking-wider">Hair restoration</span>
+<h4 class="font-headline-lg text-xl">Exosome Therapy</h4>
+<p class="text-on-surface-variant text-body-md line-clamp-2">Cutting-edge regenerative treatment using exosomes to signal cellular repair and hair follicle regeneration.</p>
+<a class="inline-flex items-center text-primary font-label-md group/link" href="#">Request visit <span class="material-symbols-outlined ml-2 group-hover/link:translate-x-1 transition-transform">arrow_forward</span></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How We Practice -->
+<section class="bg-surface-container-low py-24">
+<div class="px-margin-desktop max-w-max-width mx-auto">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">02</span>
+<h2 class="font-headline-lg text-headline-lg">How we practice</h2>
+<p class="text-on-surface-variant">Three principles that guide every patient interaction at the clinic.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-10 rounded-3xl border border-outline-variant/10 atmospheric-shadow space-y-6">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">01</div>
+<h3 class="font-headline-lg text-xl">Evidence-based protocols</h3>
+<p class="text-on-surface-variant">Every treatment follows clinically validated dermatology standards. We do not recommend procedures without proven efficacy.</p>
+</div>
+<div class="bg-white p-10 rounded-3xl border border-outline-variant/10 atmospheric-shadow space-y-6">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">02</div>
+<h3 class="font-headline-lg text-xl">Personalized consultation first</h3>
+<p class="text-on-surface-variant">Your care begins with a thorough evaluation — skin analysis, medical history, and a treatment plan tailored to your needs.</p>
+</div>
+<div class="bg-white p-10 rounded-3xl border border-outline-variant/10 atmospheric-shadow space-y-6">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">03</div>
+<h3 class="font-headline-lg text-xl">Modern clinical technology</h3>
+<p class="text-on-surface-variant">Advanced diagnostic tools and treatment technology meeting international standards of precision, safety, and patient comfort.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- The Clinic & Your Dermatologist -->
+<section class="py-24 px-margin-desktop max-w-max-width mx-auto" id="about">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">03</span>
+<h2 class="font-headline-lg text-headline-lg">The clinic &amp; your dermatologist</h2>
+<p class="text-on-surface-variant">Medically trusted dermatology in the heart of Pokhara, opposite GMC Hospital.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+<div class="space-y-8">
+<div class="rounded-3xl overflow-hidden atmospheric-shadow aspect-square md:aspect-video lg:aspect-square">
+<img class="w-full h-full object-cover" data-alt="A professional interior photograph of Pokhara Skin &amp; Hair Clinic, showing a modern consultation room. The room features high-end medical cabinetry, ergonomic white furniture, and a clinical skin analysis station. Large windows provide natural light, and the overall aesthetic is one of clean, professional medical excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG2Wwog5yowjrIhHOuw79P5y24zghPNedvw5t31K1udPgu6LN1rzfNy-u_Q2xLQs5vtcVZMWAuk_ud0WVyG3fOE7ecDMwjHgkArwG8UamG3xjRZBxSsmuZapmrmsK2pAHT_UcGpcCfXUoFl-42qoYnGilGZwF3FUg0y1l5t-s_ueLv5oth2WS3fqGnp2qkSZVd9Z0CEjSWepZyg3UW9xHxRUSOecZ_4n2LSXmjZ8qMGb6hS3BDnFAIaVx3HB0R1DCz0qA92PIuz6h1"/>
+</div>
+<div class="space-y-6">
+<h3 class="font-headline-lg text-2xl">About the clinic</h3>
+<p class="text-on-surface-variant">Pokhara Skin and Hair Clinic is located in Prithvi Chowk area, Nayabazar-8, Pokhara — Opposite GMC Hospital. We serve patients across Pokhara and the wider Gandaki region with advanced skin care, hair restoration, and aesthetic dermatology.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Nayabazar-8, Pokhara</li>
+<li class="flex items-center gap-3 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Gandaki Province, Nepal</li>
+<li class="flex items-center gap-3 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Opposite GMC Hospital (GMC Medical College) Gate</li>
+<li class="flex items-center gap-3 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Prithvi Chowk area</li>
+</ul>
+</div>
+</div>
+<div class="bg-surface-container rounded-3xl p-8 lg:p-12 space-y-8">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-40 h-40 rounded-2xl overflow-hidden shrink-0 border-4 border-white atmospheric-shadow">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of Dr. Prakash Acharya, a middle-aged male dermatologist in a clean white doctor's coat with a stethoscope around his neck. He has a warm, confident smile and is photographed against a minimalist medical clinic background. The lighting is flattering and professional, conveying expertise and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQD9cKX5FnRUSY0JHkpneOQvn6Y_kCWAlM_B0wTb6-UKmNgpVpwf_-OrY-PlgLmaMtDXvAcXn7EcM89KXdFm39UpTfPtS6NoFIcOFHWw6a9OfV2dbl8pXwcfh6IcIspJhuKdcZVKaJ5R5zDgwj_N5370SvyxK4Cm-vkHP5Qag7xAbbx6ZQh0Afgr3jkWZWtHnTA4ey0bUq_DU_BOf1KzY20Tn4OTwExXIknUv2fXCVFyB_jinqXdRCblRUTWDHpLA5F7ULarKJsq3m"/>
+</div>
+<div class="space-y-2">
+<p class="text-primary font-label-md">Dr. Prakash Acharya</p>
+<h3 class="font-headline-lg text-2xl">Board Certified Dermatologist</h3>
+<p class="text-secondary font-label-md">MD, Dermatology &amp; Venereology</p>
+</div>
+</div>
+<div class="space-y-6 text-on-surface-variant">
+<p>Dr. Prakash Acharya is a Board Certified Dermatologist with an MD in Dermatology and Venereology. He established Pokhara Skin and Hair Clinic with the vision of making internationally standard dermatological care accessible to patients across the Gandaki region of Nepal. He also practices in Kathmandu.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<p class="font-label-md text-on-surface mb-2">Qualification</p>
+<p class="text-caption">MD, Dermatology &amp; Venereology</p>
+</div>
+<div>
+<p class="font-label-md text-on-surface mb-2">Certification</p>
+<p class="text-caption">Board Certified Dermatologist</p>
+</div>
+<div>
+<p class="font-label-md text-on-surface mb-2">Specialization</p>
+<p class="text-caption">Clinical &amp; Aesthetic Dermatology</p>
+</div>
+<div>
+<p class="font-label-md text-on-surface mb-2">Focus Areas</p>
+<p class="text-caption">Skin Repair &amp; Regeneration, Melasma, Acne Scars, Hair Disorders, Advanced Dermatological Treatments</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Conditions We Treat -->
+<section class="bg-surface-container-highest py-24">
+<div class="px-margin-desktop max-w-max-width mx-auto">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">04</span>
+<h2 class="font-headline-lg text-headline-lg">Conditions we treat</h2>
+<p class="text-on-surface-variant max-w-2xl">A focused overview of the dermatological and trichological concerns addressed at the clinic. Patient photography will be added when available.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-6">
+<h3 class="font-label-md text-primary uppercase border-b border-outline pb-2">Skin conditions</h3>
+<ul class="space-y-3 text-on-surface-variant">
+<li>Acne &amp; Pigmentation</li>
+<li>Chemical Peels</li>
+<li>Skin Analyzer &amp; Skin Tests</li>
+<li>Microneedling</li>
+<li>Laser Procedures</li>
+<li>Hydrafacial &amp; Rejuvenation</li>
+</ul>
+</div>
+<div class="space-y-6">
+<h3 class="font-label-md text-primary uppercase border-b border-outline pb-2">Hair &amp; scalp</h3>
+<ul class="space-y-3 text-on-surface-variant">
+<li>PRP Therapy</li>
+<li>GFC Therapy</li>
+<li>Exosome Therapy</li>
+<li>Hair Fall Consultation</li>
+<li>Hair Density Restoration</li>
+</ul>
+</div>
+<div class="space-y-6">
+<h3 class="font-label-md text-primary uppercase border-b border-outline pb-2">Aesthetic concerns</h3>
+<ul class="space-y-3 text-on-surface-variant">
+<li>Botox</li>
+<li>Dermal Fillers</li>
+<li>Anti-Aging Procedures</li>
+<li>Laser Hair Reduction</li>
+<li>Personalized Cosmetology</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Patient Experiences -->
+<section class="py-24 px-margin-desktop max-w-max-width mx-auto" id="results">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">05</span>
+<h2 class="font-headline-lg text-headline-lg">Patient experiences</h2>
+<p class="text-on-surface-variant">Selected feedback from patients who visited the clinic.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-8 rounded-3xl border border-outline-variant/10 atmospheric-shadow italic text-on-surface-variant flex flex-col justify-between">
+<p class="mb-6">"After years of struggling with hormonal acne, I finally found a clinic that approached my skin medically rather than cosmetically. Dr. Acharya created a treatment plan that addressed the root cause. Three months later, my skin is clearer than it has been in a decade."</p>
+<div>
+<p class="font-label-md text-on-surface not-italic">Priya S.</p>
+<p class="text-caption not-italic">Pokhara • Acne &amp; Pigmentation Treatment</p>
+</div>
+</div>
+<div class="bg-white p-8 rounded-3xl border border-outline-variant/10 atmospheric-shadow italic text-on-surface-variant flex flex-col justify-between">
+<p class="mb-6">"The clinic feels different from the moment you walk in. Clean, calm, and clinical in the best way. My skin tone is significantly more even after the peel series, and the team was genuinely attentive throughout every session."</p>
+<div>
+<p class="font-label-md text-on-surface not-italic">Sunita T.</p>
+<p class="text-caption not-italic">Kaski • Chemical Peel &amp; Skin Rejuvenation</p>
+</div>
+</div>
+<div class="bg-white p-8 rounded-3xl border border-outline-variant/10 atmospheric-shadow italic text-on-surface-variant flex flex-col justify-between">
+<p class="mb-6">"I travelled from Lekhnath specifically for this clinic after reading about Dr. Acharya. Worth every kilometer. The laser treatment for my pigmentation was precise, painless, and the results were visible within two weeks."</p>
+<div>
+<p class="font-label-md text-on-surface not-italic">Manjula R.</p>
+<p class="text-caption not-italic">Lekhnath • Laser Pigmentation Treatment</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Visit the Clinic -->
+<section class="bg-surface-container-low py-24" id="contact">
+<div class="px-margin-desktop max-w-max-width mx-auto">
+<div class="mb-16 space-y-4">
+<span class="text-primary font-label-md">06</span>
+<h2 class="font-headline-lg text-headline-lg">Visit the clinic</h2>
+<p class="text-on-surface-variant">Request an appointment or find us opposite GMC Hospital, Nayabazar-8.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+<!-- Appointment Form -->
+<div class="bg-white p-10 rounded-3xl atmospheric-shadow border border-outline-variant/10">
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label-md">Full name *</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Your name" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-md">Phone *</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="+977 984-5815246" type="tel"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label-md">Email</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="For confirmation email" type="email"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-md">Treatment *</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4">
+<option>Choose a treatment</option>
+<option>Skin Care (Acne, Peels, etc.)</option>
+<option>Hair Restoration (PRP, GFC, etc.)</option>
+<option>Aesthetic Procedure</option>
+</select>
+<p class="text-caption text-on-surface-variant">Grouped by specialty — we will confirm during your call.</p>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md">Preferred date</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" type="date"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-md">Your message or concern</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Tell us about your skin or hair concern..." rows="4"></textarea>
+</div>
+<div class="flex flex-col md:flex-row gap-4">
+<button class="bg-on-surface text-surface py-4 px-8 rounded-xl font-label-md grow hover:opacity-90 transition-opacity" type="submit">Request appointment</button>
+<button class="bg-[#25D366] text-white py-4 px-8 rounded-xl font-label-md grow flex items-center justify-center gap-2 hover:opacity-90 transition-opacity" type="button">
+<span class="material-symbols-outlined">chat</span> WhatsApp
+                            </button>
+</div>
+</form>
+</div>
+<!-- Clinic Info -->
+<div class="space-y-12">
+<div class="space-y-6">
+<h3 class="font-headline-lg text-xl">Contact</h3>
+<div class="space-y-4">
+<p class="text-on-surface-variant">Nayabazar-8, Pokhara<br/>Opposite GMC Hospital (GMC Medical College) Gate</p>
+<div class="space-y-2">
+<p class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-primary">call</span> +977 970-6979379 - Main Contact</p>
+<p class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-primary">call</span> +977 984-5815246 - Appointments</p>
+<p class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-primary">call</span> +977 61-586227 - Clinic Line</p>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<h3 class="font-headline-lg text-xl">Hours</h3>
+<div class="space-y-2 divide-y divide-outline-variant/10">
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Sunday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Monday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Tuesday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Wednesday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Thursday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Friday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<div class="flex justify-between py-2"><span class="text-on-surface-variant">Saturday</span><span class="font-label-md">8:00 AM – 7:00 PM</span></div>
+<p class="text-caption text-primary pt-2">Saturday OPD available</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Map & Inquiry -->
+<section class="py-24 border-t border-outline-variant/10">
+<div class="px-margin-desktop max-w-max-width mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Map -->
+<div class="lg:col-span-7 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<span class="text-primary font-label-md">Location</span>
+<h3 class="font-headline-lg text-2xl">Find the clinic</h3>
+</div>
+<a class="text-primary font-label-md flex items-center gap-2 group" href="#">Open in Google Maps <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">open_in_new</span></a>
+</div>
+<div class="bg-surface-container rounded-3xl overflow-hidden atmospheric-shadow h-[450px]">
+<img class="w-full h-full object-cover" data-alt="A detailed map visualization of Pokhara, Nepal, centered on the Nayabazar and Prithvi Chowk area. The map highlights key landmarks such as Gandaki Medical College (GMC) Hospital and the exact location of Pokhara Skin &amp; Hair Clinic. The visual style is clean and functional, similar to modern digital cartography with legible street names and medical facility markers." data-location="Pokhara" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrEUTgzaI_BkVsFRXvje3MZBJD9VPz7Z2-MQsuJ8iI8mDqK3jw5CW2O6ySgGnyDVWKLIXVQC-dHjxkCVxr37nP-f3N2FlWRNlp0yPmeA2OXv1K-EGuY2mUoQVUytOikLVR7qyj3UgvolEQby2aWETiFacUlHI5Yl33ljPLsqVPMLOonOLXOJKUIqiIChX2_0BdvmDzJU7t17OaqK_tWWXWFLNbS45UHcIYdIRX-V58O5DWXwiMFrP314cCgkNaLuqV_LQug6nGq9Id"/>
+</div>
+</div>
+<!-- Quick Inquiry -->
+<div class="lg:col-span-5 space-y-6 lg:pl-12 border-l border-outline-variant/10">
+<div>
+<span class="text-primary font-label-md">Inquiries</span>
+<h3 class="font-headline-lg text-2xl">Have a question?</h3>
+<p class="text-on-surface-variant">General enquiries about treatments, pricing, or hours — no appointment required.</p>
+</div>
+<form class="space-y-4">
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Full name *" type="text"/>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Phone *" type="tel"/>
+</div>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Email" type="email"/>
+<input class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Topic (e.g. Acne, Hair loss, Pricing)" type="text"/>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary py-3 px-4" placeholder="Describe your concern or question..." rows="4"></textarea>
+<div class="flex items-center gap-4">
+<button class="bg-on-surface text-surface py-3 px-8 rounded-xl font-label-md hover:opacity-90 transition-opacity">Send enquiry</button>
+<span class="text-caption text-on-surface-variant italic">We typically reply within one business day.</span>
+</div>
+</form>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-surface-container-high w-full py-12 border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-max-width mx-auto">
+<div class="space-y-6">
+<div class="font-headline-lg text-secondary font-semibold">Pokhara Skin</div>
+<p class="text-on-surface-variant font-body-md">Advanced dermatology and aesthetic care with medically trusted expertise and modern treatment technology.</p>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-md text-on-surface">Navigation</h4>
+<nav class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">About</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#treatments">Treatments</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#about">Doctor</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#results">Results</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#contact">Contact</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Location</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-md text-on-surface">Treatments</h4>
+<nav class="flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Acne &amp; Pigmentation</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Chemical Peels</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Microneedling</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Laser Treatments</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Skin Analyzer</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">PRP Hair Therapy</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">GFC Therapy</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Botox &amp; Fillers</a>
+<a class="text-on-surface-variant hover:text-primary hover:underline transition-all font-body-md" href="#">Laser Hair Reduction</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-md text-on-surface">Contact</h4>
+<p class="text-on-surface-variant text-caption">
+                    Nayabazar-8, Pokhara<br/>
+                    Opposite GMC Hospital (GMC Medical College) Gate<br/><br/>
+                    +977 970-6979379<br/>
+                    +977 984-5815246<br/>
+                    +977 61-586227<br/>
+                    +977 985-1063249<br/><br/>
+                    Daily: 8AM–7PM · Saturday OPD available
+                </p>
+<div class="flex gap-4 pt-4">
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="font-caption">Instagram</span></a>
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="font-caption">Facebook</span></a>
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="font-caption">TikTok</span></a>
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="font-caption">WhatsApp</span></a>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-outline-variant max-w-max-width mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-caption text-on-surface-variant opacity-70">© 2024 Pokhara Skin &amp; Hair Clinic. All rights reserved. | Dr. Prakash Acharya - Board Certified Dermatologist</p>
+<div class="flex gap-6">
+<a class="text-caption text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="text-caption text-on-surface-variant hover:text-primary" href="#">Medical Disclaimer</a>
+<a class="text-caption text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 z-[100] bg-primary text-on-primary p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center gap-3">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md pr-2">Book appointment</span>
+</button>
+</body></html>
