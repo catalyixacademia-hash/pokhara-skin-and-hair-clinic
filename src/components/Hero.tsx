@@ -95,12 +95,15 @@ export default function Hero() {
             {...stagger}
             transition={{ ...stagger.transition, delay: 0 }}
           >
-            <p className="hero-brand">{clinic.nameShort}</p>
-
-            <p className="hero-badge">
-              <ShieldIcon />
-              Board certified dermatology
-            </p>
+            {/* Brand and accreditation share one line — as two stacked blocks
+                they cost the card an extra row for very little content. */}
+            <div className="hero-eyebrow">
+              <p className="hero-brand">{clinic.nameShort}</p>
+              <p className="hero-badge">
+                <ShieldIcon />
+                Board certified dermatology
+              </p>
+            </div>
 
             <h1 id="hero-heading" className="hero-main-card__title">
               Dermatologist-led skin &amp; hair care in Pokhara
