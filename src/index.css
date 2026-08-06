@@ -2551,21 +2551,61 @@
 }
 
 .founder-card {
-  background: var(--color-surface-container);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--color-surface);
   border-radius: var(--radius-3xl);
-  overflow: hidden;
+  padding: 1rem;
+  box-shadow: var(--shadow-1);
+}
+
+@media (min-width: 480px) {
+  .founder-card {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.15rem;
+    padding: 1.15rem;
+  }
 }
 
 .founder-portrait {
   width: 100%;
   aspect-ratio: 4 / 5;
-  max-height: 28rem;
+  max-height: 16rem;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+@media (min-width: 480px) {
+  .founder-portrait {
+    width: 9.5rem;
+    height: auto;
+    max-height: none;
+    align-self: stretch;
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .founder-portrait {
+    width: 10.5rem;
+  }
 }
 
 .founder-card__caption {
-  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 3.5vw, 2rem)
-    clamp(1.5rem, 3.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 0.15rem 0.25rem 0.35rem 0;
+}
+
+@media (max-width: 479px) {
+  .founder-card__caption {
+    padding: 0.15rem 0.25rem 0.5rem;
+  }
 }
 
 .clinic-image-frame {
@@ -2949,10 +2989,6 @@
   .doctor-portrait {
     width: 10rem;
     height: 11rem;
-  }
-
-  .founder-portrait {
-    max-height: 22rem;
   }
 
 }
