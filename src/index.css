@@ -525,28 +525,8 @@
   font-size: 0.875rem;
   line-height: 1.45;
   color: var(--color-muted);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.85rem;
   max-width: 27rem;
-}
-
-.hero-credential-ribbon {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 0.65rem;
-  margin-bottom: 0.75rem;
-  font-family: 'Manrope', sans-serif;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-
-.hero-credential-ribbon__sep {
-  width: 1px;
-  height: 0.75rem;
-  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 @media (min-width: 640px) {
