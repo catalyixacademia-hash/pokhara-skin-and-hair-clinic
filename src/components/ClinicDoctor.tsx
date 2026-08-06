@@ -12,13 +12,13 @@ export default function ClinicDoctor() {
   return (
     <section
       id="doctor"
-      className="bg-surface-container-low section-padding"
+      className="bg-surface section-padding"
       aria-labelledby="doctor-heading"
     >
       <Container>
         <Reveal>
           <SectionIntro
-            index="04"
+            index="03"
             title="Your dermatologist"
             titleId="doctor-heading"
             lede={`Clinical care led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}

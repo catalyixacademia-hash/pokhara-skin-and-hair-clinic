@@ -10,13 +10,13 @@ export default function ClinicJourney() {
   return (
     <section
       id="about"
-      className="bg-surface section-padding"
+      className="bg-surface-container-low section-padding"
       aria-labelledby="journey-heading"
     >
       <Container>
         <Reveal>
           <SectionIntro
-            index="03"
+            index="10"
             title="Our journey"
             titleId="journey-heading"
             lede="A Pokhara clinic built for clear dermatology and hair care — close to where patients already seek medical help."
@@ -42,15 +42,15 @@ export default function ClinicJourney() {
 
           <Reveal delay={0.1}>
             <div className="clinic-panel flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
-              <div className="doctor-portrait">
+              <div className="founder-portrait">
                 <img
                   src="/images/founder/arjun-giri.png"
                   alt="Mr. Arjun Giri, Founder of Pokhara Skin and Hair Clinic"
                   className="w-full h-full object-cover object-[78%_12%]"
                   loading="lazy"
                   decoding="async"
-                  width={432}
-                  height={464}
+                  width={528}
+                  height={568}
                 />
               </div>
               <div className="space-y-3 min-w-0">

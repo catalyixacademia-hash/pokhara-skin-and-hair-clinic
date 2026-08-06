@@ -17,7 +17,7 @@ export default function Faq() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="09"
+            index="08"
             title="Visit FAQ"
             titleId="faq-heading"
             lede="Common questions before your first appointment."

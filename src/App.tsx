@@ -27,7 +27,6 @@ export default function App() {
         <TrustStrip />
         <Treatments />
         <CareStandards />
-        <ClinicJourney />
         <ClinicDoctor />
         <Outcomes />
         <Aesthetics />
@@ -36,6 +35,7 @@ export default function App() {
         <Faq />
         <Visit />
         <GeneralEnquiry />
+        <ClinicJourney />
       </main>
       <Footer />
       <WhatsAppFloat />

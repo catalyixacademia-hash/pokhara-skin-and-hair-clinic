@@ -43,7 +43,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-surface-container-low border-t border-outline-variant pt-8 pb-6 pb-safe sm:pt-10">
+    <footer className="bg-surface border-t border-outline-variant pt-8 pb-6 pb-safe sm:pt-10">
       <Container>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-6">
           <div className="sm:col-span-2 lg:col-span-1">

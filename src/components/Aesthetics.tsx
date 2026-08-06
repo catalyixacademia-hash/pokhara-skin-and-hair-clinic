@@ -19,7 +19,7 @@ export default function Aesthetics() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="06"
+            index="05"
             title="Aesthetic care"
             titleId="aesthetics-heading"
             lede="Natural refinement with botox, fillers, anti-aging protocols, and laser hair reduction — planned after clinical assessment."
