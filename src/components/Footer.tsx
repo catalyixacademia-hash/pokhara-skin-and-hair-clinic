@@ -47,7 +47,7 @@ export default function Footer() {
       <Container>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-6">
           <div className="sm:col-span-2 lg:col-span-1">
-            <p className="font-display text-h3 text-secondary font-semibold">{clinic.nameShort}</p>
+            <p className="font-display text-h3 text-brand-green font-semibold">{clinic.nameShort}</p>
             <p className="font-body text-caption text-muted leading-relaxed mt-2 max-w-xs">
               {clinic.tagline}
             </p>
@@ -121,7 +121,8 @@ export default function Footer() {
           <p className="font-body text-caption text-muted text-center md:text-left">
             © {new Date().getFullYear()} {clinic.nameShort}. All rights reserved.
             <span className="text-muted/60"> · </span>
-            Built by Orcrist Tech Nepal
+            Built by{' '}
+            <span className="font-semibold text-error">Orcrist Tech Nepal</span>
           </p>
           <div className="flex flex-wrap justify-center gap-1 -mx-2">
             {legalDocuments.map((doc) => (
