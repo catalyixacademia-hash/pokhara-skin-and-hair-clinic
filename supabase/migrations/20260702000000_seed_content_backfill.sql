@@ -42,8 +42,7 @@ insert into phones (number, role, label, sort_order)
 select * from (values
   ('9706929329', 'main', 'Main Contact', 1),
   ('9845815246', 'appointments', 'Appointments', 2),
-  ('061-586227', 'landline', 'Clinic Line', 3),
-  ('9851063249', 'additional', 'Additional', 4)
+  ('061-586227', 'landline', 'Clinic Line', 3)
 ) as v(number, role, label, sort_order)
 where not exists (select 1 from phones);
 

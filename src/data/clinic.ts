@@ -27,13 +27,13 @@ export type ClinicPhone = {
  * Phone roles (do not invent numbers):
  * - main: primary voice contact (also drives social.whatsapp)
  * - appointments: booking line (Visit form placeholder / labeled calls)
- * - landline / additional: listed in Visit contact block (footer shows main + appointments)
+ * - landline: listed in Visit contact block (footer shows main + appointments)
+ * - additional: optional CMS-only role; not seeded in static fallback
  */
 export const phones: ClinicPhone[] = [
   { role: 'main', number: '9706929329', label: 'Main Contact' },
   { role: 'appointments', number: '9845815246', label: 'Appointments' },
   { role: 'landline', number: '061-586227', label: 'Clinic Line' },
-  { role: 'additional', number: '9851063249', label: 'Additional' },
 ];
 
 export const address = {
