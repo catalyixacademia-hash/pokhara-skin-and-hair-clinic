@@ -103,11 +103,11 @@ export default function Visit() {
   };
 
   return (
-    <section id="contact" className="bg-surface-container-low section-padding" aria-labelledby="contact-heading">
+    <section id="contact" className="bg-surface section-padding" aria-labelledby="contact-heading">
       <Container>
         <Reveal>
           <SectionIntro
-            index="09"
+            index="10"
             title="Book your visit"
             titleId="contact-heading"
             lede="Request an appointment and we will confirm by phone or WhatsApp within 24 hours."

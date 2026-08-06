@@ -65,7 +65,7 @@ export default function GeneralEnquiry() {
   return (
     <section
       id="enquiry"
-      className="bg-surface section-padding"
+      className="bg-surface-container-low section-padding"
       aria-labelledby="enquiry-heading"
     >
       <Container>

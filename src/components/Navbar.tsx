@@ -17,8 +17,8 @@ const navLinks = [
   { label: 'Hair restoration', href: '#hair-services' },
   { label: 'Dermatology', href: '#doctor' },
   { label: 'Results', href: '#results' },
-  { label: 'Contact', href: '#contact' },
   { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
 ] as const;
 
 const navHrefs = navLinks.map((l) => l.href);

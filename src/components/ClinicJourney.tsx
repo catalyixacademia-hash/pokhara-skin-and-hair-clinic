@@ -16,16 +16,16 @@ export default function ClinicJourney() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="10"
+            index="09"
             title="Our journey"
             titleId="journey-heading"
             lede="A Pokhara clinic built for clear dermatology and hair care — close to where patients already seek medical help."
           />
         </Reveal>
 
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-16 items-start">
-          <Reveal delay={0.05}>
-            <div className="space-y-5">
+        <div className="grid lg:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
+          <Reveal className="lg:col-span-6 xl:col-span-7" delay={0.05}>
+            <div className="space-y-5 max-w-xl">
               <p className="font-body text-base text-muted leading-relaxed">
                 {settings.name} was established to bring patient-centered skin and hair treatment to{' '}
                 {address.line1} — {address.landmark}. The goal was practical: a clinic patients can
@@ -40,8 +40,8 @@ export default function ClinicJourney() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="clinic-panel flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+          <Reveal className="lg:col-span-6 xl:col-span-5" delay={0.1}>
+            <figure className="founder-card">
               <div className="founder-portrait">
                 <img
                   src="/images/founder/arjun-giri.png"
@@ -50,18 +50,18 @@ export default function ClinicJourney() {
                   loading="lazy"
                   decoding="async"
                   width={528}
-                  height={568}
+                  height={660}
                 />
               </div>
-              <div className="space-y-3 min-w-0">
+              <figcaption className="founder-card__caption">
                 <p className="section-label">Founder</p>
-                <h3 className="font-display text-2xl text-ink">Mr. Arjun Giri</h3>
-                <p className="font-body text-base text-muted leading-relaxed">
+                <h3 className="font-display text-2xl text-ink mt-1">Mr. Arjun Giri</h3>
+                <p className="font-body text-base text-muted leading-relaxed mt-3">
                   Clinic leadership dedicated to bringing trusted skin and hair care to Pokhara —
                   with clinical treatment led by our board-certified dermatologist.
                 </p>
-              </div>
-            </div>
+              </figcaption>
+            </figure>
           </Reveal>
         </div>
       </Container>

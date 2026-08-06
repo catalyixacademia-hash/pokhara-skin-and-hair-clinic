@@ -33,9 +33,9 @@ export default function App() {
         <Gallery />
         <SocialProof />
         <Faq />
+        <ClinicJourney />
         <Visit />
         <GeneralEnquiry />
-        <ClinicJourney />
       </main>
       <Footer />
       <WhatsAppFloat />
