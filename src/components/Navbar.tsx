@@ -194,13 +194,10 @@ export default function Navbar() {
     <>
       <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant">
         <Container>
-          <div className="nav-row flex items-center justify-between gap-3 min-h-[var(--nav-height)]">
+          <div className="nav-row min-h-[var(--nav-height)]">
             <NavBrand onClick={goHome} />
 
-            <nav
-              className="hidden lg:flex items-center justify-center flex-1 gap-1 xl:gap-2 min-w-0"
-              aria-label="Main"
-            >
+            <nav className="nav-links" aria-label="Main">
               {navLinks.map((link) => (
                 <button
                   key={link.href}
@@ -214,7 +211,7 @@ export default function Navbar() {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="nav-actions">
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}

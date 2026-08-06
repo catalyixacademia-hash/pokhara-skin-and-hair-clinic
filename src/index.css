@@ -913,13 +913,6 @@
   transition: color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
 }
 
-@media (min-width: 1280px) {
-  .nav-link {
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
-  }
-}
-
 .nav-link:hover {
   color: var(--color-accent);
   background: var(--color-accent-soft);
@@ -989,8 +982,24 @@
 }
 
 .nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.nav-links {
+  display: none;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .btn-nav-cta.nav-book-desktop,
@@ -1182,8 +1191,58 @@
 }
 
 @media (min-width: 1024px) {
+  /*
+   * Three-zone desktop header: brand | centered links | CTA + staff.
+   * Equal side columns keep the link cluster truly centered in the
+   * container rather than collapsing into the leftover middle gap.
+   */
+  .nav-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 1.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .nav-brand {
+    justify-self: start;
+    min-width: 0;
+  }
+
+  .nav-brand__name {
+    font-size: 1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .nav-link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .nav-link::after {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .nav-actions {
+    justify-self: end;
+    gap: 0.625rem;
+  }
+
   .btn-nav-cta.nav-book-desktop {
     display: inline-flex;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .nav-staff-desktop {
@@ -1193,6 +1252,56 @@
   .nav-book-mobile,
   .nav-menu-toggle {
     display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nav-row {
+    column-gap: 2rem;
+  }
+
+  .nav-brand__name {
+    font-size: 1.125rem;
+  }
+
+  .nav-links {
+    gap: 0.375rem;
+  }
+
+  .nav-link {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: var(--text-label);
+  }
+
+  .nav-link::after {
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .btn-nav-cta.nav-book-desktop {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .nav-row {
+    column-gap: 2.5rem;
+  }
+
+  .nav-links {
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+
+  .nav-link::after {
+    left: 0.875rem;
+    right: 0.875rem;
   }
 }
 
