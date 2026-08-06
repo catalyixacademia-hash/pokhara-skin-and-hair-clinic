@@ -411,15 +411,23 @@
   }
 
   .hero-bottom-band {
-    /* Narrower main card column keeps the receptionist clear of the frost panel */
-    grid-template-columns: minmax(0, 28rem) minmax(16rem, 18.5rem);
-    gap: 1.25rem 1.5rem;
+    /* Wider main column so the H1 can sit on one line; info column stays compact
+       so frost does not push too far over the receptionist. */
+    grid-template-columns: minmax(0, 40rem) minmax(13.5rem, 15rem);
+    gap: 1.25rem 1rem;
   }
 }
 
 @media (min-width: 1280px) {
   .hero-bottom-band {
-    grid-template-columns: minmax(0, 30rem) minmax(17rem, 20rem);
+    grid-template-columns: minmax(0, 44rem) minmax(16rem, 18.5rem);
+    gap: 1.25rem 1.5rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .hero-bottom-band {
+    grid-template-columns: minmax(0, 48rem) minmax(17rem, 20rem);
   }
 }
 
@@ -455,10 +463,23 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .hero-main-card {
+    /* 1.8rem Manrope bold H1 ≈ 37rem + horizontal padding → fits one line */
+    max-width: 40rem;
+  }
+}
+
 @media (min-width: 1280px) {
   .hero-main-card {
-    max-width: 30rem;
+    max-width: 44rem;
     padding: 1.25rem 1.5rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .hero-main-card {
+    max-width: 48rem;
   }
 }
 
@@ -520,6 +541,31 @@
   text-wrap: balance;
 }
 
+@media (min-width: 1024px) {
+  .hero-main-card__title {
+    /* Prefer width over wrap on laptop/desktop; size nudged so the full H1 fits. */
+    font-size: 1.8rem;
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-main-card__title {
+    font-size: 1.95rem;
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1536px) {
+  .hero-main-card__title {
+    font-size: 2.15rem;
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}
+
 .hero-main-card__lede {
   font-family: 'Work Sans', sans-serif;
   font-size: 0.875rem;
@@ -570,9 +616,15 @@
 @media (min-width: 1024px) {
   .hero-info-card {
     justify-self: end;
-    max-width: 18.5rem;
+    max-width: 15rem;
     width: 100%;
     padding: 1rem 1.125rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-info-card {
+    max-width: 18.5rem;
   }
 }
 
