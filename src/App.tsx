@@ -3,6 +3,7 @@ import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
 import Treatments from './components/Treatments';
 import CareStandards from './components/CareStandards';
+import ClinicJourney from './components/ClinicJourney';
 import ClinicDoctor from './components/ClinicDoctor';
 import Outcomes from './components/Outcomes';
 import Aesthetics from './components/Aesthetics';
@@ -26,6 +27,7 @@ export default function App() {
         <TrustStrip />
         <Treatments />
         <CareStandards />
+        <ClinicJourney />
         <ClinicDoctor />
         <Outcomes />
         <Aesthetics />

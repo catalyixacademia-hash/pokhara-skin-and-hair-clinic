@@ -10,14 +10,18 @@ export default function ClinicDoctor() {
   const { address } = settings;
 
   return (
-    <section id="about" className="bg-surface section-padding" aria-labelledby="about-heading">
+    <section
+      id="doctor"
+      className="bg-surface-container-low section-padding"
+      aria-labelledby="doctor-heading"
+    >
       <Container>
         <Reveal>
           <SectionIntro
-            index="03"
-            title="The clinic & your dermatologist"
-            titleId="about-heading"
-            lede={`Led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}
+            index="04"
+            title="Your dermatologist"
+            titleId="doctor-heading"
+            lede={`Clinical care led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}
           />
         </Reveal>
 
@@ -36,11 +40,11 @@ export default function ClinicDoctor() {
                 />
               </div>
               <div className="space-y-6">
-                <h3 className="font-display text-2xl text-ink">About the clinic</h3>
+                <h3 className="font-display text-2xl text-ink">In the clinic</h3>
                 <p className="font-body text-base text-muted leading-relaxed">
-                  {settings.name} is located in {address.area}, {address.line1} — {address.landmark}.
-                  We serve patients across Pokhara and the wider Gandaki region with advanced skin care,
-                  hair restoration, and aesthetic dermatology.
+                  Consultations take place at {settings.name} in {address.area}, {address.line1} —{' '}
+                  {address.landmark}. Patients across Pokhara and the Gandaki region come here for
+                  skin care, hair restoration, and aesthetic dermatology under specialist supervision.
                 </p>
                 <ul className="space-y-3">
                   {address.full.map((line) => (
@@ -55,7 +59,7 @@ export default function ClinicDoctor() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div id="doctor" className="clinic-panel space-y-8">
+            <div className="clinic-panel space-y-8">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="doctor-portrait">
                   <img

@@ -22,7 +22,7 @@ export default function Outcomes() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="04"
+            index="05"
             title="Patient results"
             titleId="results-heading"
             lede={

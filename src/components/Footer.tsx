@@ -16,6 +16,7 @@ import LegalModal from './LegalModal';
 
 const quickLinks = [
   { label: 'Treatments', href: '#services' },
+  { label: 'About', href: '#about' },
   { label: 'Doctor', href: '#doctor' },
   { label: 'Results', href: '#results' },
   { label: 'FAQ', href: '#faq' },

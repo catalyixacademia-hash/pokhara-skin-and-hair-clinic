@@ -18,7 +18,7 @@ export default function SocialProof() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="07"
+            index="08"
             title="Patient experiences"
             titleId="testimonials-heading"
             lede="Selected feedback from patients who visited the clinic."

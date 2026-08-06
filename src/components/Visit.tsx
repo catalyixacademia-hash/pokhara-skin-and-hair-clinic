@@ -107,7 +107,7 @@ export default function Visit() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="09"
+            index="10"
             title="Book your visit"
             titleId="contact-heading"
             lede="Request an appointment and we will confirm by phone or WhatsApp within 24 hours."

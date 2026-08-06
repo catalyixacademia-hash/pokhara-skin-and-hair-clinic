@@ -30,7 +30,7 @@ export default function Gallery() {
       <Container>
         <Reveal>
           <SectionIntro
-            index="06"
+            index="07"
             title="Inside the clinic"
             titleId="gallery-heading"
             lede="A calm clinical environment opposite GMC Hospital in Nayabazar-8."
