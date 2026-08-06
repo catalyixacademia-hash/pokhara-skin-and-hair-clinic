@@ -50,14 +50,14 @@ export default function ClinicJourney() {
                   className="w-full h-full object-cover object-[78%_12%]"
                   loading="lazy"
                   decoding="async"
-                  width={320}
-                  height={400}
+                  width={480}
+                  height={600}
                 />
               </div>
               <figcaption className="founder-card__caption">
                 <p className="section-label">Founder</p>
-                <h3 className="font-display text-xl md:text-2xl text-ink mt-1">Mr. Arjun Giri</h3>
-                <p className="font-body text-sm md:text-base text-muted leading-relaxed mt-2">
+                <h3 className="font-display text-2xl text-ink mt-1">Mr. Arjun Giri</h3>
+                <p className="font-body text-base text-muted leading-relaxed mt-2.5">
                   Clinic leadership dedicated to bringing trusted skin and hair care to Pokhara —
                   with clinical treatment led by our board-certified dermatologist.
                 </p>
