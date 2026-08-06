@@ -38,6 +38,22 @@ export default function ClinicJourney() {
                 restoration, serving families across Pokhara and the wider Gandaki region with a
                 steady, medical approach.
               </p>
+              <p className="font-body text-base leading-relaxed">
+                Sitting opposite GMC Hospital means patients already travelling for medical care can
+                add a dermatology visit without a long detour — same neighbourhood, clearer next
+                steps for skin concerns, hair loss, and aesthetic treatment when it is clinically
+                appropriate.
+              </p>
+              <p className="font-body text-base leading-relaxed">
+                Clinic operations and patient experience are guided by founder Mr. Arjun Giri.
+                Consultations and procedures are led by our board-certified dermatologist, so every
+                plan stays grounded in specialist judgment — from first assessment through follow-up.
+              </p>
+              <p className="font-body text-base leading-relaxed">
+                Whether you are visiting for acne, pigmentation, hair restoration, or a routine skin
+                check, we aim for the same standard: clear explanation, realistic expectations, and
+                care that respects both medical need and how you want to feel in your own skin.
+              </p>
             </div>
           </Reveal>
 
