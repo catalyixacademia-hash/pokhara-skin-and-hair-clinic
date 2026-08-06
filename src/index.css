@@ -1811,6 +1811,34 @@
   }
 }
 
+/* Laptop/desktop: fuller rows so 2-col grids don't feel sparse. */
+@media (min-width: 1024px) {
+  .treatment-row {
+    gap: 1.25rem;
+    min-height: 5.75rem;
+    padding: 1.125rem 1.25rem;
+  }
+
+  .treatment-row__thumb {
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  .treatment-row {
+    gap: 1.375rem;
+    min-height: 6.25rem;
+    padding: 1.25rem 1.375rem;
+  }
+
+  .treatment-row__thumb {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
 .treatment-row__thumb img {
   width: 100%;
   height: 100%;
@@ -1888,6 +1916,23 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .treatment-row__title {
+    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .treatment-row__desc {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .treatment-row__chev svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
 /* Grid used by both card and row collections. */
 .treatment-grid {
   display: grid;
@@ -1922,7 +1967,13 @@
 @media (min-width: 1024px) {
   .treatment-grid--rows {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.875rem;
+    gap: 1.125rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .treatment-grid--rows {
+    gap: 1.25rem;
   }
 }
 
