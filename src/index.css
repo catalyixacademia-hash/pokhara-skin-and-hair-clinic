@@ -412,14 +412,14 @@
 
   .hero-bottom-band {
     /* Narrower main card column keeps the receptionist clear of the frost panel */
-    grid-template-columns: minmax(0, 28rem) minmax(22rem, 1fr);
+    grid-template-columns: minmax(0, 28rem) minmax(16rem, 18.5rem);
     gap: 1.25rem 1.5rem;
   }
 }
 
 @media (min-width: 1280px) {
   .hero-bottom-band {
-    grid-template-columns: minmax(0, 30rem) minmax(24rem, 1fr);
+    grid-template-columns: minmax(0, 30rem) minmax(17rem, 20rem);
   }
 }
 
@@ -589,14 +589,10 @@
 
 @media (min-width: 1024px) {
   .hero-info-card {
-    flex-direction: row;
-    align-items: center;
-    justify-content: stretch;
-    gap: 1.125rem;
-    justify-self: stretch;
+    justify-self: end;
+    max-width: 18.5rem;
     width: 100%;
-    max-width: none;
-    padding: 1rem 1.35rem;
+    padding: 1rem 1.125rem;
   }
 }
 
@@ -606,26 +602,9 @@
   gap: 0.75rem;
 }
 
-@media (min-width: 1024px) {
-  .hero-info-card__row {
-    flex: 1 1 0;
-    min-width: 0;
-    align-items: center;
-  }
-}
-
 .hero-info-card__divider {
   height: 1px;
   background: color-mix(in srgb, var(--color-line) 70%, transparent);
-}
-
-@media (min-width: 1024px) {
-  .hero-info-card__divider {
-    width: 1px;
-    height: auto;
-    align-self: stretch;
-    min-height: 2.75rem;
-  }
 }
 
 .hero-info-card__body {
