@@ -74,26 +74,15 @@ type NavBrandProps = {
 
 function NavBrand({ onClick }: NavBrandProps) {
   return (
-    <a
-      href="#"
-      onClick={onClick}
-      className="nav-brand"
-      aria-label={`${clinic.nameShort} home`}
-    >
-      <span className="nav-brand__mark-wrap">
-        <img
-          src="/clinic-logo-mark.png?v=3"
-          alt=""
-          width={256}
-          height={256}
-          className="nav-brand__mark"
-          decoding="async"
-          aria-hidden
-        />
-      </span>
-      <span className="nav-brand__text">
-        <span className="nav-brand__name">{clinic.nameShort}</span>
-      </span>
+    <a href="#" onClick={onClick} className="nav-brand">
+      <img
+        src="/clinic-logo-full.png"
+        alt={clinic.nameShort}
+        width={1024}
+        height={512}
+        className="nav-brand__logo"
+        decoding="async"
+      />
     </a>
   );
 }

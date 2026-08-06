@@ -834,62 +834,43 @@
   gap: 0.25rem;
 }
 
-/* Nav */
+/* Nav — full horizontal logo (emblem + wordmark in one image) */
 .nav-brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
   min-width: 0;
-  /* Home link must clear the touch floor even where the mark shrinks to 32px. */
+  /* Home link must clear the touch floor even when the logo is compact. */
   min-height: 2.75rem;
   text-decoration: none;
 }
 
-.nav-brand__mark-wrap {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.875rem;
-  height: 2.875rem;
+.nav-brand__logo {
+  display: block;
+  height: 2.25rem;
+  width: auto;
+  max-width: min(12rem, 54vw);
+  object-fit: contain;
+  object-position: left center;
 }
 
-@media (min-width: 768px) {
-  .nav-brand__mark-wrap {
-    width: 3.125rem;
-    height: 3.125rem;
+@media (min-width: 640px) {
+  .nav-brand__logo {
+    height: 2.5rem;
+    max-width: 14rem;
   }
 }
 
-.nav-brand__mark {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+@media (min-width: 1024px) {
+  .nav-brand__logo {
+    height: 2.75rem;
+    max-width: 16rem;
+  }
 }
 
-.nav-brand__text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  line-height: 1.05;
-}
-
-.nav-brand__name {
-  display: block;
-  font-family: 'Manrope', sans-serif;
-  font-size: clamp(0.8125rem, 2.8vw, 1.125rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--color-brand-green);
-  white-space: nowrap;
-}
-
-@media (min-width: 768px) {
-  .nav-brand__name {
-    font-size: 1.125rem;
+@media (min-width: 1280px) {
+  .nav-brand__logo {
+    height: 3rem;
+    max-width: 18rem;
   }
 }
 
@@ -1167,29 +1148,7 @@
 
   .nav-brand {
     flex: 1 1 auto;
-    gap: 0.5rem;
     overflow: hidden;
-  }
-
-  .nav-brand__mark-wrap {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .nav-brand__name {
-    font-size: clamp(0.625rem, 2.9vw, 0.75rem);
-    white-space: nowrap;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .nav-brand__mark-wrap {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-
-  .nav-brand__name {
-    font-size: 0.875rem;
   }
 }
 
@@ -1211,10 +1170,6 @@
   .nav-brand {
     justify-self: start;
     min-width: 0;
-  }
-
-  .nav-brand__name {
-    font-size: 1rem;
   }
 
   .nav-links {
@@ -1261,10 +1216,6 @@
 @media (min-width: 1280px) {
   .nav-row {
     column-gap: 2rem;
-  }
-
-  .nav-brand__name {
-    font-size: 1.125rem;
   }
 
   .nav-links {
