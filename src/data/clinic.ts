@@ -27,7 +27,7 @@ export type ClinicPhone = {
  * Phone roles (do not invent numbers):
  * - main: primary voice contact (also drives social.whatsapp)
  * - appointments: booking line (Visit form placeholder / labeled calls)
- * - landline / additional: listed in Visit + Footer contact blocks
+ * - landline / additional: listed in Visit contact block (footer shows main + appointments)
  */
 export const phones: ClinicPhone[] = [
   { role: 'main', number: '9706929329', label: 'Main Contact' },
@@ -234,16 +234,14 @@ export function groupTreatmentOptions(labels: string[]): { label: string; option
     }));
 }
 
+/** Curated footer treatment links — skin-first, short list (not every service). */
 export const footerServiceLinks = [
   { label: 'Acne & Pigmentation', href: '#acne-pigmentation' },
   { label: 'Chemical Peels', href: '#chemical-peels' },
   { label: 'Microneedling', href: '#microneedling' },
   { label: 'Laser Treatments', href: '#laser-procedures' },
-  { label: 'Skin Analyzer', href: '#skin-analyzer-skin-tests' },
   { label: 'PRP Hair Therapy', href: '#prp-therapy' },
-  { label: 'GFC Therapy', href: '#gfc-therapy' },
   { label: 'Aesthetic care', href: '#aesthetics' },
-  { label: 'Laser Hair Reduction', href: '#aesthetics' },
 ] as const;
 
 /** Google Maps pin — Pokhara Skin and Hair Clinic, Nayabazar Rd (plus code 6X6P+MP5). */
