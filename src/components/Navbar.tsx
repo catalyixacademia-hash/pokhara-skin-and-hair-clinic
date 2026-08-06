@@ -78,8 +78,8 @@ function NavBrand({ onClick }: NavBrandProps) {
       <img
         src="/clinic-logo-full.png"
         alt={clinic.nameShort}
-        width={1024}
-        height={512}
+        width={869}
+        height={316}
         className="nav-brand__logo"
         decoding="async"
       />
