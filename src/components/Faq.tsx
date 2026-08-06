@@ -11,7 +11,7 @@ export default function Faq() {
   return (
     <section
       id="faq"
-      className="bg-surface-container-low section-padding"
+      className="bg-surface section-padding"
       aria-labelledby="faq-heading"
     >
       <Container>

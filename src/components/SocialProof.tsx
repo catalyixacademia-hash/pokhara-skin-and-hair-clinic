@@ -12,7 +12,7 @@ export default function SocialProof() {
   return (
     <section
       id="testimonials"
-      className="bg-surface section-padding"
+      className="bg-surface-container-low section-padding"
       aria-labelledby="testimonials-heading"
     >
       <Container>

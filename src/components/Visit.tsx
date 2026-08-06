@@ -103,7 +103,7 @@ export default function Visit() {
   };
 
   return (
-    <section id="contact" className="bg-surface section-padding" aria-labelledby="contact-heading">
+    <section id="contact" className="bg-surface-container-low section-padding" aria-labelledby="contact-heading">
       <Container>
         <Reveal>
           <SectionIntro

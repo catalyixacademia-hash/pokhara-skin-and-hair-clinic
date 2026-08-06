@@ -13,7 +13,7 @@ export default function Aesthetics() {
   return (
     <section
       id="aesthetics"
-      className="bg-surface section-padding"
+      className="bg-surface-container-low section-padding"
       aria-labelledby="aesthetics-heading"
     >
       <Container>

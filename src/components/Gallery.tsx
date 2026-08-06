@@ -24,7 +24,7 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      className="bg-surface-container-low section-padding"
+      className="bg-surface section-padding"
       aria-labelledby="gallery-heading"
     >
       <Container>
