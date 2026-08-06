@@ -120,7 +120,7 @@ export default function Footer() {
           <p className="font-body text-caption text-muted text-center md:text-left">
             © {new Date().getFullYear()} {clinic.nameShort}. All rights reserved.
             <span className="text-muted/60"> · </span>
-            Built by Orchist Nepal Tech
+            Built by Orchist Tech Nepal
           </p>
           <div className="flex flex-wrap justify-center gap-1 -mx-2">
             {legalDocuments.map((doc) => (
