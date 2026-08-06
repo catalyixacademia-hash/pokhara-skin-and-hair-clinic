@@ -61,7 +61,7 @@ export default function Gallery() {
                   loading="lazy"
                   decoding="async"
                   width={600}
-                  height={800}
+                  height={750}
                 />
                 <figcaption>
                   {item.tag && <span className="gallery-card__tag">{item.tag}</span>}
