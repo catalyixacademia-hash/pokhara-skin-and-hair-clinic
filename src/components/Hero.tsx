@@ -108,7 +108,7 @@ export default function Hero() {
             </h1>
 
             <p className="hero-main-card__lede">
-              Evidence-based dermatology, hair restoration, and aesthetic treatment — opposite GMC
+              Evidence-based dermatology, hair restoration, and aesthetic treatment — opposite of GMC
               Hospital, Nayabazar-8.
             </p>
 
