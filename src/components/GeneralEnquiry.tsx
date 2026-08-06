@@ -176,7 +176,7 @@ export default function GeneralEnquiry() {
                       autoComplete="tel"
                       inputMode="tel"
                       className="field-input"
-                      placeholder="We reply on this number"
+                      placeholder="98XXXXXXXX"
                     />
                   </FormField>
                 </div>
