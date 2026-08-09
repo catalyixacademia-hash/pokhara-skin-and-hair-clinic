@@ -24,20 +24,20 @@
     <link rel="apple-touch-icon" href="/favicon.png?v=4" />
     <!--
       Hero preload is media-scoped so each viewport fetches exactly one file.
-      Previously a single unconditional preload of the 130KB PNG meant desktop
-      downloaded it *and* the 341KB JPEG that <picture> actually rendered.
+      Mobile WebP is derived from the same reception photo as the desktop JPEG
+      (not a different clinic shot).
     -->
     <link
       rel="preload"
       as="image"
-      href="/images/hero/clinic-hero@1920.jpg?v=5"
+      href="/images/hero/clinic-hero@1920.jpg?v=6"
       media="(min-width: 1024px)"
       fetchpriority="high"
     />
     <link
       rel="preload"
       as="image"
-      href="/images/hero/clinic-hero.webp?v=5"
+      href="/images/hero/clinic-hero.webp?v=6"
       type="image/webp"
       media="(max-width: 1023px)"
       fetchpriority="high"

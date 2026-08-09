@@ -47,40 +47,42 @@ export default function Hero() {
     });
   };
 
-  const stagger = prefersReducedMotion
+  const reduceMotion = Boolean(prefersReducedMotion);
+  const entrance = reduceMotion
     ? {}
     : {
         initial: { opacity: 0, y: 12 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
       };
+  const entranceEase = [0.22, 1, 0.36, 1] as const;
 
   return (
     <section className="hero-section" aria-labelledby="hero-heading">
       <div className="hero-media absolute inset-0 z-0">
+        {/*
+          Same reception photo at every breakpoint. Desktop gets the 1920 JPEG;
+          smaller viewports get a WebP derived from that same frame (not a
+          different clinic shot). JPEG remains the no-WebP fallback.
+        */}
         <picture>
           <source
             media="(min-width: 1024px)"
-            srcSet="/images/hero/clinic-hero@1920.jpg?v=5"
+            srcSet="/images/hero/clinic-hero@1920.jpg?v=6"
             width={1920}
             height={1080}
           />
-          {/*
-            Below 1024px the 44KB WebP is served instead of the 130KB PNG. The
-            PNG stays as the final fallback for browsers without WebP support.
-          */}
           <source
-            srcSet="/images/hero/clinic-hero.webp?v=5"
+            srcSet="/images/hero/clinic-hero.webp?v=6"
             type="image/webp"
-            width={1024}
-            height={576}
+            width={1280}
+            height={720}
           />
           <img
-            src="/images/hero/clinic-hero.png?v=5"
-            alt={`${clinic.nameShort} exterior — Nayabazar-8, opposite GMC Hospital, Pokhara`}
+            src="/images/hero/clinic-hero.jpg?v=6"
+            alt={`${clinic.nameShort} reception — Nayabazar-8, opposite GMC Hospital, Pokhara`}
             className="hero-bg-image h-full w-full"
-            width={1024}
-            height={576}
+            width={1280}
+            height={720}
             decoding="async"
             fetchPriority="high"
           />
@@ -92,8 +94,10 @@ export default function Hero() {
         <div className="hero-bottom-band">
           <motion.div
             className="hero-main-card"
-            {...stagger}
-            transition={{ ...stagger.transition, delay: 0 }}
+            {...entrance}
+            transition={
+              reduceMotion ? undefined : { duration: 0.5, ease: entranceEase, delay: 0 }
+            }
           >
             <div className="hero-eyebrow">
               <p className="hero-brand">{clinic.nameShort}</p>
@@ -129,8 +133,10 @@ export default function Hero() {
           <motion.aside
             className="hero-info-card"
             aria-label="Clinic hours and location"
-            {...stagger}
-            transition={{ ...stagger.transition, delay: 0.12 }}
+            {...entrance}
+            transition={
+              reduceMotion ? undefined : { duration: 0.5, ease: entranceEase, delay: 0.12 }
+            }
           >
             <div className="hero-info-card__row">
               <span className="hero-info-card__icon hero-info-card__icon--accent">
