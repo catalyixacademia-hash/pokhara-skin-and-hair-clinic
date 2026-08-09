@@ -358,7 +358,22 @@
   background-color: var(--color-ink);
 }
 
+.hero-media picture {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
 .hero-bg-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
   object-fit: cover;
   /* Bias right so the receptionist clears the left frost card on desktop */
   object-position: 56% 38%;
@@ -2892,11 +2907,20 @@
     background: var(--color-surface-container-low);
   }
 
+  /*
+   * Full-bleed photo band. Do NOT combine aspect-ratio with max-height here —
+   * when height would exceed max-height, browsers shrink the used width to keep
+   * the ratio and leave an empty strip on the right (visible on ~390–430px
+   * phones). Size height from viewport width instead, and force width: 100%.
+   */
   .hero-media {
+    top: 0;
+    left: 0;
+    right: 0;
     bottom: auto;
-    height: auto;
-    aspect-ratio: 3 / 4;
-    max-height: 32rem;
+    width: 100%;
+    max-width: none;
+    height: min(32rem, calc(100vw * 4 / 3));
   }
 
   .hero-overlay {
@@ -2911,7 +2935,8 @@
   .hero-shell {
     justify-content: flex-start;
     min-height: 0;
-    padding-top: min(calc(100vw * 4 / 3 - 5.5rem), 26.5rem);
+    /* Keep cards overlapping the photo: media height minus frosted-card overlap */
+    padding-top: calc(min(32rem, calc(100vw * 4 / 3)) - 5.5rem);
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
   }
 
@@ -2930,7 +2955,8 @@
   }
 
   .hero-bg-image {
-    object-position: 46% center;
+    /* Keep receptionist + clinic sign in frame on tall mobile crops */
+    object-position: 42% 46%;
   }
 
   .btn-primary,
