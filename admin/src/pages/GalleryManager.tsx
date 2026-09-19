@@ -58,6 +58,14 @@ export default function GalleryManager() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.image_url.trim()) {
+      setError('Image is required.');
+      return;
+    }
+    if (!form.label.trim()) {
+      setError('Label is required.');
+      return;
+    }
     setSaving(true);
     setError(null);
     const payload = { ...form, updated_at: new Date().toISOString() };
@@ -145,6 +153,7 @@ export default function GalleryManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Label">
           <input

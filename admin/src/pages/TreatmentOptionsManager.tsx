@@ -158,6 +158,7 @@ export default function TreatmentOptionsManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Label">
           <input

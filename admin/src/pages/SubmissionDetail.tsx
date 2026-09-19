@@ -67,8 +67,10 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
       });
   }, [id]);
 
-  const updateField = async (fields: Partial<Pick<Submission, 'status' | 'internal_notes'>>) => {
-    if (!id) return;
+  const updateField = async (
+    fields: Partial<Pick<Submission, 'status' | 'internal_notes'>>,
+  ): Promise<boolean> => {
+    if (!id) return false;
     setSaving(true);
     const { data, error: updateError } = await supabase
       .from('appointments')
@@ -76,9 +78,14 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
       .eq('id', id)
       .select()
       .single();
-    if (updateError) setError(updateError.message);
-    else if (data) setRow(data as Submission);
+    if (updateError) {
+      setError(updateError.message);
+      setSaving(false);
+      return false;
+    }
+    if (data) setRow(data as Submission);
     setSaving(false);
+    return true;
   };
 
   useDebouncedSave(
@@ -91,7 +98,9 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
         return;
       }
       setNotesSaved(false);
-      void updateField({ internal_notes: trimmed }).then(() => setNotesSaved(true));
+      void updateField({ internal_notes: trimmed }).then((ok) => {
+        if (ok) setNotesSaved(true);
+      });
     },
   );
 

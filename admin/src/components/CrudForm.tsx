@@ -7,9 +7,19 @@ type CrudFormProps = {
   onSubmit: (e: React.FormEvent) => void;
   children: ReactNode;
   saving?: boolean;
+  /** Shown inside the drawer so save failures are visible while the form is open. */
+  error?: string | null;
 };
 
-export default function CrudForm({ title, open, onClose, onSubmit, children, saving }: CrudFormProps) {
+export default function CrudForm({
+  title,
+  open,
+  onClose,
+  onSubmit,
+  children,
+  saving,
+  error,
+}: CrudFormProps) {
   if (!open) return null;
 
   return (
@@ -22,6 +32,11 @@ export default function CrudForm({ title, open, onClose, onSubmit, children, sav
           </button>
         </div>
         <form onSubmit={onSubmit} className="p-6 space-y-4">
+          {error && (
+            <p className="text-sm text-red-600 rounded-md border border-red-200 bg-red-50 px-3 py-2" role="alert">
+              {error}
+            </p>
+          )}
           {children}
           <div className="flex gap-3 pt-4">
             <button type="submit" disabled={saving} className="admin-btn-primary">

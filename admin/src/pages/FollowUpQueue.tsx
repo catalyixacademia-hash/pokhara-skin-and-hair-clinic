@@ -5,6 +5,7 @@ import { mutationResult } from '@/lib/supabase-result';
 import StatusBadge from '@/components/StatusBadge';
 import {
   formatPreferredDate,
+  parseLocalDate,
   phoneHref,
   preferredDateUrgency,
   urgencyStyles,
@@ -30,8 +31,12 @@ function queueSort(a: Submission, b: Submission): number {
   if (statusDiff !== 0) return statusDiff;
 
   if (a.form_type === 'booking' && b.form_type === 'booking') {
-    const aDate = a.preferred_date ? new Date(a.preferred_date).getTime() : Number.MAX_SAFE_INTEGER;
-    const bDate = b.preferred_date ? new Date(b.preferred_date).getTime() : Number.MAX_SAFE_INTEGER;
+    const aDate = a.preferred_date
+      ? (parseLocalDate(a.preferred_date)?.getTime() ?? Number.MAX_SAFE_INTEGER)
+      : Number.MAX_SAFE_INTEGER;
+    const bDate = b.preferred_date
+      ? (parseLocalDate(b.preferred_date)?.getTime() ?? Number.MAX_SAFE_INTEGER)
+      : Number.MAX_SAFE_INTEGER;
     if (aDate !== bDate) return aDate - bDate;
   }
 

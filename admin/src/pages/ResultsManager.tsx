@@ -57,6 +57,14 @@ export default function ResultsManager() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.before_url.trim() || !form.after_url.trim()) {
+      setError('Before and after images are required.');
+      return;
+    }
+    if (!form.label.trim()) {
+      setError('Label is required.');
+      return;
+    }
     setSaving(true);
     setError(null);
     const payload = { ...form, updated_at: new Date().toISOString() };
@@ -142,6 +150,7 @@ export default function ResultsManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Label">
           <input

@@ -153,6 +153,7 @@ export default function TestimonialsManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Name">
           <input

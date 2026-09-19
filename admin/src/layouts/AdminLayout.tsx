@@ -38,7 +38,6 @@ const navSections: NavSection[] = [
       { to: '/testimonials', label: 'Testimonials' },
       { to: '/results', label: 'Results' },
       { to: '/gallery', label: 'Gallery' },
-      { to: '/hero', label: 'Hero slides' },
       { to: '/doctor', label: 'Doctor profile' },
     ],
   },
@@ -70,7 +69,7 @@ export default function AdminLayout() {
   };
 
   const badgeFor = (key?: NavItem['badgeKey']) => {
-    if (key === 'queue') return pending.total;
+    if (key === 'queue') return pending.queue;
     if (key === 'bookings') return pending.bookings;
     if (key === 'enquiries') return pending.enquiries;
     return 0;

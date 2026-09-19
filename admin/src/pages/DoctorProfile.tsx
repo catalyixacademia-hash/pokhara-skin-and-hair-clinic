@@ -140,9 +140,10 @@ export default function DoctorProfile() {
     setMessage(null);
     setError(null);
 
-    const { error: updateError } = await supabase
+    const { data, error: updateError } = await supabase
       .from('doctor_profile')
-      .update({
+      .upsert({
+        id: 1,
         name: doctor.name.trim(),
         title: doctor.title.trim(),
         title_short: doctor.title_short.trim(),
@@ -154,11 +155,14 @@ export default function DoctorProfile() {
         portrait_url: doctor.portrait_url,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', 1);
+      .select('id')
+      .maybeSingle();
 
     const result = mutationResult(updateError);
     if (!result.ok) {
       setError(result.message);
+    } else if (!data) {
+      setError('Doctor profile could not be saved. Please try again.');
     } else {
       setCredentials(cleanedCredentials);
       setMessage('Doctor profile saved.');

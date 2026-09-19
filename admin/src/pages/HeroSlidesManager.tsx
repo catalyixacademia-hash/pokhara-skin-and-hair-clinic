@@ -54,6 +54,10 @@ export default function HeroSlidesManager() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.image_url.trim()) {
+      setError('Image is required.');
+      return;
+    }
     setSaving(true);
     setError(null);
     const payload = { ...form, updated_at: new Date().toISOString() };
@@ -104,6 +108,11 @@ export default function HeroSlidesManager() {
         </button>
       </div>
 
+      <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mb-4" role="note">
+        The public homepage hero uses fixed reception photography and does not read these slides.
+        Manage this table only if you plan to wire CMS-driven hero images later.
+      </p>
+
       {error && (
         <p className="text-sm text-red-600 mb-4" role="alert">
           {error}
@@ -139,6 +148,7 @@ export default function HeroSlidesManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Image">
           <ImageUpload

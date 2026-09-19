@@ -204,6 +204,7 @@ export default function ServicesManager() {
         onClose={() => setFormOpen(false)}
         onSubmit={(e) => void handleSave(e)}
         saving={saving}
+        error={error}
       >
         <FormField label="Category">
           <select

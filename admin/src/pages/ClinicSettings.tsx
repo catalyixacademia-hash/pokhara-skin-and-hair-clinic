@@ -206,9 +206,10 @@ export default function ClinicSettings() {
       summary: hours.summary.trim() || `Daily: ${hours.daily.trim()}`,
     };
 
-    const { error: updateError } = await supabase
+    const { data, error: updateError } = await supabase
       .from('clinic_settings')
-      .update({
+      .upsert({
+        id: 1,
         name: settings.name.trim(),
         name_short: settings.name_short.trim(),
         tagline: settings.tagline.trim(),
@@ -224,11 +225,14 @@ export default function ClinicSettings() {
         whatsapp_main_url: settings.whatsapp_main_url.trim(),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', 1);
+      .select('id')
+      .maybeSingle();
 
     const result = mutationResult(updateError);
     if (!result.ok) {
       setError(result.message);
+    } else if (!data) {
+      setError('Settings could not be saved. Please try again.');
     } else {
       setSettings({
         ...settings,
