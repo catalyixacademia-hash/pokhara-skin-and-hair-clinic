@@ -67,18 +67,18 @@ export default function Hero() {
         <picture>
           <source
             media="(min-width: 1024px)"
-            srcSet="/images/hero/clinic-hero@1920.jpg?v=8"
+            srcSet="/images/hero/clinic-hero@1920.jpg?v=9"
             width={1920}
             height={1080}
           />
           <source
-            srcSet="/images/hero/clinic-hero.webp?v=8"
+            srcSet="/images/hero/clinic-hero.webp?v=9"
             type="image/webp"
             width={1280}
             height={720}
           />
           <img
-            src="/images/hero/clinic-hero.jpg?v=8"
+            src="/images/hero/clinic-hero.jpg?v=9"
             alt={`${clinic.nameShort} reception — Nayabazar-8, opposite GMC Hospital, Pokhara`}
             className="hero-bg-image"
             width={1280}

@@ -25,7 +25,7 @@ export const fallbackGallery: GalleryItem[] = [
   },
   {
     id: 'fallback-reception',
-    imageUrl: '/images/hero/clinic-hero.webp?v=8',
+    imageUrl: '/images/hero/clinic-hero.webp?v=9',
     label: 'Clinic reception',
     tag: 'Nayabazar',
     isTall: false,
