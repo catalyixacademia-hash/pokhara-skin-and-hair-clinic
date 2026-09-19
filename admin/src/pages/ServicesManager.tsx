@@ -173,6 +173,31 @@ export default function ServicesManager() {
 
       <DataTable
         columns={[
+          {
+            key: 'image_url',
+            label: 'Preview',
+            render: (r) =>
+              r.image_url ? (
+                <a
+                  href={r.image_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-14 h-14 rounded-md overflow-hidden border border-border bg-muted/30 shrink-0"
+                  title="Open full image"
+                >
+                  <img
+                    src={r.image_url}
+                    alt={r.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </a>
+              ) : (
+                <span className="inline-flex w-14 h-14 items-center justify-center rounded-md border border-dashed border-border text-[10px] text-muted">
+                  None
+                </span>
+              ),
+          },
           { key: 'title', label: 'Title' },
           { key: 'category_id', label: 'Category', render: (r) => categoryLabel(r.category_id) },
           { key: 'featured', label: 'Featured', render: (r) => (r.featured ? 'Yes' : 'No') },
