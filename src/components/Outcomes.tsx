@@ -33,7 +33,7 @@ export default function Outcomes() {
           />
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8 items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mb-10 items-stretch">
           {display.map((result, i) => (
             <Reveal key={result.id} className="h-full" delay={i * 0.05}>
               <article className="result-card h-full">
@@ -44,8 +44,8 @@ export default function Outcomes() {
                       alt={`${result.label} — before`}
                       loading="lazy"
                       decoding="async"
-                      width={600}
-                      height={800}
+                      width={720}
+                      height={900}
                     />
                     <figcaption>Before</figcaption>
                   </figure>
@@ -55,14 +55,14 @@ export default function Outcomes() {
                       alt={`${result.label} — after`}
                       loading="lazy"
                       decoding="async"
-                      width={600}
-                      height={800}
+                      width={720}
+                      height={900}
                     />
                     <figcaption>After</figcaption>
                   </figure>
                 </div>
                 <div className="result-card__meta">
-                  <h3 className="font-display text-lg text-ink">{result.label}</h3>
+                  <h3 className="font-display text-ink">{result.label}</h3>
                   {result.duration && (
                     <p className="font-body text-caption text-muted">{result.duration}</p>
                   )}
