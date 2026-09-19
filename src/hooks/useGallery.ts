@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase';
 import type { DbGalleryItem } from '../types/cms';
-import { fallbackGallery, mapGalleryRow, type GalleryItem } from '../data/gallery';
+import {
+  fallbackGallery,
+  isStockGalleryUrl,
+  mapGalleryRow,
+  type GalleryItem,
+} from '../data/gallery';
 
 export function useGallery() {
   const [items, setItems] = useState<GalleryItem[]>(fallbackGallery);
@@ -22,8 +27,17 @@ export function useGallery() {
       .order('sort_order')
       .then(({ data, error }) => {
         if (!error && data?.length) {
-          setItems(data.map((row) => mapGalleryRow(row as DbGalleryItem)));
-          setFromDb(true);
+          const curated = data
+            .map((row) => mapGalleryRow(row as DbGalleryItem))
+            .filter((item) => !isStockGalleryUrl(item.imageUrl));
+          if (curated.length > 0) {
+            setItems(curated);
+            setFromDb(true);
+          } else {
+            // Keep clinic photography when CMS only has Pexels seed rows.
+            setItems(fallbackGallery);
+            setFromDb(false);
+          }
         }
         setLoading(false);
       });

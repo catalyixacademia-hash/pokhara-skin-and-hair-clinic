@@ -1,13 +1,12 @@
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
-import { useResults } from '../hooks/useResults';
 import { fallbackResults } from '../data/results';
 
 export default function Outcomes() {
-  const { results, fromDb } = useResults();
-  // Clinic photography shipped in the repo; CMS rows win only when staff publish cases.
-  const display = fromDb && results.length > 0 ? results : fallbackResults;
+  // Curated clinic before/after photography shipped in the repo.
+  // CMS stock/Pexels seed rows must not override these on the public site.
+  const display = fallbackResults;
 
   const scrollToContact = () => {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });

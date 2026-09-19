@@ -8,17 +8,18 @@ export type GalleryItem = {
   isTall: boolean;
 };
 
+/** Real Pokhara clinic photography — preferred over CMS stock/Pexels seed. */
 export const fallbackGallery: GalleryItem[] = [
   {
     id: 'fallback-waiting',
-    imageUrl: '/images/clinic/interior-waiting.webp?v=2',
+    imageUrl: '/images/clinic/interior-waiting.webp?v=3',
     label: 'Reception & waiting',
     tag: 'Clinic',
     isTall: false,
   },
   {
     id: 'fallback-welcome',
-    imageUrl: '/images/clinic/welcome-board.webp',
+    imageUrl: '/images/clinic/welcome-board.webp?v=3',
     label: 'Welcome — coffee & cookies corner',
     tag: 'Visit',
     isTall: true,
@@ -28,6 +29,13 @@ export const fallbackGallery: GalleryItem[] = [
     imageUrl: '/images/hero/clinic-hero.webp?v=9',
     label: 'Clinic reception',
     tag: 'Nayabazar',
+    isTall: false,
+  },
+  {
+    id: 'fallback-reception-wide',
+    imageUrl: '/images/hero/clinic-hero@1920.jpg?v=9',
+    label: 'Front desk & product wall',
+    tag: 'Clinic',
     isTall: false,
   },
 ];
@@ -40,4 +48,14 @@ export function mapGalleryRow(row: DbGalleryItem): GalleryItem {
     tag: row.tag,
     isTall: row.is_tall,
   };
+}
+
+/** True when a CMS URL is illustrative stock, not clinic-owned media. */
+export function isStockGalleryUrl(url: string): boolean {
+  const lower = url.toLowerCase();
+  return (
+    lower.includes('pexels.com') ||
+    lower.includes('unsplash.com') ||
+    lower.includes('images.unsplash')
+  );
 }
