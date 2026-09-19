@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
+import ExosomesSpotlight from './components/ExosomesSpotlight';
 import Treatments from './components/Treatments';
 import CareStandards from './components/CareStandards';
 import ClinicJourney from './components/ClinicJourney';
@@ -25,6 +26,7 @@ export default function App() {
       <main id="main">
         <Hero />
         <TrustStrip />
+        <ExosomesSpotlight />
         <Treatments />
         <CareStandards />
         <ClinicDoctor />

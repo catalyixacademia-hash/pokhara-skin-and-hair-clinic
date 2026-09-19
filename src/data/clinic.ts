@@ -170,6 +170,7 @@ export const treatmentOptionGroups = [
     label: 'Skin care',
     hint: 'Primary specialty',
     options: [
+      'Exosome Skin Rejuvenation',
       'Skin Consultation',
       'Skin Analyzer / Skin Test',
       'Acne & Pigmentation',
@@ -236,10 +237,10 @@ export function groupTreatmentOptions(labels: string[]): { label: string; option
 
 /** Curated footer treatment links — skin-first, short list (not every service). */
 export const footerServiceLinks = [
+  { label: 'Exosome Skin Rejuvenation', href: '#exosomes' },
   { label: 'Acne & Pigmentation', href: '#acne-pigmentation' },
   { label: 'Chemical Peels', href: '#chemical-peels' },
   { label: 'Microneedling', href: '#microneedling' },
-  { label: 'Laser Treatments', href: '#laser-procedures' },
   { label: 'PRP Hair Therapy', href: '#prp-therapy' },
   { label: 'Aesthetic care', href: '#aesthetics' },
 ] as const;

@@ -5,6 +5,11 @@ export type FaqItem = {
 
 export const faqs: FaqItem[] = [
   {
+    question: 'Do you offer Exosome therapy in Pokhara?',
+    answer:
+      'Yes. Pokhara Skin and Hair Clinic offers Exosome skin rejuvenation and Exosome hair therapy — among the first regenerative exosome treatments available in Pokhara. Sessions are planned after a dermatologist consultation so the protocol fits your skin or scalp goals.',
+  },
+  {
     question: 'Do I need an appointment?',
     answer:
       'Yes. We recommend booking ahead so we can allocate enough time for assessment and treatment planning. Walk-ins are accommodated when the schedule allows.',

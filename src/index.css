@@ -780,6 +780,128 @@
   color: #d3e8e4;
 }
 
+/* Exosomes spotlight — high-visibility “1st in Pokhara” offer */
+.exosomes-spotlight {
+  background: var(--color-surface-container-low);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.exosomes-spotlight__grid {
+  display: grid;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .exosomes-spotlight__grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 2.5rem;
+  }
+}
+
+.exosomes-spotlight__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-secondary) 14%, transparent);
+  color: var(--color-secondary);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.exosomes-spotlight__title {
+  margin: 0 0 0.75rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.exosomes-spotlight__lede {
+  margin: 0 0 1.25rem;
+  max-width: 36rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.exosomes-spotlight__points {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.exosomes-spotlight__points li {
+  position: relative;
+  padding-left: 1.15rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--color-ink);
+}
+
+.exosomes-spotlight__points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.exosomes-spotlight__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.exosomes-spotlight__actions .btn-primary,
+.exosomes-spotlight__actions .btn-secondary-outline {
+  width: auto;
+}
+
+.exosomes-spotlight__media {
+  margin: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-2, 0 12px 36px rgba(13, 17, 23, 0.1));
+  border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+}
+
+.exosomes-spotlight__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 687 / 1024;
+  object-fit: cover;
+}
+
+@media (max-width: 639px) {
+  .exosomes-spotlight__actions .btn-primary,
+  .exosomes-spotlight__actions .btn-secondary-outline {
+    width: 100%;
+  }
+
+  .exosomes-spotlight__media {
+    max-width: 22rem;
+    margin-inline: auto;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;

@@ -9,6 +9,15 @@ export type ServiceItem = {
 
 export const skinServices: ServiceItem[] = [
   {
+    title: 'Exosome Skin Rejuvenation',
+    description:
+      'First in Pokhara — next-generation regenerative exosome therapy that signals cellular repair to regenerate, restore, and renew skin quality under dermatologist supervision.',
+    benefits: ['1st in Pokhara', 'Cellular renewal', 'Regenerate · Restore · Renew'],
+    result: 'Fresher, more resilient skin with a personalized session plan',
+    img: '/images/treatments/skin/exosome-skin.webp',
+    featured: true,
+  },
+  {
     title: 'Acne & Pigmentation',
     description:
       'Comprehensive medical treatment for acne, acne scars, melasma, post-acne marks, and nail problems using clinically proven protocols.',
@@ -81,10 +90,11 @@ export const hairServices: ServiceItem[] = [
   {
     title: 'Exosome Therapy',
     description:
-      'Cutting-edge regenerative treatment using exosomes to signal cellular repair and accelerate hair follicle regeneration at the root.',
-    benefits: ['Regenerative medicine', 'Cellular renewal', 'Minimal sessions'],
+      'First in Pokhara for regenerative exosome care — cutting-edge treatment using exosomes to signal cellular repair and accelerate hair follicle regeneration at the root.',
+    benefits: ['1st in Pokhara', 'Cellular renewal', 'Minimal sessions'],
     result: 'Visible improvement within 6 to 10 weeks',
     img: '/images/treatments/hair/exosome-therapy.webp',
+    featured: true,
   },
   {
     title: 'Hair Fall Consultation',
