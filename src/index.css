@@ -886,10 +886,9 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  /* Natural poster height — never crop crown, face, or footer icons */
+  max-width: 100%;
   object-fit: contain;
-  object-position: center center;
-  background: #f4efe6;
 }
 
 @media (max-width: 639px) {

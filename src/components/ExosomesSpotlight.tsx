@@ -73,10 +73,10 @@ export default function ExosomesSpotlight() {
             }
           >
             <img
-              src="/images/treatments/skin/exosomes-promo.webp?v=3"
+              src="/images/treatments/skin/exosomes-promo.webp?v=4"
               alt="Exosomes — next generation skin rejuvenation, first in Pokhara at Pokhara Skin and Hair Clinic"
-              width={1000}
-              height={1000}
+              width={687}
+              height={1024}
               loading="lazy"
               decoding="async"
             />
