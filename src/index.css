@@ -462,17 +462,17 @@
 .hero-info-card {
   background: linear-gradient(
     155deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.52) 55%,
-    rgba(249, 249, 252, 0.48) 100%
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(255, 255, 255, 0.74) 55%,
+    rgba(249, 249, 252, 0.68) 100%
   );
-  backdrop-filter: blur(36px) saturate(1.45);
-  -webkit-backdrop-filter: blur(36px) saturate(1.45);
-  border: 1px solid rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(56px) saturate(1.55);
+  -webkit-backdrop-filter: blur(56px) saturate(1.55);
+  border: 1px solid rgba(255, 255, 255, 0.82);
   box-shadow:
     0 12px 40px rgba(13, 17, 23, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .hero-main-card {
