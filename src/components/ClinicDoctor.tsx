@@ -26,7 +26,7 @@ export default function ClinicDoctor() {
         </Reveal>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-20 items-start">
-          <Reveal delay={0.05}>
+          <Reveal delay={0.05} direction="left">
             <div className="space-y-8">
               <div className="clinic-image-frame aspect-square md:aspect-video lg:aspect-square">
                 <img
@@ -58,7 +58,7 @@ export default function ClinicDoctor() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} direction="right">
             <div className="clinic-panel space-y-8">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="doctor-portrait">

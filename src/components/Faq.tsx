@@ -1,12 +1,15 @@
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 import { faqs } from '../data/faq';
 import { cn } from '../utils/cn';
+import { easeOut } from './motion/variants';
 
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section
@@ -30,7 +33,7 @@ export default function Faq() {
             const panelId = `faq-panel-${i}`;
             const triggerId = `faq-trigger-${i}`;
             return (
-              <Reveal key={item.question} delay={i * 0.04}>
+              <Reveal key={item.question} delay={Math.min(i, 4) * 0.05}>
                 <div className={cn('faq-item', open && 'faq-item--open')}>
                   <h3 className="faq-item__question">
                     <button
@@ -54,16 +57,29 @@ export default function Faq() {
                       </span>
                     </button>
                   </h3>
-                  <div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={triggerId}
-                    hidden={!open}
-                  >
-                    <p className="faq-item__answer font-body text-base text-muted leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </div>
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={triggerId}
+                        key="panel"
+                        {...(prefersReducedMotion
+                          ? {}
+                          : {
+                              initial: { height: 0, opacity: 0 },
+                              animate: { height: 'auto', opacity: 1 },
+                              exit: { height: 0, opacity: 0 },
+                              transition: { duration: 0.32, ease: easeOut },
+                            })}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <p className="faq-item__answer font-body text-base text-muted leading-relaxed">
+                          {item.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </Reveal>
             );

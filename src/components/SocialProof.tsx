@@ -1,6 +1,7 @@
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 import { useTestimonials } from '../hooks/useTestimonials';
 import { useClinicSettings } from '../hooks/useClinicSettings';
 
@@ -25,9 +26,9 @@ export default function SocialProof() {
           />
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
-          {featured.map((item, i) => (
-            <Reveal key={item.name} className="h-full" delay={i * 0.06}>
+        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
+          {featured.map((item) => (
+            <StaggerItem key={item.name} className="h-full">
               <blockquote className="testimonial-card">
                 <p className="testimonial-card__quote">&ldquo;{item.quote}&rdquo;</p>
                 <footer>
@@ -37,9 +38,9 @@ export default function SocialProof() {
                   </p>
                 </footer>
               </blockquote>
-            </Reveal>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         <Reveal delay={0.12}>
           <div className="mt-10 flex justify-center">

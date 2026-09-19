@@ -115,7 +115,7 @@ export default function Visit() {
         </Reveal>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-20">
-          <Reveal delay={0.05}>
+          <Reveal delay={0.05} direction="left">
             <div className="form-card">
               {submitted ? (
                 <div className="form-success" role="status" aria-live="polite">
@@ -242,7 +242,7 @@ export default function Visit() {
             </div>
           </Reveal>
 
-          <Reveal className="space-y-8 md:space-y-10" delay={0.1}>
+          <Reveal className="space-y-8 md:space-y-10" delay={0.1} direction="right">
             <div className="info-panel">
               <h3 className="font-display text-h3 text-ink mb-4">Contact</h3>
               <p className="font-body text-base text-muted mb-4">

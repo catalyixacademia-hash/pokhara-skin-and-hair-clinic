@@ -48,13 +48,21 @@ export default function Hero() {
   };
 
   const reduceMotion = Boolean(prefersReducedMotion);
-  const entrance = reduceMotion
+  const entranceEase = [0.22, 1, 0.36, 1] as const;
+  const mainCardMotion = reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 12 },
+        initial: { opacity: 0, y: 20 },
         animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.55, ease: entranceEase, delay: 0.05 },
       };
-  const entranceEase = [0.22, 1, 0.36, 1] as const;
+  const infoCardMotion = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.55, ease: entranceEase, delay: 0.18 },
+      };
 
   return (
     <section className="hero-section" aria-labelledby="hero-heading">
@@ -92,13 +100,7 @@ export default function Hero() {
 
       <Container className="hero-shell">
         <div className="hero-bottom-band">
-          <motion.div
-            className="hero-main-card"
-            {...entrance}
-            transition={
-              reduceMotion ? undefined : { duration: 0.5, ease: entranceEase, delay: 0 }
-            }
-          >
+          <motion.div className="hero-main-card" {...mainCardMotion}>
             <div className="hero-eyebrow">
               <p className="hero-brand">{clinic.nameShort}</p>
               <p className="hero-cert-bar">
@@ -133,10 +135,7 @@ export default function Hero() {
           <motion.aside
             className="hero-info-card"
             aria-label="Clinic hours and location"
-            {...entrance}
-            transition={
-              reduceMotion ? undefined : { duration: 0.5, ease: entranceEase, delay: 0.12 }
-            }
+            {...infoCardMotion}
           >
             <div className="hero-info-card__row">
               <span className="hero-info-card__icon hero-info-card__icon--accent">

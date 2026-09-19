@@ -1,12 +1,15 @@
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import { TreatmentCard, TreatmentRow } from './ui/TreatmentCard';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 import TreatmentDetailSheet from './TreatmentDetailSheet';
 import { useServices } from '../hooks/useServices';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { ServiceItem } from '../data/services';
+import { easeOut } from './motion/variants';
 
 type Selected = { service: ServiceItem; category: 'skin' | 'hair' };
 
@@ -45,6 +48,7 @@ export default function Treatments() {
   const [showAllSkin, setShowAllSkin] = useState(false);
   const isWide = useMediaQuery('(min-width: 640px)');
   const previewCount = isWide ? SKIN_PREVIEW_WIDE : SKIN_PREVIEW_MOBILE;
+  const prefersReducedMotion = useReducedMotion();
 
   const allByAnchor = useMemo(() => {
     const map = new Map<string, Selected>();
@@ -83,12 +87,15 @@ export default function Treatments() {
   }, [skinServices, showAllSkin, previewCount]);
 
   const scrollToContact = () => {
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+    document.querySelector('#contact')?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
   };
 
   const hasHiddenSkin = skinServices.length > previewCount;
-  const visibleSkin = showAllSkin ? skinServices : skinServices.slice(0, previewCount);
-  const hiddenSkinCount = skinServices.length - previewCount;
+  const previewSkin = skinServices.slice(0, previewCount);
+  const extraSkin = skinServices.slice(previewCount);
+  const hiddenSkinCount = extraSkin.length;
 
   return (
     <section id="services" className="bg-surface section-padding" aria-labelledby="services-heading">
@@ -102,18 +109,18 @@ export default function Treatments() {
           />
         </Reveal>
 
-        {/* Primary: skin care — image-led cards. */}
-        <Reveal delay={0.05}>
-          <div className="mb-14 md:mb-16">
+        <div className="mb-14 md:mb-16">
+          <Reveal delay={0.04}>
             <div className="treatment-group__head">
               <h3 className="treatment-group__eyebrow">Skin care</h3>
               <p className="treatment-group__note">Primary specialty · led by Dr. Prakash Acharya</p>
             </div>
+          </Reveal>
 
-            <div className="treatment-grid">
-              {visibleSkin.map((service) => (
+          <Stagger className="treatment-grid">
+            {previewSkin.map((service) => (
+              <StaggerItem key={service.title} className="h-full">
                 <TreatmentCard
-                  key={service.title}
                   id={serviceAnchorId(service.title)}
                   title={service.title}
                   description={service.description}
@@ -121,21 +128,53 @@ export default function Treatments() {
                   category="skin"
                   onSelect={() => setSelected({ service, category: 'skin' })}
                 />
-              ))}
-            </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
 
-            {hasHiddenSkin && !showAllSkin && (
-              <button
-                type="button"
-                className="disclosure-btn"
-                aria-expanded={false}
-                onClick={() => setShowAllSkin(true)}
-              >
-                Show {hiddenSkinCount} more skin treatment{hiddenSkinCount === 1 ? '' : 's'}
-                <ChevronDownIcon />
-              </button>
-            )}
+              <AnimatePresence initial={false}>
+                {showAllSkin && extraSkin.length > 0 && (
+                  <motion.div
+                    key="extra-skin"
+                    className="treatment-grid mt-4 sm:mt-5"
+                    {...(prefersReducedMotion
+                      ? {}
+                      : {
+                          initial: { opacity: 0, height: 0 },
+                          animate: { opacity: 1, height: 'auto' },
+                          exit: { opacity: 0, height: 0 },
+                          transition: { duration: 0.4, ease: easeOut },
+                        })}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    {extraSkin.map((service) => (
+                      <TreatmentCard
+                        key={service.title}
+                        id={serviceAnchorId(service.title)}
+                        title={service.title}
+                        description={service.description}
+                        img={service.img}
+                        category="skin"
+                        onSelect={() => setSelected({ service, category: 'skin' })}
+                      />
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
+          {hasHiddenSkin && !showAllSkin && (
+            <button
+              type="button"
+              className="disclosure-btn"
+              aria-expanded={false}
+              onClick={() => setShowAllSkin(true)}
+            >
+              Show {hiddenSkinCount} more skin treatment{hiddenSkinCount === 1 ? '' : 's'}
+              <ChevronDownIcon />
+            </button>
+          )}
+
+          <Reveal delay={0.08}>
             <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <button type="button" onClick={scrollToContact} className="btn-primary">
                 Book a skin consultation
@@ -144,23 +183,23 @@ export default function Treatments() {
                 Assessment first — we recommend only what is medically appropriate.
               </p>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
 
-        {/* Secondary: hair restoration — compact rows. */}
-        <Reveal delay={0.1}>
-          <div id="hair-services" className="scroll-mt-24">
+        <div id="hair-services" className="scroll-mt-24">
+          <Reveal delay={0.04}>
             <div className="treatment-group__head">
               <h3 className="treatment-group__eyebrow treatment-group__eyebrow--secondary">
                 Hair restoration
               </h3>
               <p className="treatment-group__note">Complementary care · scalp &amp; density</p>
             </div>
+          </Reveal>
 
-            <div className="treatment-grid treatment-grid--rows">
-              {hairServices.map((service) => (
+          <Stagger className="treatment-grid treatment-grid--rows">
+            {hairServices.map((service) => (
+              <StaggerItem key={service.title}>
                 <TreatmentRow
-                  key={service.title}
                   id={serviceAnchorId(service.title)}
                   title={service.title}
                   description={service.description}
@@ -168,9 +207,11 @@ export default function Treatments() {
                   category="hair"
                   onSelect={() => setSelected({ service, category: 'hair' })}
                 />
-              ))}
-            </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
 
+          <Reveal delay={0.06}>
             <p className="font-body text-sm text-muted mt-5">
               <button
                 type="button"
@@ -181,8 +222,8 @@ export default function Treatments() {
               </button>
               {' '}— we will confirm the right protocol during your consultation.
             </p>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </Container>
 
       <TreatmentDetailSheet

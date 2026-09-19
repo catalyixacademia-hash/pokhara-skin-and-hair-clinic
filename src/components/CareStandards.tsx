@@ -1,6 +1,7 @@
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 
 const standards = [
   {
@@ -37,17 +38,15 @@ export default function CareStandards() {
           />
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
-          {standards.map((item, i) => (
-            <Reveal key={item.index} className="h-full" delay={i * 0.06}>
-              <article className="standard-card">
-                <div className="standard-card__badge">{item.index}</div>
-                <h3 className="font-display text-h3 text-ink mt-5 mb-3">{item.title}</h3>
-                <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
-              </article>
-            </Reveal>
+        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
+          {standards.map((item) => (
+            <StaggerItem key={item.index} as="article" className="standard-card h-full">
+              <div className="standard-card__badge">{item.index}</div>
+              <h3 className="font-display text-h3 text-ink mt-5 mb-3">{item.title}</h3>
+              <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </Container>
     </section>
   );

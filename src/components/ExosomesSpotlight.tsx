@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import Container from './ui/Container';
+import { easeOut } from './motion/variants';
 
 /**
  * High-visibility Exosomes spotlight — first in Pokhara claim.
@@ -15,6 +16,24 @@ export default function ExosomesSpotlight() {
     });
   };
 
+  const copyMotion = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, x: -20 },
+        whileInView: { opacity: 1, x: 0 },
+        viewport: { once: true, amount: 0.35 },
+        transition: { duration: 0.55, ease: easeOut },
+      };
+
+  const mediaMotion = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, x: 20, scale: 0.98 },
+        whileInView: { opacity: 1, x: 0, scale: 1 },
+        viewport: { once: true, amount: 0.35 },
+        transition: { duration: 0.6, ease: easeOut, delay: 0.1 },
+      };
+
   return (
     <section
       id="exosomes"
@@ -23,15 +42,7 @@ export default function ExosomesSpotlight() {
     >
       <Container>
         <div className="exosomes-spotlight__grid">
-          <motion.div
-            className="exosomes-spotlight__copy"
-            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={
-              reduceMotion ? undefined : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
-            }
-          >
+          <motion.div className="exosomes-spotlight__copy" {...copyMotion}>
             <p className="exosomes-spotlight__eyebrow">
               <span aria-hidden="true">★</span> 1st in Pokhara
             </p>
@@ -61,17 +72,7 @@ export default function ExosomesSpotlight() {
             </div>
           </motion.div>
 
-          <motion.figure
-            className="exosomes-spotlight__media"
-            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={
-              reduceMotion
-                ? undefined
-                : { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.08 }
-            }
-          >
+          <motion.figure className="exosomes-spotlight__media" {...mediaMotion}>
             <img
               src="/images/treatments/skin/exosomes-promo.webp?v=4"
               alt="Exosomes — next generation skin rejuvenation, first in Pokhara at Pokhara Skin and Hair Clinic"

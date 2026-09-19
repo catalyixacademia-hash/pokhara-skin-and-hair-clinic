@@ -1,13 +1,28 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '../../utils/cn';
+import { baseTransition, fadeLeft, fadeRight, fadeUp, viewportOnce } from './variants';
+
+type RevealDirection = 'up' | 'left' | 'right';
 
 type RevealProps = {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  direction?: RevealDirection;
 };
 
-export default function Reveal({ children, className, delay = 0 }: RevealProps) {
+const directionVariants = {
+  up: fadeUp,
+  left: fadeLeft,
+  right: fadeRight,
+} as const;
+
+export default function Reveal({
+  children,
+  className,
+  delay = 0,
+  direction = 'up',
+}: RevealProps) {
   const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion) {
@@ -17,10 +32,11 @@ export default function Reveal({ children, className, delay = 0 }: RevealProps) 
   return (
     <motion.div
       className={cn(className)}
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-10%' }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay }}
+      variants={directionVariants[direction]}
+      initial="hidden"
+      whileInView="show"
+      viewport={viewportOnce}
+      transition={baseTransition(delay)}
     >
       {children}
     </motion.div>

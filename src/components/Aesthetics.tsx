@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 import { aestheticServices } from '../data/services';
 import { TreatmentRow } from './ui/TreatmentCard';
 import TreatmentDetailSheet from './TreatmentDetailSheet';
@@ -26,20 +27,19 @@ export default function Aesthetics() {
           />
         </Reveal>
 
-        <Reveal delay={0.05}>
-          <div className="treatment-grid treatment-grid--rows">
-            {aestheticServices.map((service) => (
+        <Stagger className="treatment-grid treatment-grid--rows">
+          {aestheticServices.map((service) => (
+            <StaggerItem key={service.title}>
               <TreatmentRow
-                key={service.title}
                 title={service.title}
                 description={service.description}
                 img={service.img}
                 category="aesthetic"
                 onSelect={() => setSelected(service)}
               />
-            ))}
-          </div>
-        </Reveal>
+            </StaggerItem>
+          ))}
+        </Stagger>
       </Container>
 
       <TreatmentDetailSheet

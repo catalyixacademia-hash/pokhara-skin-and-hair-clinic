@@ -25,7 +25,7 @@ export default function ClinicJourney() {
         </Reveal>
 
         <div className="grid lg:grid-cols-12 gap-6 md:gap-8 lg:gap-10 items-start">
-          <Reveal className="lg:col-span-7" delay={0.05}>
+          <Reveal className="lg:col-span-7" delay={0.05} direction="left">
             <div className="space-y-4 text-muted">
               <p className="font-body text-base leading-relaxed">
                 {settings.name} was established to bring patient-centered skin and hair treatment to{' '}
@@ -57,7 +57,7 @@ export default function ClinicJourney() {
             </div>
           </Reveal>
 
-          <Reveal className="lg:col-span-5" delay={0.1}>
+          <Reveal className="lg:col-span-5" delay={0.1} direction="right">
             <figure className="founder-card">
               <div className="founder-portrait">
                 <img

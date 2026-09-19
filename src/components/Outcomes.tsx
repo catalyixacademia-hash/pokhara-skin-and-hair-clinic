@@ -1,6 +1,7 @@
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 import { fallbackResults } from '../data/results';
 
 export default function Outcomes() {
@@ -28,44 +29,42 @@ export default function Outcomes() {
           />
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mb-10 items-stretch">
-          {display.map((result, i) => (
-            <Reveal key={result.id} className="h-full" delay={i * 0.05}>
-              <article className="result-card h-full">
-                <div className="result-card__pair">
-                  <figure className="result-card__shot">
-                    <img
-                      src={result.beforeUrl}
-                      alt={`${result.label} — before`}
-                      loading="lazy"
-                      decoding="async"
-                      width={824}
-                      height={1024}
-                    />
-                    <figcaption>Before</figcaption>
-                  </figure>
-                  <figure className="result-card__shot">
-                    <img
-                      src={result.afterUrl}
-                      alt={`${result.label} — after`}
-                      loading="lazy"
-                      decoding="async"
-                      width={824}
-                      height={1024}
-                    />
-                    <figcaption>After</figcaption>
-                  </figure>
-                </div>
-                <div className="result-card__meta">
-                  <h3 className="font-display text-ink">{result.label}</h3>
-                  {result.duration && (
-                    <p className="font-body text-caption text-muted">{result.duration}</p>
-                  )}
-                </div>
-              </article>
-            </Reveal>
+        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mb-10 items-stretch">
+          {display.map((result) => (
+            <StaggerItem key={result.id} as="article" className="result-card h-full">
+              <div className="result-card__pair">
+                <figure className="result-card__shot">
+                  <img
+                    src={result.beforeUrl}
+                    alt={`${result.label} — before`}
+                    loading="lazy"
+                    decoding="async"
+                    width={824}
+                    height={1024}
+                  />
+                  <figcaption>Before</figcaption>
+                </figure>
+                <figure className="result-card__shot">
+                  <img
+                    src={result.afterUrl}
+                    alt={`${result.label} — after`}
+                    loading="lazy"
+                    decoding="async"
+                    width={824}
+                    height={1024}
+                  />
+                  <figcaption>After</figcaption>
+                </figure>
+              </div>
+              <div className="result-card__meta">
+                <h3 className="font-display text-ink">{result.label}</h3>
+                {result.duration && (
+                  <p className="font-body text-caption text-muted">{result.duration}</p>
+                )}
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         <Reveal delay={0.1}>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">

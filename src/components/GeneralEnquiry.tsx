@@ -70,7 +70,7 @@ export default function GeneralEnquiry() {
     >
       <Container>
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-          <Reveal className="lg:col-span-7 space-y-6" delay={0.05}>
+          <Reveal className="lg:col-span-7 space-y-6" delay={0.05} direction="left">
             <div id="location">
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
                 <div>
@@ -106,7 +106,7 @@ export default function GeneralEnquiry() {
             </div>
           </Reveal>
 
-          <Reveal className="lg:col-span-5 lg:pl-10 xl:pl-12 lg:border-l border-outline-variant space-y-6" delay={0.1}>
+          <Reveal className="lg:col-span-5 lg:pl-10 xl:pl-12 lg:border-l border-outline-variant space-y-6" delay={0.1} direction="right">
             <div>
               <span className="section-label">Inquiries</span>
               <h2 className="font-display text-h3 text-ink mt-2 mb-2">Have a question?</h2>

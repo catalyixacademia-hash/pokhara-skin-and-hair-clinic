@@ -1,6 +1,7 @@
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
+import { Stagger, StaggerItem } from './motion/Stagger';
 import { useGallery } from '../hooks/useGallery';
 import { cn } from '../utils/cn';
 
@@ -42,17 +43,11 @@ export default function Gallery() {
           scroll container keyboard-reachable, which browsers require for any
           scrollable region that holds no focusable children.
         */}
-        <div
-          className="gallery-grid"
-          role="group"
-          aria-label="Clinic photographs"
-          tabIndex={0}
-        >
-          {items.map((item, i) => (
-            <Reveal
+        <Stagger className="gallery-grid" role="group" aria-label="Clinic photographs" tabIndex={0}>
+          {items.map((item) => (
+            <StaggerItem
               key={item.id}
               className={cn('gallery-grid__item', item.isTall && 'gallery-grid__item--tall')}
-              delay={Math.min(i, 5) * 0.04}
             >
               <figure className="gallery-card">
                 <img
@@ -68,9 +63,9 @@ export default function Gallery() {
                   <span className="gallery-card__label">{item.label}</span>
                 </figcaption>
               </figure>
-            </Reveal>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         <p className="gallery-hint">
           <SwipeIcon />

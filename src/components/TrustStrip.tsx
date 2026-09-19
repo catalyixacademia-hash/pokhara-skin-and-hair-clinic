@@ -1,4 +1,5 @@
 import Container from './ui/Container';
+import { Stagger, StaggerItem } from './motion/Stagger';
 
 function ClinicIcon() {
   return (
@@ -83,9 +84,9 @@ export default function TrustStrip() {
   return (
     <section className="trust-strip" aria-label="Clinic highlights">
       <Container>
-        <ul className="trust-strip__list">
+        <Stagger as="ul" className="trust-strip__list">
           {items.map((item) => (
-            <li key={item.value} className="trust-strip__item">
+            <StaggerItem key={item.value} as="li" className="trust-strip__item">
               <span className="trust-strip__icon" aria-hidden="true">
                 {item.icon}
               </span>
@@ -93,9 +94,9 @@ export default function TrustStrip() {
                 <span className="trust-strip__value">{item.value}</span>
                 <span className="trust-strip__label">{item.label}</span>
               </span>
-            </li>
+            </StaggerItem>
           ))}
-        </ul>
+        </Stagger>
       </Container>
     </section>
   );
