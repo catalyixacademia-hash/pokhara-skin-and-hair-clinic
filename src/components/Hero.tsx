@@ -52,16 +52,16 @@ export default function Hero() {
   const mainCardMotion = reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 20 },
+        initial: { opacity: 0, y: 18 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.55, ease: entranceEase, delay: 0.05 },
+        transition: { duration: 0.9, ease: entranceEase, delay: 0.12 },
       };
   const infoCardMotion = reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 20 },
+        initial: { opacity: 0, y: 18 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.55, ease: entranceEase, delay: 0.18 },
+        transition: { duration: 0.9, ease: entranceEase, delay: 0.32 },
       };
 
   return (

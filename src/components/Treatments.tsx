@@ -143,7 +143,7 @@ export default function Treatments() {
                           initial: { opacity: 0, height: 0 },
                           animate: { opacity: 1, height: 'auto' },
                           exit: { opacity: 0, height: 0 },
-                          transition: { duration: 0.4, ease: easeOut },
+                          transition: { duration: 0.65, ease: easeOut },
                         })}
                     style={{ overflow: 'hidden' }}
                   >

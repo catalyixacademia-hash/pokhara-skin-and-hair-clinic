@@ -70,7 +70,7 @@ export default function Faq() {
                               initial: { height: 0, opacity: 0 },
                               animate: { height: 'auto', opacity: 1 },
                               exit: { height: 0, opacity: 0 },
-                              transition: { duration: 0.32, ease: easeOut },
+                              transition: { duration: 0.48, ease: easeOut },
                             })}
                         style={{ overflow: 'hidden' }}
                       >

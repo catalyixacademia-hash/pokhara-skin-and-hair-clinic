@@ -19,19 +19,19 @@ export default function ExosomesSpotlight() {
   const copyMotion = reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, x: -20 },
+        initial: { opacity: 0, x: -14 },
         whileInView: { opacity: 1, x: 0 },
-        viewport: { once: true, amount: 0.35 },
-        transition: { duration: 0.55, ease: easeOut },
+        viewport: { once: true, amount: 0.25 },
+        transition: { duration: 0.95, ease: easeOut },
       };
 
   const mediaMotion = reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, x: 20, scale: 0.98 },
+        initial: { opacity: 0, x: 14, scale: 0.985 },
         whileInView: { opacity: 1, x: 0, scale: 1 },
-        viewport: { once: true, amount: 0.35 },
-        transition: { duration: 0.6, ease: easeOut, delay: 0.1 },
+        viewport: { once: true, amount: 0.25 },
+        transition: { duration: 1.05, ease: easeOut, delay: 0.18 },
       };
 
   return (

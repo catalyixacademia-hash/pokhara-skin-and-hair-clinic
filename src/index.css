@@ -392,16 +392,32 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-bg-image {
-    animation: hero-media-settle 1.65s var(--ease-out) forwards;
+    animation: hero-media-settle 2.4s var(--ease-out) forwards;
   }
 }
 
 @keyframes hero-media-settle {
   from {
-    transform: scale(1.045);
+    transform: scale(1.04);
   }
   to {
     transform: scale(1);
+  }
+}
+
+/* Gentler hero settle on phones/tablets — less zoom, still unhurried. */
+@media (prefers-reduced-motion: no-preference) and (max-width: 1023px) {
+  .hero-bg-image {
+    animation-duration: 2.2s;
+  }
+
+  @keyframes hero-media-settle {
+    from {
+      transform: scale(1.025);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 }
 
@@ -969,9 +985,9 @@
   overflow: hidden;
   box-shadow: var(--shadow-1, 0 4px 16px rgba(13, 17, 23, 0.06));
   transition:
-    transform 0.35s var(--ease-out),
-    box-shadow 0.35s var(--ease-out),
-    border-color 0.35s var(--ease-out);
+    transform 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out);
 }
 
 @media (hover: hover) {
@@ -979,6 +995,12 @@
     transform: translateY(-4px);
     box-shadow: var(--shadow-3);
     border-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  }
+}
+
+@media (hover: hover) and (max-width: 1023px) {
+  .result-card:hover {
+    transform: translateY(-2px);
   }
 }
 
@@ -1951,9 +1973,9 @@
   overflow: hidden;
   box-shadow: var(--shadow-1);
   transition:
-    transform 0.3s var(--ease-out),
-    box-shadow 0.3s var(--ease-out),
-    border-color 0.3s var(--ease-out);
+    transform 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out);
   text-align: left;
 }
 
@@ -1967,6 +1989,12 @@
     transform: translateY(-4px);
     box-shadow: var(--shadow-3);
     border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  }
+}
+
+@media (hover: hover) and (max-width: 1023px) {
+  .treatment-card:hover {
+    transform: translateY(-2px);
   }
 }
 
@@ -1990,12 +2018,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s var(--ease-out);
+  transition: transform 0.85s var(--ease-out);
 }
 
 @media (hover: hover) {
   .treatment-card:hover .treatment-card__image img {
-    transform: scale(1.06);
+    transform: scale(1.05);
   }
 }
 
@@ -2705,9 +2733,9 @@
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-1);
   transition:
-    transform 0.35s var(--ease-out),
-    box-shadow 0.35s var(--ease-out),
-    border-color 0.35s var(--ease-out);
+    transform 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out);
 }
 
 @media (hover: hover) {
@@ -2715,6 +2743,12 @@
     transform: translateY(-3px);
     box-shadow: var(--shadow-2);
     border-color: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+}
+
+@media (hover: hover) and (max-width: 1023px) {
+  .testimonial-card:hover {
+    transform: translateY(-2px);
   }
 }
 

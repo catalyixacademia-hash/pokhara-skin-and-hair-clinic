@@ -24,7 +24,7 @@ export default function MotionPress({ children, className, lift = 3 }: MotionPre
       className={cn(className)}
       whileHover={{ y: -lift }}
       whileTap={{ y: 0, scale: 0.985 }}
-      transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 32, mass: 0.9 }}
     >
       {children}
     </motion.div>
