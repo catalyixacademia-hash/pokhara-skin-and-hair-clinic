@@ -948,22 +948,12 @@
 
 .result-card__shot img {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  min-height: 14rem;
-  object-fit: cover;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: center top;
   display: block;
-}
-
-@media (min-width: 640px) {
-  .result-card__shot img {
-    min-height: 16rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .result-card__shot img {
-    min-height: 18rem;
-  }
+  background: var(--color-surface-container-low);
 }
 
 .result-card__shot figcaption {

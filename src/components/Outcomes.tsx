@@ -6,8 +6,8 @@ import { fallbackResults } from '../data/results';
 
 export default function Outcomes() {
   const { results, fromDb } = useResults();
+  // Clinic photography shipped in the repo; CMS rows win only when staff publish cases.
   const display = fromDb && results.length > 0 ? results : fallbackResults;
-  const isLive = fromDb && results.length > 0;
 
   const scrollToContact = () => {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -25,11 +25,7 @@ export default function Outcomes() {
             index="04"
             title="Patient results"
             titleId="results-heading"
-            lede={
-              isLive
-                ? 'Selected clinical outcomes from our dermatology practice. Individual results vary.'
-                : 'Representative photography of conditions we treat. Published before-and-after cases appear here when available. Individual results vary.'
-            }
+            lede="Selected clinical photography from our Pokhara practice. Individual results vary."
           />
         </Reveal>
 
@@ -44,8 +40,8 @@ export default function Outcomes() {
                       alt={`${result.label} — before`}
                       loading="lazy"
                       decoding="async"
-                      width={720}
-                      height={900}
+                      width={824}
+                      height={1024}
                     />
                     <figcaption>Before</figcaption>
                   </figure>
@@ -55,8 +51,8 @@ export default function Outcomes() {
                       alt={`${result.label} — after`}
                       loading="lazy"
                       decoding="async"
-                      width={720}
-                      height={900}
+                      width={824}
+                      height={1024}
                     />
                     <figcaption>After</figcaption>
                   </figure>

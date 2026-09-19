@@ -1,32 +1,32 @@
 import type { ResultItem } from '../hooks/useResults';
 
 /**
- * Static illustrative fallbacks when CMS results are empty.
- * Not clinical before/after claims — photography placeholders until staff publish real cases.
+ * Static clinic before/after cases shown when CMS results are empty.
+ * Individual results vary — not a guarantee of outcome.
  */
 export const fallbackResults: ResultItem[] = [
   {
     id: 'fallback-acne',
     label: 'Acne & pigmentation care',
-    beforeUrl: '/images/treatments/skin/skin-analyzer.webp',
-    afterUrl: '/images/treatments/skin/acne-pigmentation.webp',
-    duration: 'Illustrative · individual results vary',
+    beforeUrl: '/images/results/acne-before.webp',
+    afterUrl: '/images/results/acne-after.webp',
+    duration: 'Clinical photography · individual results vary',
     category: 'skin',
   },
   {
     id: 'fallback-peel',
-    label: 'Chemical peel refinement',
-    beforeUrl: '/images/treatments/skin/hydrafacial.webp',
-    afterUrl: '/images/treatments/skin/chemical-peels.webp',
-    duration: 'Illustrative · individual results vary',
+    label: 'Pigmentation & peel refinement',
+    beforeUrl: '/images/results/peel-before.webp',
+    afterUrl: '/images/results/peel-after.webp',
+    duration: 'Clinical photography · individual results vary',
     category: 'skin',
   },
   {
     id: 'fallback-hair',
-    label: 'Hair restoration protocols',
-    beforeUrl: '/images/treatments/hair/hair-consultation.webp',
-    afterUrl: '/images/treatments/hair/prp-therapy.webp',
-    duration: 'Illustrative · individual results vary',
+    label: 'Hair restoration',
+    beforeUrl: '/images/results/hair-before.webp',
+    afterUrl: '/images/results/hair-after.webp',
+    duration: 'Clinical photography · individual results vary',
     category: 'hair',
   },
 ];
