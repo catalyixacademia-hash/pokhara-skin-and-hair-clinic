@@ -259,7 +259,7 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
             <button
               key={kind}
               type="button"
-              className={waScript === kind ? 'admin-btn-primary text-xs py-1.5 px-3' : 'admin-btn-secondary text-xs py-1.5 px-3'}
+              className={waScript === kind ? 'admin-btn-primary' : 'admin-btn-secondary'}
               onClick={() => setWaScript(kind)}
             >
               {scriptLabel(kind)}

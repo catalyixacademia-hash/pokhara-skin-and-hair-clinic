@@ -76,8 +76,8 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-paper">
-      <header className="flex md:hidden items-center justify-between bg-ink text-paper px-5 py-3 border-b border-paper/10 sticky top-0 z-30">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-paper">
+      <header className="flex lg:hidden items-center justify-between bg-ink text-paper px-5 py-3 border-b border-paper/10 sticky top-0 z-30">
         <div className="min-w-0">
           <span className="font-display font-semibold text-sm leading-tight text-paper block truncate">
             Pokhara Skin &amp; Hair Clinic
@@ -89,7 +89,7 @@ export default function AdminLayout() {
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-1 focus:outline-none shrink-0"
+          className="inline-flex items-center justify-center min-h-11 min-w-11 focus:outline-none shrink-0"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -111,13 +111,13 @@ export default function AdminLayout() {
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-ink/50 z-30 md:hidden transition-opacity"
+          className="fixed inset-0 bg-ink/50 z-30 lg:hidden transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink text-paper flex flex-col border-r border-line transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink text-paper flex flex-col border-r border-line transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -141,7 +141,7 @@ export default function AdminLayout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `flex items-center px-4 py-2.5 rounded text-sm transition-colors ${
+                      `flex items-center min-h-11 px-4 py-2.5 rounded text-sm transition-colors ${
                         isActive
                           ? 'bg-accent text-paper font-medium'
                           : 'text-paper/70 hover:text-paper hover:bg-paper/5'
@@ -172,7 +172,7 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 p-4 md:p-8 overflow-auto bg-accent-soft/20 min-w-0">
+      <main className="flex-1 p-4 lg:p-8 overflow-auto bg-accent-soft/20 min-w-0">
         <Outlet />
       </main>
     </div>

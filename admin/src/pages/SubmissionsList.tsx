@@ -323,14 +323,14 @@ export default function SubmissionsList({
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    className="admin-btn-secondary text-xs py-1.5 px-3"
+                    className="admin-btn-secondary"
                     onClick={() => navigate(`${basePath}/${r.id}`)}
                   >
                     Open
                   </button>
                   <button
                     type="button"
-                    className="admin-btn-primary text-xs py-1.5 px-3"
+                    className="admin-btn-primary"
                     onClick={() => void handleRestore(r)}
                   >
                     Restore

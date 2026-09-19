@@ -58,7 +58,7 @@ export default function Hero() {
 
   return (
     <section className="hero-section" aria-labelledby="hero-heading">
-      <div className="hero-media absolute inset-0 z-0">
+      <div className="hero-media absolute z-0">
         {/*
           Same reception photo at every breakpoint. Desktop gets the 1920 JPEG;
           smaller viewports get a WebP derived from that same frame (not a

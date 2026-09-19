@@ -16,11 +16,18 @@ body {
   border: 1px solid var(--color-line, #e8e8e4);
   background: white;
   padding: 0.625rem 0.875rem;
-  font-size: 0.875rem;
+  min-height: 2.75rem;
+  font-size: 1rem;
   color: var(--color-ink);
   border-radius: 4px;
   outline: none;
   transition: border-color 0.2s;
+}
+
+@media (min-width: 768px) {
+  .admin-input {
+    font-size: 0.875rem;
+  }
 }
 
 .admin-input:focus {
@@ -48,11 +55,19 @@ body {
   text-decoration: underline;
 }
 
+.admin-btn-primary,
+.admin-btn-secondary,
+.admin-btn-danger,
+.admin-btn-ghost {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
 .admin-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.25rem;
+  padding: 0.625rem 1.25rem;
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -80,7 +95,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
   font-size: 0.75rem;
   font-weight: 500;
   background: var(--color-surface, #FFFFFF);
@@ -100,7 +115,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
   font-size: 0.75rem;
   font-weight: 500;
   background: #b91c1c;
@@ -119,7 +134,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
   font-size: 0.75rem;
   background: transparent;
   color: rgba(251, 251, 250, 0.7);
@@ -138,8 +153,39 @@ body {
   background: white;
   border: 1px solid var(--color-line);
   border-radius: 6px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: 0 1px 3px rgba(28, 28, 26, 0.04);
+}
+
+@media (min-width: 768px) {
+  .admin-card {
+    padding: 1.5rem;
+  }
+}
+
+.admin-table {
+  min-width: 36rem;
+}
+
+.admin-table th:first-child,
+.admin-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+@media (max-width: 767px) {
+  .admin-actions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .admin-actions-row > * {
+    width: 100%;
+  }
 }
 
 .admin-stat-card {
@@ -208,8 +254,29 @@ body {
   background: rgba(251, 251, 250, 0.6);
 }
 
+.admin-table tbody tr:nth-child(even) td:first-child {
+  background: #fbfbfa;
+}
+
 .admin-table tbody tr:hover {
   background: var(--color-accent-soft, #f5f3ef);
+}
+
+.admin-table tbody tr:hover td:first-child {
+  background: var(--color-accent-soft, #f5f3ef);
+}
+
+@media (max-width: 767px) {
+  .admin-actions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .admin-actions-row > * {
+    width: 100%;
+  }
 }
 
 .admin-bar-track {

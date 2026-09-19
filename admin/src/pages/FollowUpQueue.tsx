@@ -229,22 +229,22 @@ export default function FollowUpQueue() {
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 shrink-0">
-                    <a href={phoneHref(row.phone)} className="admin-btn-secondary text-xs py-1.5 px-3">
+                  <div className="admin-actions-row flex flex-wrap gap-2 shrink-0">
+                    <a href={phoneHref(row.phone)} className="admin-btn-secondary">
                       Call
                     </a>
                     <a
                       href={whatsappHref(row.phone, waMessage)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="admin-btn-secondary text-xs py-1.5 px-3"
+                      className="admin-btn-secondary"
                       title={scriptLabel(scriptKind)}
                     >
                       WhatsApp
                     </a>
                     <button
                       type="button"
-                      className="admin-btn-secondary text-xs py-1.5 px-3"
+                      className="admin-btn-secondary"
                       onClick={() => navigate(detailPath)}
                     >
                       Open
@@ -253,7 +253,7 @@ export default function FollowUpQueue() {
                       <button
                         type="button"
                         disabled={updatingId === row.id}
-                        className="admin-btn-primary text-xs py-1.5 px-3"
+                        className="admin-btn-primary"
                         onClick={() => void updateStatus(row, 'confirmed')}
                       >
                         {updatingId === row.id ? 'Saving…' : 'Confirm'}
@@ -263,7 +263,7 @@ export default function FollowUpQueue() {
                       <button
                         type="button"
                         disabled={updatingId === row.id}
-                        className="admin-btn-primary text-xs py-1.5 px-3"
+                        className="admin-btn-primary"
                         onClick={() => void updateStatus(row, 'completed')}
                       >
                         {updatingId === row.id ? 'Saving…' : 'Complete'}

@@ -41,20 +41,20 @@ export default function DataTable<T extends { id: string }>({
           placeholder="Search…"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="admin-input max-w-xs"
+          className="admin-input w-full sm:max-w-xs"
         />
         {toolbar}
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-1 px-1">
         <table className="admin-table w-full text-sm">
           <thead>
             <tr>
               {columns.map((col) => (
-                <th key={String(col.key)} className="py-3 pr-4">
+                <th key={String(col.key)} className="py-3 pr-4 whitespace-nowrap">
                   {col.label}
                 </th>
               ))}
-              <th className="py-3 text-right">Actions</th>
+              <th className="py-3 text-right whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -68,12 +68,12 @@ export default function DataTable<T extends { id: string }>({
                   </td>
                 ))}
                 <td className="py-3.5">
-                  <div className="flex gap-2 items-center justify-end">
+                  <div className="flex flex-wrap gap-2 items-center justify-end min-w-[9rem]">
                     {extraActions?.(row)}
                     {onView && (
                       <button
                         type="button"
-                        className="admin-btn-secondary text-xs py-1.5 px-3"
+                        className="admin-btn-secondary"
                         onClick={() => onView(row)}
                       >
                         {viewLabel}
@@ -82,7 +82,7 @@ export default function DataTable<T extends { id: string }>({
                     {onEdit && (
                       <button
                         type="button"
-                        className="admin-btn-secondary text-xs py-1.5 px-3"
+                        className="admin-btn-secondary"
                         onClick={() => onEdit(row)}
                       >
                         {editLabel}
@@ -90,7 +90,7 @@ export default function DataTable<T extends { id: string }>({
                     )}
                     <button
                       type="button"
-                      className="admin-btn-danger text-xs py-1.5 px-3"
+                      className="admin-btn-danger"
                       onClick={() => onDelete(row)}
                     >
                       Delete

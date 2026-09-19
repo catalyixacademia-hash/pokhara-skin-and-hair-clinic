@@ -22,12 +22,21 @@ export default function ConfirmDelete({
       <div className="admin-card max-w-md w-full">
         <h3 className="font-serif text-lg mb-2">{title}</h3>
         <p className="text-sm text-warm-gray mb-6">{message}</p>
-        <div className="flex gap-3">
-          <button type="button" className="admin-btn-danger" onClick={onConfirm} disabled={deleting}>
-            {deleting ? 'Deleting…' : 'Delete'}
-          </button>
-          <button type="button" className="admin-btn-secondary" onClick={onCancel}>
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
+          <button
+            type="button"
+            className="admin-btn-secondary w-full sm:w-auto"
+            onClick={onCancel}
+          >
             Cancel
+          </button>
+          <button
+            type="button"
+            className="admin-btn-danger w-full sm:w-auto"
+            onClick={onConfirm}
+            disabled={deleting}
+          >
+            {deleting ? 'Deleting…' : 'Delete'}
           </button>
         </div>
       </div>

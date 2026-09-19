@@ -358,6 +358,14 @@
   background-color: var(--color-ink);
 }
 
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  max-width: none;
+}
+
 .hero-media picture {
   display: block;
   position: absolute;
@@ -537,7 +545,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
   color: var(--color-accent);
 }
 
@@ -799,6 +807,19 @@
   }
 }
 
+@media (min-width: 640px) and (max-width: 899px) {
+  .exosomes-spotlight__media {
+    max-width: 26rem;
+    margin-inline: auto;
+  }
+
+  .exosomes-spotlight__media img {
+    max-height: min(28rem, 70vh);
+    width: auto;
+    margin-inline: auto;
+  }
+}
+
 .exosomes-spotlight__eyebrow {
   display: inline-flex;
   align-items: center;
@@ -949,6 +970,7 @@
 .result-card__shot img {
   width: 100%;
   height: auto;
+  min-height: 12rem;
   max-height: none;
   object-fit: contain;
   object-position: center top;
@@ -1714,8 +1736,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border: none;
   border-radius: var(--radius-lg);
   background: var(--color-surface-container-low);
@@ -2369,8 +2393,10 @@
 }
 
 .treatment-sheet__close {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border: none;
   border-radius: 9999px;
   background: var(--color-surface-container-low);
@@ -3147,17 +3173,67 @@
     padding-right: var(--space-8);
   }
 
+  /*
+   * Tablet: same photo-band + spacer pattern as mobile so frost cards do not
+   * cover the receptionist. Desktop (lg+) keeps the full-viewport hero.
+   */
   .hero-section {
-    min-height: min(860px, 94dvh);
+    min-height: auto;
+    background: var(--color-surface-container-low);
+  }
+
+  .hero-media {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    max-width: none;
+    height: min(36rem, calc(100vw * 3 / 4));
   }
 
   .hero-shell {
-    min-height: calc(min(860px, 94dvh) - var(--nav-height));
+    justify-content: flex-start;
+    min-height: 0;
+    padding-top: calc(min(36rem, calc(100vw * 3 / 4)) - 6rem);
     padding-bottom: 1.5rem;
   }
 
   .hero-bg-image {
     object-position: 42% 40%;
+  }
+
+  .hero-main-card,
+  .hero-info-card {
+    max-width: none;
+  }
+
+  .btn-primary,
+  .btn-secondary-outline,
+  .btn-form-submit,
+  .btn-whatsapp,
+  .btn-accent {
+    width: 100%;
+  }
+
+  .hero-main-card .btn-primary,
+  .hero-main-card .btn-secondary-outline {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  #contact,
+  #enquiry,
+  footer {
+    padding-bottom: 5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  #contact,
+  #enquiry,
+  footer {
+    padding-bottom: 5rem;
   }
 }
 

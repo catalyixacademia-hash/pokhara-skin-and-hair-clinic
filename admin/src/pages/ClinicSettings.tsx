@@ -522,14 +522,14 @@ export default function ClinicSettings() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  className="admin-btn-secondary text-xs py-1 px-2"
+                  className="admin-btn-secondary"
                   onClick={() => startEditPhone(p)}
                 >
                   Edit
                 </button>
                 <button
                   type="button"
-                  className="admin-btn-danger text-xs py-1 px-2"
+                  className="admin-btn-danger"
                   disabled={phoneSaving}
                   onClick={() => void deletePhone(p.id)}
                 >

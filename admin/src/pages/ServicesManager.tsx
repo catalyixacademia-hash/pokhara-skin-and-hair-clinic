@@ -190,7 +190,7 @@ export default function ServicesManager() {
         extraActions={(r) => (
           <button
             type="button"
-            className="admin-btn-secondary text-[10px] py-1 px-2"
+            className="admin-btn-secondary"
             onClick={() => void togglePublish(r)}
           >
             {r.is_published ? 'Unpublish' : 'Publish'}
