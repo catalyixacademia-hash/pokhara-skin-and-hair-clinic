@@ -887,15 +887,9 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
-  max-height: 28rem;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center center;
-}
-
-@media (min-width: 900px) {
-  .exosomes-spotlight__media img {
-    max-height: 26rem;
-  }
+  background: #f4efe6;
 }
 
 @media (max-width: 639px) {
