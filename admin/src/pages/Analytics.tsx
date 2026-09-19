@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { computeAnalytics, weekChangePercent } from '@/lib/analytics';
+import { useRefetchOnFocus } from '@/hooks/useRefetchOnFocus';
 import type { Submission } from '@/types/submission';
 
 const RANGE_OPTIONS = [
@@ -80,7 +81,10 @@ function DailyChart({
           <div key={`${d.date}-label`} className="flex-1 min-w-0 text-center">
             {index % labelEvery === 0 || index === data.length - 1 ? (
               <span className="text-[10px] text-muted block truncate">
-                {new Date(d.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                {new Date(`${d.date}T12:00:00`).toLocaleDateString(undefined, {
+                  month: 'short',
+                  day: 'numeric',
+                })}
               </span>
             ) : null}
           </div>
@@ -104,21 +108,41 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    supabase
+  const load = useCallback(async (opts?: { silent?: boolean }) => {
+    if (!opts?.silent) setLoading(true);
+    setError(null);
+    const { data, error: fetchError } = await supabase
       .from('appointments')
       .select('*')
       .is('deleted_at', null)
-      .order('created_at', { ascending: false })
-      .then(({ data, error: fetchError }) => {
-        if (fetchError) setError(fetchError.message);
-        else setRows((data ?? []) as Submission[]);
-        setLoading(false);
-      });
+      .order('created_at', { ascending: false });
+
+    if (fetchError) setError(fetchError.message);
+    else setRows((data ?? []) as Submission[]);
+    setLoading(false);
   }, []);
 
-  if (loading) return <p className="text-muted">Loading analytics…</p>;
-  if (error) return <p className="text-red-600">{error}</p>;
+  useEffect(() => {
+    void load();
+
+    const channel = supabase
+      .channel('analytics-appointments')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
+        void load({ silent: true });
+      })
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [load]);
+
+  useRefetchOnFocus(() => {
+    void load({ silent: true });
+  });
+
+  if (loading && rows.length === 0) return <p className="text-muted">Loading analytics…</p>;
+  if (error && rows.length === 0) return <p className="text-red-600">{error}</p>;
 
   const { summary, topTopics, statusBreakdown, dailyRange } = computeAnalytics(rows, rangeDays);
   const weekChange = weekChangePercent(summary.thisWeek, summary.lastWeek);
@@ -129,7 +153,7 @@ export default function Analytics() {
         <div>
           <h1 className="font-serif text-3xl text-ink">Analytics</h1>
           <p className="text-sm text-muted mt-1">
-            Insights from patient booking and enquiry forms.
+            Live insights from patient booking and enquiry forms.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -146,9 +170,23 @@ export default function Analytics() {
         </div>
       </div>
 
+      {error && (
+        <p className="text-sm text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
+
       <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Total submissions" value={summary.total} />
-        <StatCard label="Pending follow-up" value={summary.pending} />
+        <StatCard
+          label="Total submissions"
+          value={summary.total}
+          hint={`Last ${rangeDays} days`}
+        />
+        <StatCard
+          label="Pending follow-up"
+          value={summary.pending}
+          hint={`Last ${rangeDays} days`}
+        />
         <StatCard
           label="This week"
           value={summary.thisWeek}
@@ -157,19 +195,20 @@ export default function Analytics() {
         <StatCard
           label="Bookings / Enquiries"
           value={`${summary.bookings} / ${summary.enquiries}`}
+          hint={`Last ${rangeDays} days`}
         />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="admin-card">
           <h2 className="font-serif text-xl text-ink mb-1">Top treatments & topics</h2>
-          <p className="text-xs text-muted mb-4">Main patient interests and concerns</p>
+          <p className="text-xs text-muted mb-4">Main patient interests · last {rangeDays} days</p>
           <BarList items={topTopics} />
         </div>
 
         <div className="admin-card">
           <h2 className="font-serif text-xl text-ink mb-1">Status breakdown</h2>
-          <p className="text-xs text-muted mb-4">How staff are progressing submissions</p>
+          <p className="text-xs text-muted mb-4">Staff progress · last {rangeDays} days</p>
           <BarList items={statusBreakdown.map((s) => ({ label: s.label, count: s.count }))} />
         </div>
       </div>

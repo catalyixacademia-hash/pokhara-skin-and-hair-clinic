@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { mutationResult } from '@/lib/supabase-result';
+import { useRefetchOnFocus } from '@/hooks/useRefetchOnFocus';
 import DataTable from '@/components/DataTable';
 import CrudForm, { FormField } from '@/components/CrudForm';
 import ConfirmDelete from '@/components/ConfirmDelete';
@@ -63,6 +64,10 @@ export default function ServicesManager() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useRefetchOnFocus(() => {
+    void load();
+  });
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
