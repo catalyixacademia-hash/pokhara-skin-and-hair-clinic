@@ -886,8 +886,17 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 687 / 1024;
+  /* Shorter frame than the full promo poster so the section balances with copy */
+  aspect-ratio: 4 / 5;
+  max-height: 28rem;
   object-fit: cover;
+  object-position: center 42%;
+}
+
+@media (min-width: 900px) {
+  .exosomes-spotlight__media img {
+    max-height: 26rem;
+  }
 }
 
 @media (max-width: 639px) {
