@@ -30,13 +30,13 @@ export default function ClinicDoctor() {
             <div className="space-y-8">
               <div className="clinic-image-frame aspect-square md:aspect-video lg:aspect-square">
                 <img
-                  src="/images/clinic/interior-waiting.webp"
-                  alt={`${settings.nameShort} waiting and reception area`}
-                  className="w-full h-full object-cover"
+                  src="/images/clinic/interior-waiting.webp?v=2"
+                  alt={`${settings.nameShort} waiting and reception area — Nayabazar-8, Pokhara`}
+                  className="w-full h-full object-cover object-[62%_40%]"
                   loading="lazy"
                   decoding="async"
                   width={1024}
-                  height={1024}
+                  height={682}
                 />
               </div>
               <div className="space-y-6">

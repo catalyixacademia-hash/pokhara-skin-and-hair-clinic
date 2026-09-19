@@ -11,23 +11,23 @@ export type GalleryItem = {
 export const fallbackGallery: GalleryItem[] = [
   {
     id: 'fallback-waiting',
-    imageUrl: '/images/clinic/interior-waiting.webp',
+    imageUrl: '/images/clinic/interior-waiting.webp?v=2',
     label: 'Reception & waiting',
     tag: 'Clinic',
     isTall: false,
   },
   {
-    id: 'fallback-reception',
-    imageUrl: '/images/hero/clinic-hero.webp',
-    label: 'Clinic reception',
-    tag: 'Nayabazar',
+    id: 'fallback-welcome',
+    imageUrl: '/images/clinic/welcome-board.webp',
+    label: 'Welcome — coffee & cookies corner',
+    tag: 'Visit',
     isTall: true,
   },
   {
-    id: 'fallback-consult',
-    imageUrl: '/images/treatments/hair/hair-consultation.webp',
-    label: 'Consultation space',
-    tag: 'Care',
+    id: 'fallback-reception',
+    imageUrl: '/images/hero/clinic-hero.webp?v=8',
+    label: 'Clinic reception',
+    tag: 'Nayabazar',
     isTall: false,
   },
 ];

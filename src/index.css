@@ -375,8 +375,8 @@
   height: 100%;
   max-width: none;
   object-fit: cover;
-  /* Bias right so the receptionist clears the left frost card on desktop */
-  object-position: 56% 38%;
+  /* Bias toward reception desk + clinic sign (right side of the photo) */
+  object-position: 62% 40%;
   opacity: 1;
   filter: none;
 }
@@ -2955,8 +2955,8 @@
   }
 
   .hero-bg-image {
-    /* Keep receptionist + clinic sign in frame on tall mobile crops */
-    object-position: 42% 46%;
+    /* Keep waiting sofa + reception sign in frame on tall mobile crops */
+    object-position: 58% 42%;
   }
 
   .btn-primary,
@@ -3017,7 +3017,7 @@
   }
 
   .hero-bg-image {
-    object-position: 42% 40%;
+    object-position: 60% 40%;
   }
 }
 
