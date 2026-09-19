@@ -14,7 +14,7 @@ export const skinServices: ServiceItem[] = [
       'First in Pokhara — next-generation regenerative exosome therapy that signals cellular repair to regenerate, restore, and renew skin quality under dermatologist supervision.',
     benefits: ['1st in Pokhara', 'Cellular renewal', 'Regenerate · Restore · Renew'],
     result: 'Fresher, more resilient skin with a personalized session plan',
-    img: '/images/treatments/skin/exosome-skin.webp',
+    img: '/images/treatments/skin/exosomes-promo.webp?v=5',
     featured: true,
   },
   {
@@ -23,7 +23,7 @@ export const skinServices: ServiceItem[] = [
       'Comprehensive medical treatment for acne, acne scars, melasma, post-acne marks, and nail problems using clinically proven protocols.',
     benefits: ['Reduces breakouts', 'Fades dark spots', 'Clears skin tone'],
     result: 'Visibly clearer skin within 4 to 8 weeks',
-    img: '/images/treatments/skin/acne-pigmentation.webp',
+    img: '/images/results/acne-before.webp?v=2',
     featured: true,
   },
   {
@@ -32,7 +32,7 @@ export const skinServices: ServiceItem[] = [
       'Medical-grade peels tailored to your skin type, targeting texture, tone, and radiance with precision-controlled exfoliation.',
     benefits: ['Refines texture', 'Brightens complexion', 'Minimizes pores'],
     result: 'Smoother, luminous skin in 1 to 3 sessions',
-    img: '/images/treatments/skin/chemical-peels.webp',
+    img: '/images/results/peel-before.webp?v=2',
     featured: true,
   },
   {
@@ -41,7 +41,7 @@ export const skinServices: ServiceItem[] = [
       'Advanced Skin Analyzer diagnostics and clinical skin tests to accurately assess your skin condition and build a personalized treatment roadmap.',
     benefits: ['Skin Analyzer scan', 'Accurate diagnosis', 'Customized plan'],
     result: 'Clear treatment plan in a single consultation',
-    img: '/images/treatments/skin/skin-analyzer.webp',
+    img: '/images/clinic/interior-waiting.webp?v=3',
     featured: true,
   },
   {
@@ -50,7 +50,7 @@ export const skinServices: ServiceItem[] = [
       'Precision collagen induction therapy that stimulates natural skin regeneration for firmer, smoother, and more youthful-looking skin.',
     benefits: ['Boosts collagen', 'Reduces scars', 'Improves elasticity'],
     result: 'Firmer, rejuvenated skin within 4 to 6 weeks',
-    img: '/images/treatments/skin/microneedling.webp',
+    img: '/images/results/acne-after.webp?v=2',
   },
   {
     title: 'Laser Procedures',
@@ -58,7 +58,7 @@ export const skinServices: ServiceItem[] = [
       'Advanced laser technology for skin resurfacing, pigmentation correction, and targeted skin renewal with minimal downtime.',
     benefits: ['Targets pigmentation', 'Resurfaces skin', 'Long-lasting results'],
     result: 'Clinically significant improvement after each session',
-    img: '/images/treatments/skin/laser-procedures.webp',
+    img: '/images/results/peel-after.webp?v=2',
   },
   {
     title: 'HydraFacial & Rejuvenation',
@@ -66,7 +66,7 @@ export const skinServices: ServiceItem[] = [
       'Multi-step medical facial treatment combining deep cleansing, exfoliation, extraction, and hydration for instantly radiant skin.',
     benefits: ['Deep cleansing', 'Instant radiance', 'Zero downtime'],
     result: 'Visibly refreshed skin after first treatment',
-    img: '/images/treatments/skin/hydrafacial.webp',
+    img: '/images/clinic/welcome-board.webp?v=3',
   },
 ];
 
@@ -77,7 +77,7 @@ export const hairServices: ServiceItem[] = [
       'Platelet-Rich Plasma therapy using your own blood growth factors to stimulate dormant hair follicles and promote natural regrowth.',
     benefits: ['Activates follicles', 'Thickens hair', 'Natural process'],
     result: 'Noticeable density improvement in 3 to 6 months',
-    img: '/images/treatments/hair/prp-therapy.webp',
+    img: '/images/results/hair-before.webp?v=2',
   },
   {
     title: 'GFC Therapy',
@@ -85,7 +85,7 @@ export const hairServices: ServiceItem[] = [
       'Growth Factor Concentrate therapy, a next-generation advancement over PRP with a higher concentration of targeted growth factors.',
     benefits: ['Higher efficacy', 'Concentrated factors', 'Faster results'],
     result: 'Enhanced hair density within 2 to 4 months',
-    img: '/images/treatments/hair/gfc-therapy.webp',
+    img: '/images/results/hair-after.webp?v=2',
   },
   {
     title: 'Exosome Therapy',
@@ -93,7 +93,7 @@ export const hairServices: ServiceItem[] = [
       'First in Pokhara for regenerative exosome care — cutting-edge treatment using exosomes to signal cellular repair and accelerate hair follicle regeneration at the root.',
     benefits: ['1st in Pokhara', 'Cellular renewal', 'Minimal sessions'],
     result: 'Visible improvement within 6 to 10 weeks',
-    img: '/images/treatments/hair/exosome-therapy.webp',
+    img: '/images/treatments/skin/exosomes-promo.webp?v=5',
     featured: true,
   },
   {
@@ -102,7 +102,7 @@ export const hairServices: ServiceItem[] = [
       'Complete trichological evaluation for hair loss and hair care, including scalp health assessment, hormonal analysis review, and dietary guidance.',
     benefits: ['Root cause diagnosis', 'Scalp health', 'Treatment roadmap'],
     result: 'Targeted treatment plan from first visit',
-    img: '/images/treatments/hair/hair-consultation.webp',
+    img: '/images/results/hair-before.webp?v=2',
   },
   {
     title: 'Hair Density Restoration',
@@ -110,7 +110,7 @@ export const hairServices: ServiceItem[] = [
       'Multi-modal treatment combining medical therapy, nutritional support, and clinical procedures to restore optimal hair density.',
     benefits: ['Multi-modal approach', 'Proven protocols', 'Lasting results'],
     result: 'Measurable density improvement in 3 to 6 months',
-    img: '/images/treatments/hair/hair-density.webp',
+    img: '/images/results/hair-after.webp?v=2',
   },
 ];
 
