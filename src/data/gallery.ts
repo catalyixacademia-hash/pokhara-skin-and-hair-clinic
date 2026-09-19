@@ -31,13 +31,6 @@ export const fallbackGallery: GalleryItem[] = [
     tag: 'Nayabazar',
     isTall: false,
   },
-  {
-    id: 'fallback-reception-wide',
-    imageUrl: '/images/hero/clinic-hero@1920.jpg?v=9',
-    label: 'Front desk & product wall',
-    tag: 'Clinic',
-    isTall: false,
-  },
 ];
 
 export function mapGalleryRow(row: DbGalleryItem): GalleryItem {

@@ -11,7 +11,8 @@ type ServicesByCategory = {
 };
 
 /**
- * Public treatments always use curated local photography (clinic + results assets).
+ * Public Treatments + Hair restoration always use curated local photography
+ * under /images/treatments/{skin,hair,aesthetic} — never results before/after.
  * CMS/Pexels seed image_url values must not override the public site.
  */
 export function useServices(): ServicesByCategory {
