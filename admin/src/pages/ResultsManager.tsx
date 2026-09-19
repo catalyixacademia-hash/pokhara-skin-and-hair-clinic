@@ -120,6 +120,54 @@ export default function ResultsManager() {
 
       <DataTable
         columns={[
+          {
+            key: 'before_url',
+            label: 'Before / After',
+            render: (r) => (
+              <div className="flex items-center gap-1.5">
+                {r.before_url ? (
+                  <a
+                    href={r.before_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-14 h-14 rounded-md overflow-hidden border border-border bg-muted/30 shrink-0"
+                    title="Before — open full image"
+                  >
+                    <img
+                      src={r.before_url}
+                      alt={`${r.label} before`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <span className="inline-flex w-14 h-14 items-center justify-center rounded-md border border-dashed border-border text-[10px] text-muted">
+                    Before
+                  </span>
+                )}
+                {r.after_url ? (
+                  <a
+                    href={r.after_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-14 h-14 rounded-md overflow-hidden border border-border bg-muted/30 shrink-0"
+                    title="After — open full image"
+                  >
+                    <img
+                      src={r.after_url}
+                      alt={`${r.label} after`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <span className="inline-flex w-14 h-14 items-center justify-center rounded-md border border-dashed border-border text-[10px] text-muted">
+                    After
+                  </span>
+                )}
+              </div>
+            ),
+          },
           { key: 'label', label: 'Label' },
           { key: 'category', label: 'Category' },
           { key: 'is_published', label: 'Published', render: (r) => (r.is_published ? 'Yes' : 'No') },
