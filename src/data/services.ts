@@ -14,7 +14,7 @@ export const skinServices: ServiceItem[] = [
       'First in Pokhara — next-generation regenerative exosome therapy that signals cellular repair to regenerate, restore, and renew skin quality under dermatologist supervision.',
     benefits: ['1st in Pokhara', 'Cellular renewal', 'Regenerate · Restore · Renew'],
     result: 'Fresher, more resilient skin with a personalized session plan',
-    img: '/images/treatments/skin/exosome-skin.webp?v=6',
+    img: '/images/treatments/aesthetic/exosome.webp?v=1',
     featured: true,
   },
   {

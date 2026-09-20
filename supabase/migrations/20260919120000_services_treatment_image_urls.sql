@@ -2,7 +2,7 @@
 -- Paths match public/images/treatments/{skin,hair,aesthetic} uploaded via
 -- scripts/sync-treatment-images-to-supabase.mjs
 
-update public.services set image_url = 'https://hgreobmkdckjecvgiver.supabase.co/storage/v1/object/public/clinic-media/treatments/skin/exosome-skin.webp', updated_at = now()
+update public.services set image_url = 'https://hgreobmkdckjecvgiver.supabase.co/storage/v1/object/public/clinic-media/treatments/aesthetic/exosome.webp', updated_at = now()
 where title = 'Exosome Skin Rejuvenation';
 
 update public.services set image_url = 'https://hgreobmkdckjecvgiver.supabase.co/storage/v1/object/public/clinic-media/treatments/skin/acne-pigmentation.webp', updated_at = now()

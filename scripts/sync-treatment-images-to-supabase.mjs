@@ -26,7 +26,7 @@ const supabase = createClient(url, serviceKey, {
 });
 
 const TITLE_TO_RELATIVE = {
-  'Exosome Skin Rejuvenation': 'treatments/skin/exosome-skin.webp',
+  'Exosome Skin Rejuvenation': 'treatments/aesthetic/exosome.webp',
   'Acne & Pigmentation': 'treatments/skin/acne-pigmentation.webp',
   'Chemical Peels': 'treatments/skin/chemical-peels.webp',
   'Skin Analyzer & Skin Tests': 'treatments/skin/skin-analyzer.webp',
