@@ -39,20 +39,20 @@ export const phones: ClinicPhone[] = [
 export const address = {
   line1: 'Nayabazar-8, Pokhara',
   line2: 'Gandaki Province, Nepal',
-  landmark: 'Opposite GMC Hospital (GMC Medical College) Gate',
+  landmark: 'Opposite of GMC Hospital (GMC Medical College) Gate',
   area: 'Prithvi Chowk area',
   short: 'Nayabazar-8, Pokhara, Nepal',
   full: [
     'Nayabazar-8, Pokhara',
     'Gandaki Province, Nepal',
-    'Opposite GMC Hospital (GMC Medical College) Gate',
+    'Opposite of GMC Hospital (GMC Medical College) Gate',
     'Prithvi Chowk area',
   ],
   mapCaption: 'Nayabazar-8 · Prithvi Chowk · Pokhara, Gandaki Province, Nepal',
 } as const;
 
 export const landmarks = [
-  'Opposite GMC Hospital (GMC Medical College) Main Gate',
+  'Opposite of GMC Hospital (GMC Medical College) Main Gate',
   'Nayabazar-8, Prithvi Chowk area',
   'Near Prithvi Narayan Campus',
 ] as const;

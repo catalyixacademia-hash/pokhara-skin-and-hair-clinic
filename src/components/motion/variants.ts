@@ -3,16 +3,16 @@ import type { Transition, Variants } from 'framer-motion';
 /** Clinical Serenity ease — matches --ease-out in index.css */
 export const easeOut = [0.22, 1, 0.36, 1] as const;
 
-/** Deliberately unhurried — scroll reveals should feel calm, not snappy. */
+/** Calm motion — 0.5–0.8s, short travel distances. */
 export const duration = {
-  fast: 0.4,
-  base: 0.85,
-  slow: 1.15,
+  fast: 0.32,
+  base: 0.7,
+  slow: 0.85,
 } as const;
 
-/** Softer travel distances read better on phones/tablets. */
+/** Softer travel distances (16–28px) read better on phones/tablets. */
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0 },
 };
 
@@ -40,14 +40,14 @@ export const staggerContainer: Variants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.1,
+      staggerChildren: 0.07,
+      delayChildren: 0.06,
     },
   },
 };
 
 export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
 };
 
@@ -60,4 +60,4 @@ export function baseTransition(delay = 0): Transition {
 }
 
 /** Trigger a bit earlier on scroll so slow animations finish while content is still central. */
-export const viewportOnce = { once: true, margin: '-4% 0px -6% 0px', amount: 0.15 } as const;
+export const viewportOnce = { once: true, margin: '0px 0px -12% 0px', amount: 0.12 } as const;

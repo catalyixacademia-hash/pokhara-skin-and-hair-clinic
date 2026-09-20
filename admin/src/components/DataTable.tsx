@@ -45,7 +45,7 @@ export default function DataTable<T extends { id: string }>({
         />
         {toolbar}
       </div>
-      <div className="overflow-x-auto -mx-1 px-1">
+      <div className="admin-table-scroll overflow-x-auto -mx-1 px-1">
         <table className="admin-table w-full text-sm">
           <thead>
             <tr>

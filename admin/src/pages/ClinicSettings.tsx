@@ -38,7 +38,7 @@ type Phone = { id: string; number: string; role: string; label: string; sort_ord
 const DEFAULT_ADDRESS: AddressFields = {
   line1: 'Nayabazar-8, Pokhara',
   line2: 'Gandaki Province, Nepal',
-  landmark: 'Opposite GMC Hospital (GMC Medical College) Gate',
+  landmark: 'Opposite of GMC Hospital (GMC Medical College) Gate',
   area: 'Prithvi Chowk area',
   short: 'Nayabazar-8, Pokhara, Nepal',
   mapCaption: 'Nayabazar-8 · Prithvi Chowk · Pokhara, Gandaki Province, Nepal',

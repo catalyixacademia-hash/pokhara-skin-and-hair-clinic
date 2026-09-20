@@ -11,10 +11,10 @@ export const skinServices: ServiceItem[] = [
   {
     title: 'Exosome Skin Rejuvenation',
     description:
-      'First in Pokhara — next-generation regenerative exosome therapy that signals cellular repair to regenerate, restore, and renew skin quality under dermatologist supervision.',
-    benefits: ['1st in Pokhara', 'Cellular renewal', 'Regenerate · Restore · Renew'],
+      'Next-generation regenerative exosome therapy that signals cellular repair to regenerate, restore, and renew skin quality under dermatologist supervision.',
+    benefits: ['Cellular renewal', 'Regenerate · Restore · Renew', 'Dermatologist-led'],
     result: 'Fresher, more resilient skin with a personalized session plan',
-    img: '/images/treatments/aesthetic/exosome.webp?v=1',
+    img: '/images/treatments/aesthetic/exosome.webp?v=3',
     featured: true,
   },
   {
@@ -90,8 +90,8 @@ export const hairServices: ServiceItem[] = [
   {
     title: 'Exosome Therapy',
     description:
-      'First in Pokhara for regenerative exosome care — cutting-edge treatment using exosomes to signal cellular repair and accelerate hair follicle regeneration at the root.',
-    benefits: ['1st in Pokhara', 'Cellular renewal', 'Minimal sessions'],
+      'Regenerative exosome care using exosomes to signal cellular repair and accelerate hair follicle regeneration at the root.',
+    benefits: ['Cellular renewal', 'Minimal sessions', 'Root-level repair'],
     result: 'Visible improvement within 6 to 10 weeks',
     img: '/images/treatments/hair/exosome-therapy.webp?v=6',
     featured: true,
@@ -122,6 +122,7 @@ export const aestheticServices: ServiceItem[] = [
     benefits: ['Smooths wrinkles', 'Natural look', 'Quick procedure'],
     result: 'Visible softening of lines within 7 to 14 days',
     img: '/images/treatments/aesthetic/botox.webp?v=6',
+    featured: true,
   },
   {
     title: 'Dermal Fillers',

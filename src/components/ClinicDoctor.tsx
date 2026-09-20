@@ -1,13 +1,31 @@
+import { doctor as staticDoctor } from '../data/clinic';
 import { useClinicSettings } from '../hooks/useClinicSettings';
 import { useDoctorProfile } from '../hooks/useDoctorProfile';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 
+const PULL_QUOTE =
+  'Every plan starts with evidence — I recommend only what is medically appropriate for your skin, not what is fashionable.';
+
+function nmcChipLabel(doctor: {
+  qualificationLine: string;
+  credentials: { label: string; value: string }[];
+}): string {
+  const nmcCred = doctor.credentials.find((c) => /nmc/i.test(c.label));
+  if (nmcCred) return nmcCred.value;
+  if (doctor.qualificationLine.includes('NMC')) return doctor.qualificationLine;
+  return `NMC Reg. No. ${staticDoctor.nmcNumber} · Specialist (${staticDoctor.nmcSpecialty})`;
+}
+
 export default function ClinicDoctor() {
   const { doctor } = useDoctorProfile();
   const { settings } = useClinicSettings();
-  const { address } = settings;
+
+  const nmcLabel = nmcChipLabel(doctor);
+  const credentialChips = doctor.credentials
+    .filter((c) => !/nmc/i.test(c.label))
+    .slice(0, 4);
 
   return (
     <section
@@ -21,80 +39,50 @@ export default function ClinicDoctor() {
             index="03"
             title="Your dermatologist"
             titleId="doctor-heading"
-            lede={`Clinical care led by ${doctor.name} — NMC specialist dermatologist — opposite GMC Hospital.`}
+            lede={`Specialist-led dermatology at ${settings.nameShort} — opposite GMC Hospital in Nayabazar-8.`}
           />
         </Reveal>
 
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-20 items-start">
+        <div className="doctor-hero">
           <Reveal delay={0.05} direction="left">
-            <div className="space-y-8">
-              <div className="clinic-image-frame aspect-square md:aspect-video lg:aspect-square">
-                <img
-                  src="/images/clinic/interior-waiting.webp?v=2"
-                  alt={`${settings.nameShort} waiting and reception area — Nayabazar-8, Pokhara`}
-                  className="w-full h-full object-cover object-[62%_40%]"
-                  loading="lazy"
-                  decoding="async"
-                  width={1024}
-                  height={682}
-                />
-              </div>
-              <div className="space-y-6">
-                <h3 className="font-display text-2xl text-ink">In the clinic</h3>
-                <p className="font-body text-base text-muted leading-relaxed">
-                  Consultations take place at {settings.name} in {address.area}, {address.line1} —{' '}
-                  {address.landmark}. Patients across Pokhara and the Gandaki region come here for
-                  skin care, hair restoration, and aesthetic dermatology under specialist supervision.
-                </p>
-                <ul className="space-y-3">
-                  {address.full.map((line) => (
-                    <li key={line} className="font-body text-base text-muted flex items-center gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="doctor-portrait-lg">
+              <img
+                src={doctor.portraitUrl}
+                alt={doctor.portraitAlt}
+                loading="lazy"
+                decoding="async"
+                width={432}
+                height={540}
+              />
             </div>
           </Reveal>
 
           <Reveal delay={0.1} direction="right">
-            <div className="clinic-panel space-y-8">
-              <div className="flex flex-col md:flex-row gap-8 items-start">
-                <div className="doctor-portrait">
-                  <img
-                    src={doctor.portraitUrl}
-                    alt={doctor.portraitAlt}
-                    className="w-full h-full object-cover object-[center_20%]"
-                    loading="lazy"
-                    decoding="async"
-                    width={432}
-                    height={464}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <p className="section-label">{doctor.name}</p>
-                  <h3 className="font-display text-2xl text-ink">{doctor.title}</h3>
-                  <p className="text-label text-secondary">{doctor.qualificationLine}</p>
-                </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display text-display text-ink">{doctor.name}</h3>
+                <p className="font-body text-body-lg text-muted mt-2">{doctor.title}</p>
               </div>
 
-              <div className="space-y-6 text-muted">
+              <div className="doctor-chips">
+                <span className="doctor-chip">{nmcLabel}</span>
+                {credentialChips.map((cred) => (
+                  <span key={cred.label} className="doctor-chip">
+                    {cred.label}
+                  </span>
+                ))}
+              </div>
+
+              <blockquote className="doctor-pullquote">&ldquo;{PULL_QUOTE}&rdquo;</blockquote>
+
+              <div className="space-y-4 text-muted">
                 {doctor.bio.map((paragraph) => (
                   <p key={paragraph.slice(0, 40)} className="font-body text-base leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
-
-                <div className="grid sm:grid-cols-2 gap-8">
-                  {doctor.credentials.slice(0, 4).map((cred) => (
-                    <div key={cred.label}>
-                      <p className="text-label text-ink mb-2">{cred.label}</p>
-                      <p className="font-body text-caption text-muted">{cred.value}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
+
             </div>
           </Reveal>
         </div>

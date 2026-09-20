@@ -5,24 +5,26 @@ import { useEffect, useState } from 'react';
  * the page rather than the last thing that was clicked.
  *
  * This measures positions on scroll rather than using IntersectionObserver:
- * the sections here vary hugely in height (a 2,000px treatments block next to a
- * 400px anchor), and with an observer whichever tall section overlaps the
- * viewport wins regardless of where the visitor actually is. Picking the last
- * heading to have crossed the reading line is both simpler and more accurate.
+ * the sections here vary hugely in height, and with an observer whichever tall
+ * section overlaps the viewport wins regardless of where the visitor actually is.
+ *
+ * Optional `clearAfter` maps: when the reading line has passed a landmark that
+ * is not in `hrefs` (e.g. gallery after results), clear the stuck parent link.
  */
-export function useActiveSection(hrefs: readonly string[], navHeight = 88): string | null {
+export function useActiveSection(
+  hrefs: readonly string[],
+  navHeight = 88,
+  clearAfter?: Readonly<Record<string, readonly string[]>>,
+): string | null {
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const update = () => {
-      // Nothing is active while the visitor is still on the hero.
       if (window.scrollY < 140) {
         setActive(null);
         return;
       }
 
-      // At the very bottom the last section is active even if its top never
-      // crosses the line (short trailing sections would otherwise never light).
       const atBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       if (atBottom) {
@@ -30,26 +32,40 @@ export function useActiveSection(hrefs: readonly string[], navHeight = 88): stri
         return;
       }
 
-      /*
-       * The line sits below the header by more than the header's own height:
-       * anchors carry their own `scroll-mt`, so a clicked target can settle
-       * ~170px down. A shallower line would leave the link the visitor just
-       * clicked un-highlighted.
-       */
       const line = navHeight + 96;
       let current: string | null = null;
+      let currentTop = -Infinity;
 
       for (const href of hrefs) {
         const el = document.querySelector(href);
         if (!el) continue;
-        if (el.getBoundingClientRect().top <= line) current = href;
+        const top = el.getBoundingClientRect().top;
+        if (top <= line && top >= currentTop) {
+          current = href;
+          currentTop = top;
+        }
+      }
+
+      /*
+       * If a non-nav landmark (gallery, testimonials, faq, aesthetics panel)
+       * sits below the active nav section but closer to the reading line,
+       * clear the sticky parent so Results does not stay lit through half the page.
+       */
+      if (current && clearAfter?.[current]) {
+        for (const landmark of clearAfter[current]) {
+          const el = document.querySelector(landmark);
+          if (!el) continue;
+          const top = el.getBoundingClientRect().top;
+          if (top <= line && top > currentTop) {
+            current = null;
+            break;
+          }
+        }
       }
 
       setActive(current);
     };
 
-    // Read-only measurement of a handful of elements, so running it straight
-    // off the passive scroll listener costs less than scheduling would.
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update, { passive: true });
     update();
@@ -58,7 +74,7 @@ export function useActiveSection(hrefs: readonly string[], navHeight = 88): stri
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
     };
-  }, [hrefs, navHeight]);
+  }, [hrefs, navHeight, clearAfter]);
 
   return active;
 }

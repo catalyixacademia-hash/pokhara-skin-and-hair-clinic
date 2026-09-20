@@ -101,7 +101,7 @@ export default function GeneralEnquiry() {
               </div>
 
               <p className="font-body text-base text-muted mt-4">
-                {address.line1} · {address.area} · Opposite GMC Hospital Gate · Pokhara, Nepal
+                {address.line1} · {address.area} · Opposite of GMC Hospital Gate · Pokhara, Nepal
               </p>
             </div>
           </Reveal>

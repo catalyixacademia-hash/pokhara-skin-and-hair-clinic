@@ -1,20 +1,47 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
-import { Stagger, StaggerItem } from './motion/Stagger';
 import { useTestimonials } from '../hooks/useTestimonials';
 import { useClinicSettings } from '../hooks/useClinicSettings';
+import { cn } from '../utils/cn';
+
+const AUTO_ADVANCE_MS = 6000;
+const SWIPE_THRESHOLD = 48;
 
 export default function SocialProof() {
   const { testimonials } = useTestimonials();
   const { settings } = useClinicSettings();
-  const featured = testimonials.slice(0, 3);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const pointerStartX = useRef<number | null>(null);
+  const count = testimonials.length;
+
+  const goTo = useCallback(
+    (index: number) => {
+      if (count === 0) return;
+      setActiveIndex(((index % count) + count) % count);
+    },
+    [count],
+  );
+
+  const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
+  const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
+
+  useEffect(() => {
+    if (paused || count <= 1) return;
+    const timer = window.setInterval(goNext, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(timer);
+  }, [paused, count, goNext]);
+
+  const active = testimonials[activeIndex];
 
   return (
     <section
       id="testimonials"
-      className="bg-surface-container-low section-padding"
+      className="proof-dark section-padding"
       aria-labelledby="testimonials-heading"
+      aria-roledescription="carousel"
     >
       <Container>
         <Reveal>
@@ -23,24 +50,63 @@ export default function SocialProof() {
             title="Patient experiences"
             titleId="testimonials-heading"
             lede="Selected feedback from patients who visited the clinic."
+            inverted
           />
         </Reveal>
 
-        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
-          {featured.map((item) => (
-            <StaggerItem key={item.name} className="h-full">
-              <blockquote className="testimonial-card">
-                <p className="testimonial-card__quote">&ldquo;{item.quote}&rdquo;</p>
-                <footer>
-                  <cite className="text-label text-ink not-italic block">{item.name}</cite>
-                  <p className="font-body text-caption text-muted mt-1 not-italic">
-                    {item.location} · {item.treatment}
-                  </p>
+        <Reveal delay={0.08}>
+          <div
+            className="proof-carousel"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
+            onPointerDown={(e) => {
+              pointerStartX.current = e.clientX;
+            }}
+            onPointerUp={(e) => {
+              if (pointerStartX.current === null) return;
+              const delta = e.clientX - pointerStartX.current;
+              pointerStartX.current = null;
+              if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+              if (delta < 0) goNext();
+              else goPrev();
+            }}
+          >
+            {active && (
+              <blockquote>
+                <p className="proof-quote">&ldquo;{active.quote}&rdquo;</p>
+                <footer className="proof-meta">
+                  <cite className="not-italic">{active.name}</cite>
+                  <span aria-hidden="true"> · </span>
+                  {active.location}
+                  {active.treatment ? (
+                    <>
+                      <span aria-hidden="true"> · </span>
+                      {active.treatment}
+                    </>
+                  ) : null}
                 </footer>
               </blockquote>
-            </StaggerItem>
-          ))}
-        </Stagger>
+            )}
+
+            {count > 1 && (
+              <div className="proof-dots" role="tablist" aria-label="Testimonial slides">
+                {testimonials.map((item, i) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === activeIndex}
+                    aria-label={`Show testimonial from ${item.name}`}
+                    className={cn('proof-dot', i === activeIndex && 'proof-dot--active')}
+                    onClick={() => goTo(i)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </Reveal>
 
         <Reveal delay={0.12}>
           <div className="mt-10 flex justify-center">
@@ -48,7 +114,7 @@ export default function SocialProof() {
               href={settings.maps.reviewsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary-outline inline-flex items-center gap-2"
+              className="btn-secondary-outline inline-flex items-center gap-2 border-white/30 text-paper hover:bg-white/10"
             >
               Read Google reviews
               <span aria-hidden="true">↗</span>

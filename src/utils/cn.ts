@@ -28,6 +28,8 @@ const twMerge = extendTailwindMerge({
             "brand-green",
             "brand-navy",
             "hair-accent",
+            "on-primary-container",
+            "outline",
           ],
         },
       ],

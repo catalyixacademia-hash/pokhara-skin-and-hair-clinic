@@ -7,18 +7,22 @@ import CareStandards from './components/CareStandards';
 import ClinicJourney from './components/ClinicJourney';
 import ClinicDoctor from './components/ClinicDoctor';
 import Outcomes from './components/Outcomes';
-import Aesthetics from './components/Aesthetics';
 import Gallery from './components/Gallery';
 import SocialProof from './components/SocialProof';
 import Faq from './components/Faq';
 import Visit from './components/Visit';
-import GeneralEnquiry from './components/GeneralEnquiry';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
+import MobileActionBar from './components/MobileActionBar';
+import FinalCta from './components/FinalCta';
+import Preloader from './components/Preloader';
+import SmoothScroll from './components/SmoothScroll';
 
 export default function App() {
   return (
     <div className="bg-paper min-h-screen">
+      <Preloader />
+      <SmoothScroll />
       <a href="#main" className="skip-link">
         Skip to main content
       </a>
@@ -31,16 +35,16 @@ export default function App() {
         <CareStandards />
         <ClinicDoctor />
         <Outcomes />
-        <Aesthetics />
         <Gallery />
         <SocialProof />
         <Faq />
         <ClinicJourney />
+        <FinalCta />
         <Visit />
-        <GeneralEnquiry />
       </main>
       <Footer />
       <WhatsAppFloat />
+      <MobileActionBar />
     </div>
   );
 }

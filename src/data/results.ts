@@ -10,7 +10,7 @@ export const fallbackResults: ResultItem[] = [
     label: 'Acne & pigmentation care',
     beforeUrl: '/images/results/acne-before.webp',
     afterUrl: '/images/results/acne-after.webp',
-    duration: 'Clinical photography · individual results vary',
+    duration: 'Illustrative images · individual results vary',
     category: 'skin',
   },
   {
@@ -18,7 +18,7 @@ export const fallbackResults: ResultItem[] = [
     label: 'Pigmentation & peel refinement',
     beforeUrl: '/images/results/peel-before.webp',
     afterUrl: '/images/results/peel-after.webp',
-    duration: 'Clinical photography · individual results vary',
+    duration: 'Illustrative images · individual results vary',
     category: 'skin',
   },
   {
@@ -26,7 +26,7 @@ export const fallbackResults: ResultItem[] = [
     label: 'Hair restoration',
     beforeUrl: '/images/results/hair-before.webp',
     afterUrl: '/images/results/hair-after.webp',
-    duration: 'Clinical photography · individual results vary',
+    duration: 'Illustrative images · individual results vary',
     category: 'hair',
   },
 ];

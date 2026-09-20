@@ -14,7 +14,7 @@ const BRAND = {
   name: 'Pokhara Skin & Hair Clinic',
   tagline: 'Advanced dermatology & hair restoration',
   address: 'Nayabazar-8, Pokhara',
-  landmark: 'Opposite GMC Hospital Gate',
+  landmark: 'Opposite of GMC Hospital Gate',
   phone: '+977 970-6929329',
   appointmentsPhone: '+977 984-5815246',
   hours: 'Daily 8:00 AM – 7:00 PM',

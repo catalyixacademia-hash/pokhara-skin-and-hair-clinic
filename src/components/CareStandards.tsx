@@ -29,24 +29,30 @@ export default function CareStandards() {
       aria-labelledby="care-standards-heading"
     >
       <Container>
-        <Reveal>
-          <SectionIntro
-            index="02"
-            title="How we practice"
-            titleId="care-standards-heading"
-            lede="Three principles that guide every patient interaction at the clinic."
-          />
-        </Reveal>
+        <div className="care-sticky">
+          <Reveal className="care-sticky__head">
+            <SectionIntro
+              index="02"
+              title="How we practice"
+              titleId="care-standards-heading"
+              lede="Three principles that guide every patient interaction at the clinic."
+            />
+          </Reveal>
 
-        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
-          {standards.map((item) => (
-            <StaggerItem key={item.index} as="article" className="standard-card h-full">
-              <div className="standard-card__badge">{item.index}</div>
-              <h3 className="font-display text-h3 text-ink mt-5 mb-3">{item.title}</h3>
-              <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
-            </StaggerItem>
-          ))}
-        </Stagger>
+          <Stagger className="flex flex-col gap-4 sm:gap-5 lg:gap-6">
+            {standards.map((item) => (
+              <StaggerItem
+                key={item.index}
+                as="article"
+                className="standard-card standard-card--outlined h-full"
+              >
+                <div className="standard-card__badge">{item.index}</div>
+                <h3 className="font-display text-h3 text-ink mt-5 mb-3">{item.title}</h3>
+                <p className="font-body text-base text-muted leading-relaxed">{item.body}</p>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
       </Container>
     </section>
   );

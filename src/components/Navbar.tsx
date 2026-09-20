@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import {
   address,
@@ -8,6 +8,7 @@ import {
   phoneHref,
 } from '../data/clinic';
 import { adminLoginUrl } from '../lib/admin-url';
+import { scrollToId, scrollToTop } from '../lib/scroll';
 import { useActiveSection } from '../hooks/useActiveSection';
 import Container from './ui/Container';
 import { cn } from '../utils/cn';
@@ -17,24 +18,27 @@ const navLinks = [
   { label: 'Hair restoration', href: '#hair-services' },
   { label: 'Dermatology', href: '#doctor' },
   { label: 'Results', href: '#results' },
-  { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ] as const;
 
 const navHrefs = navLinks.map((l) => l.href);
 
-/** Elements that can hold focus inside the mobile sheet. */
+/** Clear Results highlight once the visitor has scrolled into later landmarks. */
+const clearAfter = {
+  '#results': ['#gallery', '#testimonials', '#faq', '#about', '#aesthetics'],
+} as const;
+
 const FOCUSABLE =
   'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 function PersonIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="2" />
       <path
-        d="M5 20c0-3.314 3.134-6 7-6s7 2.686 7 6"
+        d="M5.5 19.5c0-3.038 2.91-5.5 6.5-5.5s6.5 2.462 6.5 5.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="2"
         strokeLinecap="round"
       />
     </svg>
@@ -74,7 +78,7 @@ type NavBrandProps = {
 
 function NavBrand({ onClick }: NavBrandProps) {
   return (
-    <a href="#" onClick={onClick} className="nav-brand">
+    <a href="#main" onClick={onClick} className="nav-brand">
       <img
         src="/clinic-logo-full.png"
         alt={clinic.nameShort}
@@ -89,16 +93,16 @@ function NavBrand({ onClick }: NavBrandProps) {
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const lastScrollY = useRef(0);
   const prefersReducedMotion = useReducedMotion();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  /*
-   * Active state is derived from scroll position. It used to be plain state set
-   * only on click, defaulting to "#services" — so the header claimed the
-   * visitor was in Treatments while they were still reading the hero.
-   */
-  const activeHref = useActiveSection(navHrefs);
+  const clearMap = useMemo(() => clearAfter, []);
+  const activeHref = useActiveSection(navHrefs, scrolled ? 56 : 72, clearMap);
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -112,7 +116,32 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
-  // Move focus into the sheet, trap it there, and restore it on close.
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(1, y / max) : 0);
+      setScrolled(y > 24);
+
+      // Hide-on-scroll-down only below lg and when the menu is closed.
+      if (window.matchMedia('(max-width: 1023px)').matches && !menuOpen) {
+        if (y > lastScrollY.current + 8 && y > 120) {
+          setHidden(true);
+        } else if (y < lastScrollY.current - 4) {
+          setHidden(false);
+        }
+      } else {
+        setHidden(false);
+      }
+      lastScrollY.current = y;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [menuOpen]);
+
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -149,7 +178,6 @@ export default function Navbar() {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [menuOpen, closeMenu]);
 
-  // Close the sheet if the viewport grows into the desktop layout.
   useEffect(() => {
     if (!menuOpen) return;
     const list = window.matchMedia('(min-width: 1024px)');
@@ -162,26 +190,28 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    });
+    scrollToId(href, { immediate: Boolean(prefersReducedMotion) });
   };
 
   const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    scrollToTop({ immediate: Boolean(prefersReducedMotion) });
     setMenuOpen(false);
   };
 
   const linkClass = (href: string) =>
-    cn(
-      'nav-link',
-      activeHref === href && 'nav-link-active',
-    );
+    cn('nav-link', activeHref === href && 'nav-link-active');
 
   return (
     <>
-      <header className="site-header glass-nav fixed top-0 left-0 right-0 z-50 min-h-[var(--nav-height)] border-b border-outline-variant">
+      <header
+        className={cn(
+          'site-header glass-nav fixed top-0 left-0 right-0 z-50 border-b border-outline-variant',
+          scrolled && 'site-header--compact',
+          hidden && 'site-header--hidden',
+        )}
+        style={{ ['--nav-height' as string]: scrolled ? '3.5rem' : '4.5rem' }}
+      >
         <Container>
           <div className="nav-row min-h-[var(--nav-height)]">
             <NavBrand onClick={goHome} />
@@ -209,6 +239,15 @@ export default function Navbar() {
                 Book appointment
               </button>
 
+              <a
+                href={adminLoginUrl}
+                className="nav-staff-icon nav-staff-desktop"
+                aria-label="Staff login"
+                title="Staff login"
+              >
+                <PersonIcon />
+              </a>
+
               <button
                 type="button"
                 onClick={() => handleNavClick('#contact')}
@@ -217,14 +256,6 @@ export default function Navbar() {
               >
                 <CalendarIcon />
               </button>
-
-              <a
-                href={adminLoginUrl}
-                className="nav-staff-icon nav-staff-desktop"
-                aria-label="Staff login"
-              >
-                <PersonIcon />
-              </a>
 
               <button
                 ref={menuButtonRef}
@@ -252,6 +283,13 @@ export default function Navbar() {
             </div>
           </div>
         </Container>
+        <div
+          className="nav-progress"
+          role="presentation"
+          aria-hidden="true"
+        >
+          <div className="nav-progress__bar" style={{ transform: `scaleX(${progress})` }} />
+        </div>
       </header>
 
       {menuOpen && (

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 export type TreatmentCategory = 'skin' | 'hair' | 'aesthetic';
@@ -16,6 +17,7 @@ type BaseProps = {
   onSelect: () => void;
   className?: string;
   id?: string;
+  layoutId?: string;
 };
 
 function ArrowIcon() {
@@ -47,7 +49,7 @@ function ChevronIcon() {
 }
 
 /**
- * Image-led card for the primary skin specialty.
+ * Image-led treatment card used across Skin, Hair, and Aesthetic tabs.
  *
  * The heading holds the only button and that button is stretched over the whole
  * card via `::after`, so the card keeps a full-surface tap target while the
@@ -61,12 +63,14 @@ export function TreatmentCard({
   onSelect,
   className,
   id,
+  layoutId,
 }: BaseProps) {
   return (
-    <article id={id} className={cn('treatment-card scroll-mt-28', className)}>
+    <article id={id} className={cn('treatment-card scroll-mt-28 h-full', className)}>
       {img && (
         <div className="treatment-card__image">
-          <img
+          <motion.img
+            layoutId={layoutId}
             src={img}
             alt=""
             loading="lazy"
@@ -77,7 +81,13 @@ export function TreatmentCard({
         </div>
       )}
       <div className="treatment-card__body">
-        <span className={cn('category-tag', category === 'hair' && 'category-tag--hair')}>
+        <span
+          className={cn(
+            'category-tag',
+            category === 'hair' && 'category-tag--hair',
+            category === 'aesthetic' && 'category-tag--aesthetic',
+          )}
+        >
           {categoryLabels[category]}
         </span>
         <h3 className="treatment-card__title">

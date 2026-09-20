@@ -1,12 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePendingCounts } from '@/hooks/usePendingCounts';
 import { siteUrl } from '@/lib/site-url';
 
+type NavIcon =
+  | 'overview'
+  | 'queue'
+  | 'bookings'
+  | 'enquiries'
+  | 'analytics'
+  | 'settings'
+  | 'treatments'
+  | 'services'
+  | 'testimonials'
+  | 'results'
+  | 'gallery'
+  | 'doctor';
+
 type NavItem = {
   to: string;
   label: string;
+  icon: NavIcon;
   badgeKey?: 'queue' | 'bookings' | 'enquiries';
 };
 
@@ -19,29 +34,134 @@ const navSections: NavSection[] = [
   {
     title: 'Inbox',
     items: [
-      { to: '/dashboard', label: 'Overview' },
-      { to: '/queue', label: 'Follow-up queue', badgeKey: 'queue' },
-      { to: '/bookings', label: 'Bookings', badgeKey: 'bookings' },
-      { to: '/enquiries', label: 'Enquiries', badgeKey: 'enquiries' },
+      { to: '/dashboard', label: 'Overview', icon: 'overview' },
+      { to: '/queue', label: 'Follow-up queue', icon: 'queue', badgeKey: 'queue' },
+      { to: '/bookings', label: 'Bookings', icon: 'bookings', badgeKey: 'bookings' },
+      { to: '/enquiries', label: 'Enquiries', icon: 'enquiries', badgeKey: 'enquiries' },
     ],
   },
   {
     title: 'Insights',
-    items: [{ to: '/analytics', label: 'Analytics' }],
+    items: [{ to: '/analytics', label: 'Analytics', icon: 'analytics' }],
   },
   {
     title: 'Website',
     items: [
-      { to: '/settings', label: 'Clinic settings' },
-      { to: '/treatment-options', label: 'Treatment options' },
-      { to: '/services', label: 'Services' },
-      { to: '/testimonials', label: 'Testimonials' },
-      { to: '/results', label: 'Results' },
-      { to: '/gallery', label: 'Gallery' },
-      { to: '/doctor', label: 'Doctor profile' },
+      { to: '/settings', label: 'Clinic settings', icon: 'settings' },
+      { to: '/treatment-options', label: 'Treatment options', icon: 'treatments' },
+      { to: '/services', label: 'Services', icon: 'services' },
+      { to: '/testimonials', label: 'Testimonials', icon: 'testimonials' },
+      { to: '/results', label: 'Results', icon: 'results' },
+      { to: '/gallery', label: 'Gallery', icon: 'gallery' },
+      { to: '/doctor', label: 'Doctor profile', icon: 'doctor' },
     ],
   },
 ];
+
+function NavIconSvg({ name }: { name: NavIcon }) {
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    'aria-hidden': true as const,
+    className: 'admin-nav-icon shrink-0',
+  };
+
+  const stroke = {
+    stroke: 'currentColor',
+    strokeWidth: 1.75,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  };
+
+  const icons: Record<NavIcon, ReactNode> = {
+    overview: (
+      <svg {...common}>
+        <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" {...stroke} />
+        <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" {...stroke} />
+        <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" {...stroke} />
+        <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" {...stroke} />
+      </svg>
+    ),
+    queue: (
+      <svg {...common}>
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" {...stroke} />
+      </svg>
+    ),
+    bookings: (
+      <svg {...common}>
+        <rect x="3" y="5" width="18" height="16" rx="2" {...stroke} />
+        <path d="M3 10h18M8 3v4M16 3v4" {...stroke} />
+      </svg>
+    ),
+    enquiries: (
+      <svg {...common}>
+        <path
+          d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V16H6.5A2.5 2.5 0 0 1 4 13.5v-7z"
+          {...stroke}
+        />
+      </svg>
+    ),
+    analytics: (
+      <svg {...common}>
+        <path d="M4 19V5M4 19h16" {...stroke} />
+        <path d="M8 16v-5M12 16V8M16 16v-8" {...stroke} />
+      </svg>
+    ),
+    settings: (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="3" {...stroke} />
+        <path
+          d="M12 3v2.2M12 18.8V21M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3 12h2.2M18.8 12H21M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"
+          {...stroke}
+        />
+      </svg>
+    ),
+    treatments: (
+      <svg {...common}>
+        <path d="M9 3h6v4l2 2v4a5 5 0 0 1-10 0V9l2-2V3z" {...stroke} />
+        <path d="M9 7h6" {...stroke} />
+      </svg>
+    ),
+    services: (
+      <svg {...common}>
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" {...stroke} />
+        <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" {...stroke} />
+      </svg>
+    ),
+    testimonials: (
+      <svg {...common}>
+        <path d="M8 10h.01M12 10h.01M16 10h.01" {...stroke} />
+        <path
+          d="M12 19c4.5 0 8-3.1 8-7s-3.5-7-8-7-8 3.1-8 7c0 2.2 1.1 4.1 2.9 5.4L6 20l3.2-1.3c.9.2 1.8.3 2.8.3z"
+          {...stroke}
+        />
+      </svg>
+    ),
+    results: (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="8" {...stroke} />
+        <path d="M12 8v4l2.5 2.5" {...stroke} />
+      </svg>
+    ),
+    gallery: (
+      <svg {...common}>
+        <rect x="3" y="5" width="18" height="14" rx="2" {...stroke} />
+        <circle cx="8.5" cy="10" r="1.5" {...stroke} />
+        <path d="M3 16l5-4 4 3 3-2 6 4" {...stroke} />
+      </svg>
+    ),
+    doctor: (
+      <svg {...common}>
+        <circle cx="12" cy="8" r="3.5" {...stroke} />
+        <path d="M5.5 19.5c0-3.1 2.9-5.5 6.5-5.5s6.5 2.4 6.5 5.5" {...stroke} />
+      </svg>
+    ),
+  };
+
+  return icons[name];
+}
 
 function NavBadge({ count }: { count: number }) {
   if (count <= 0) return null;
@@ -76,8 +196,8 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-paper">
-      <header className="flex lg:hidden items-center justify-between bg-ink text-paper px-5 py-3 border-b border-paper/10 sticky top-0 z-30">
+    <div className="admin-shell h-dvh flex flex-col lg:flex-row bg-paper overflow-hidden">
+      <header className="admin-shell__header flex lg:hidden items-center justify-between bg-ink text-paper px-5 py-3 border-b border-paper/10 shrink-0 z-30">
         <div className="min-w-0">
           <span className="font-display font-semibold text-sm leading-tight text-paper block truncate">
             Pokhara Skin &amp; Hair Clinic
@@ -117,7 +237,7 @@ export default function AdminLayout() {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink text-paper flex flex-col border-r border-line transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink text-paper flex flex-col border-r border-line transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:shrink-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -141,14 +261,15 @@ export default function AdminLayout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `flex items-center min-h-11 px-4 py-2.5 rounded text-sm transition-colors ${
+                      `flex items-center gap-3 min-h-11 px-4 py-2.5 rounded text-sm transition-colors ${
                         isActive
                           ? 'bg-accent text-paper font-medium'
                           : 'text-paper/70 hover:text-paper hover:bg-paper/5'
                       }`
                     }
                   >
-                    <span>{item.label}</span>
+                    <NavIconSvg name={item.icon} />
+                    <span className="truncate">{item.label}</span>
                     <NavBadge count={badgeFor(item.badgeKey)} />
                   </NavLink>
                 ))}
@@ -162,17 +283,53 @@ export default function AdminLayout() {
             href={siteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full text-center admin-btn-ghost text-xs"
+            className="flex items-center justify-center gap-2 w-full admin-btn-ghost text-xs"
           >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+              className="shrink-0"
+            >
+              <path
+                d="M14 5h5v5M19 5l-9 9M10 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h10a2.5 2.5 0 0 0 2.5-2.5V14"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
             View website
           </a>
-          <button type="button" onClick={handleSignOut} className="w-full admin-btn-ghost text-xs">
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="flex items-center justify-center gap-2 w-full admin-btn-ghost text-xs"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+              className="shrink-0"
+            >
+              <path
+                d="M10 5H6.5A2.5 2.5 0 0 0 4 7.5v9A2.5 2.5 0 0 0 6.5 19H10M14 16l4-4-4-4M18 12H9"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
             Sign out
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 p-4 lg:p-8 overflow-auto bg-accent-soft/20 min-w-0">
+      <main className="admin-shell__main flex-1 p-4 lg:p-8 overflow-y-auto overflow-x-hidden bg-accent-soft/20 min-w-0 min-h-0">
         <Outlet />
       </main>
     </div>

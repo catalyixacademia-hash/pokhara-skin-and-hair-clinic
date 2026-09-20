@@ -1,25 +1,30 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
-import { TreatmentCard, TreatmentRow } from './ui/TreatmentCard';
+import { TreatmentCard } from './ui/TreatmentCard';
 import Reveal from './motion/Reveal';
-import { Stagger, StaggerItem } from './motion/Stagger';
 import TreatmentDetailSheet from './TreatmentDetailSheet';
 import { useServices } from '../hooks/useServices';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { ServiceItem } from '../data/services';
-import { easeOut } from './motion/variants';
+import { scrollToId } from '../lib/scroll';
+import { cn } from '../utils/cn';
 
-type Selected = { service: ServiceItem; category: 'skin' | 'hair' };
+type Category = 'skin' | 'hair' | 'aesthetic';
+type Selected = { service: ServiceItem; category: Category };
 
-/**
- * Cards shown before the disclosure. Phones get four so the section stays
- * roughly two screens instead of five; from `sm` up the grid is multi-column so
- * six still reads as a complete block.
- */
-const SKIN_PREVIEW_MOBILE = 4;
-const SKIN_PREVIEW_WIDE = 6;
+const TABS: { id: Category; label: string; panelId: string }[] = [
+  { id: 'skin', label: 'Skin', panelId: 'services' },
+  { id: 'hair', label: 'Hair', panelId: 'hair-services' },
+  { id: 'aesthetic', label: 'Aesthetic', panelId: 'aesthetics' },
+];
+
+const PANEL_NOTES: Record<Category, string> = {
+  skin: 'Primary specialty · led by Dr. Prakash Acharya',
+  hair: 'Complementary care · scalp & density',
+  aesthetic: 'Natural refinement after clinical assessment',
+};
 
 function serviceAnchorId(title: string): string {
   return title
@@ -28,74 +33,120 @@ function serviceAnchorId(title: string): string {
     .replace(/^-|-$/g, '');
 }
 
-function ChevronDownIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="m6 9 6 6 6-6"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function Treatments() {
-  const { skin: skinServices, hair: hairServices } = useServices();
+  const { skin: skinServices, hair: hairServices, aesthetic: aestheticServices } = useServices();
   const [selected, setSelected] = useState<Selected | null>(null);
-  const [showAllSkin, setShowAllSkin] = useState(false);
+  const [tab, setTab] = useState<Category>('skin');
   const isWide = useMediaQuery('(min-width: 640px)');
-  const previewCount = isWide ? SKIN_PREVIEW_WIDE : SKIN_PREVIEW_MOBILE;
   const prefersReducedMotion = useReducedMotion();
+
+  const lists: Record<Category, ServiceItem[]> = useMemo(
+    () => ({
+      skin: skinServices,
+      hair: hairServices,
+      aesthetic: aestheticServices,
+    }),
+    [skinServices, hairServices, aestheticServices],
+  );
 
   const allByAnchor = useMemo(() => {
     const map = new Map<string, Selected>();
-    for (const s of skinServices) {
-      map.set(serviceAnchorId(s.title), { service: s, category: 'skin' });
-    }
-    for (const s of hairServices) {
-      map.set(serviceAnchorId(s.title), { service: s, category: 'hair' });
-    }
+    (Object.keys(lists) as Category[]).forEach((category) => {
+      for (const s of lists[category]) {
+        map.set(serviceAnchorId(s.title), { service: s, category });
+      }
+    });
     return map;
-  }, [skinServices, hairServices]);
+  }, [lists]);
 
-  const openFromHash = useCallback(() => {
+  const selectTabFromHash = useCallback(() => {
     const hash = window.location.hash.replace(/^#/, '').toLowerCase();
-    if (!hash || hash === 'services' || hash === 'hair-services') return;
+    if (hash === 'hair-services') {
+      setTab('hair');
+      return;
+    }
+    if (hash === 'aesthetics') {
+      setTab('aesthetic');
+      return;
+    }
+    if (hash === 'services') {
+      setTab('skin');
+      return;
+    }
     const match = allByAnchor.get(hash);
-    if (match) setSelected(match);
+    if (match) {
+      setTab(match.category);
+      setSelected(match);
+    }
   }, [allByAnchor]);
 
   useEffect(() => {
-    openFromHash();
-    window.addEventListener('hashchange', openFromHash);
-    return () => window.removeEventListener('hashchange', openFromHash);
-  }, [openFromHash]);
+    selectTabFromHash();
+    window.addEventListener('hashchange', selectTabFromHash);
+    return () => window.removeEventListener('hashchange', selectTabFromHash);
+  }, [selectTabFromHash]);
 
-  /*
-   * A deep link to a collapsed skin treatment must still resolve, so expand the
-   * list whenever the target sits past the preview cut-off.
-   */
-  useEffect(() => {
-    if (showAllSkin) return;
-    const hash = window.location.hash.replace(/^#/, '').toLowerCase();
-    if (!hash) return;
-    const index = skinServices.findIndex((s) => serviceAnchorId(s.title) === hash);
-    if (index >= previewCount) setShowAllSkin(true);
-  }, [skinServices, showAllSkin, previewCount]);
-
-  const scrollToContact = () => {
-    document.querySelector('#contact')?.scrollIntoView({
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    });
+  const onTabChange = (next: Category) => {
+    setTab(next);
+    const panel = TABS.find((t) => t.id === next)?.panelId;
+    if (panel) {
+      history.replaceState(null, '', `#${panel}`);
+    }
   };
 
-  const hasHiddenSkin = skinServices.length > previewCount;
-  const previewSkin = skinServices.slice(0, previewCount);
-  const extraSkin = skinServices.slice(previewCount);
-  const hiddenSkinCount = extraSkin.length;
+  const scrollToContact = () => {
+    scrollToId('#contact', { immediate: Boolean(prefersReducedMotion) });
+  };
+
+  const renderBento = (list: ServiceItem[], category: Category) => {
+    const featured = list.find((s) => s.featured) ?? list[0];
+    const rest = list.filter((s) => s !== featured);
+
+    const cards = (
+      <>
+        {featured && (
+          <div className={cn(isWide && 'treatment-bento__feature')}>
+            <TreatmentCard
+              id={serviceAnchorId(featured.title)}
+              title={featured.title}
+              description={featured.description}
+              img={featured.img}
+              category={category}
+              layoutId={`treatment-img-${serviceAnchorId(featured.title)}`}
+              onSelect={() => setSelected({ service: featured, category })}
+            />
+          </div>
+        )}
+        {rest.map((service) => (
+          <TreatmentCard
+            key={service.title}
+            id={serviceAnchorId(service.title)}
+            title={service.title}
+            description={service.description}
+            img={service.img}
+            category={category}
+            layoutId={`treatment-img-${serviceAnchorId(service.title)}`}
+            onSelect={() => setSelected({ service, category })}
+          />
+        ))}
+      </>
+    );
+
+    if (!isWide) {
+      return <div className="treatment-snap">{cards}</div>;
+    }
+
+    return <div className="treatment-bento">{cards}</div>;
+  };
+
+  const panelMotion = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 12 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -8 },
+        transition: { duration: 0.35 },
+      };
 
   return (
     <section id="services" className="bg-surface section-padding" aria-labelledby="services-heading">
@@ -109,121 +160,66 @@ export default function Treatments() {
           />
         </Reveal>
 
-        <div className="mb-14 md:mb-16">
-          <Reveal delay={0.04}>
-            <div className="treatment-group__head">
-              <h3 className="treatment-group__eyebrow">Skin care</h3>
-              <p className="treatment-group__note">Primary specialty · led by Dr. Prakash Acharya</p>
-            </div>
-          </Reveal>
-
-          <Stagger className="treatment-grid">
-            {previewSkin.map((service) => (
-              <StaggerItem key={service.title} className="h-full">
-                <TreatmentCard
-                  id={serviceAnchorId(service.title)}
-                  title={service.title}
-                  description={service.description}
-                  img={service.img}
-                  category="skin"
-                  onSelect={() => setSelected({ service, category: 'skin' })}
-                />
-              </StaggerItem>
-            ))}
-          </Stagger>
-
-              <AnimatePresence initial={false}>
-                {showAllSkin && extraSkin.length > 0 && (
-                  <motion.div
-                    key="extra-skin"
-                    className="treatment-grid mt-4 sm:mt-5"
-                    {...(prefersReducedMotion
-                      ? {}
-                      : {
-                          initial: { opacity: 0, height: 0 },
-                          animate: { opacity: 1, height: 'auto' },
-                          exit: { opacity: 0, height: 0 },
-                          transition: { duration: 0.65, ease: easeOut },
-                        })}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    {extraSkin.map((service) => (
-                      <TreatmentCard
-                        key={service.title}
-                        id={serviceAnchorId(service.title)}
-                        title={service.title}
-                        description={service.description}
-                        img={service.img}
-                        category="skin"
-                        onSelect={() => setSelected({ service, category: 'skin' })}
-                      />
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-          {hasHiddenSkin && !showAllSkin && (
-            <button
-              type="button"
-              className="disclosure-btn"
-              aria-expanded={false}
-              onClick={() => setShowAllSkin(true)}
-            >
-              Show {hiddenSkinCount} more skin treatment{hiddenSkinCount === 1 ? '' : 's'}
-              <ChevronDownIcon />
-            </button>
-          )}
-
-          <Reveal delay={0.08}>
-            <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <button type="button" onClick={scrollToContact} className="btn-primary">
-                Book a skin consultation
-              </button>
-              <p className="font-body text-sm text-muted">
-                Assessment first — we recommend only what is medically appropriate.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-
-        <div id="hair-services" className="scroll-mt-24">
-          <Reveal delay={0.04}>
-            <div className="treatment-group__head">
-              <h3 className="treatment-group__eyebrow treatment-group__eyebrow--secondary">
-                Hair restoration
-              </h3>
-              <p className="treatment-group__note">Complementary care · scalp &amp; density</p>
-            </div>
-          </Reveal>
-
-          <Stagger className="treatment-grid treatment-grid--rows">
-            {hairServices.map((service) => (
-              <StaggerItem key={service.title}>
-                <TreatmentRow
-                  id={serviceAnchorId(service.title)}
-                  title={service.title}
-                  description={service.description}
-                  img={service.img}
-                  category="hair"
-                  onSelect={() => setSelected({ service, category: 'hair' })}
-                />
-              </StaggerItem>
-            ))}
-          </Stagger>
-
-          <Reveal delay={0.06}>
-            <p className="font-body text-sm text-muted mt-5">
+        <LayoutGroup>
+          <div className="treatment-tabs" role="tablist" aria-label="Treatment categories">
+            {TABS.map((t) => (
               <button
+                key={t.id}
                 type="button"
-                onClick={scrollToContact}
-                className="inline-block py-1 text-secondary hover:text-accent underline underline-offset-4 bg-transparent border-none cursor-pointer px-0 font-inherit"
+                role="tab"
+                id={`tab-${t.id}`}
+                aria-selected={tab === t.id}
+                aria-controls={t.panelId}
+                className={cn('treatment-tab', tab === t.id && 'treatment-tab--active')}
+                onClick={() => onTabChange(t.id)}
               >
-                Request a hair restoration visit
+                {tab === t.id && !prefersReducedMotion && (
+                  <motion.span
+                    layoutId="treatment-tab-pill"
+                    className="treatment-tab__pill"
+                    transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                  />
+                )}
+                {tab === t.id && prefersReducedMotion && <span className="treatment-tab__pill" />}
+                {t.label}
               </button>
-              {' '}— we will confirm the right protocol during your consultation.
-            </p>
-          </Reveal>
-        </div>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {TABS.map((t) =>
+              tab === t.id ? (
+                <motion.div
+                  key={t.id}
+                  id={t.panelId === 'services' ? 'services-panel' : t.panelId}
+                  className={t.id !== 'skin' ? 'scroll-mt-24' : undefined}
+                  role="tabpanel"
+                  aria-labelledby={`tab-${t.id}`}
+                  {...panelMotion}
+                >
+                  <p className="treatment-group__note mb-5">{PANEL_NOTES[t.id]}</p>
+                  {renderBento(lists[t.id], t.id)}
+                  {t.id === 'skin' && (
+                    <Reveal delay={0.08}>
+                      <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                        <button type="button" onClick={scrollToContact} className="btn-primary">
+                          Book a skin consultation
+                        </button>
+                        <p className="font-body text-sm text-muted">
+                          Assessment first — we recommend only what is medically appropriate.
+                        </p>
+                      </div>
+                    </Reveal>
+                  )}
+                </motion.div>
+              ) : null,
+            )}
+          </AnimatePresence>
+        </LayoutGroup>
+
+        {/* Keep hair/aesthetics anchors resolvable when those tabs are inactive */}
+        {tab !== 'hair' && <div id="hair-services" className="sr-only" aria-hidden="true" />}
+        {tab !== 'aesthetic' && <div id="aesthetics" className="sr-only" aria-hidden="true" />}
       </Container>
 
       <TreatmentDetailSheet
@@ -231,6 +227,9 @@ export default function Treatments() {
         category={selected?.category ?? 'skin'}
         open={Boolean(selected)}
         onClose={() => setSelected(null)}
+        layoutId={
+          selected ? `treatment-img-${serviceAnchorId(selected.service.title)}` : undefined
+        }
       />
     </section>
   );
