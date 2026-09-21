@@ -171,11 +171,18 @@ export default function MediaHub() {
     if (firstError) setError(firstError);
 
     setHeroes((heroesRes.data ?? []) as HeroSlide[]);
-    setExosomesUrl(
-      typeof settingsRes.data?.exosomes_promo_url === 'string'
-        ? settingsRes.data.exosomes_promo_url
-        : '',
-    );
+    {
+      const row = settingsRes.data as Record<string, unknown> | null;
+      const addr =
+        row && typeof row.address === 'object' && row.address !== null
+          ? (row.address as Record<string, unknown>)
+          : {};
+      const fromColumn =
+        typeof row?.exosomes_promo_url === 'string' ? row.exosomes_promo_url : '';
+      const fromAddress =
+        typeof addr.exosomesPromoUrl === 'string' ? addr.exosomesPromoUrl : '';
+      setExosomesUrl(fromColumn || fromAddress);
+    }
     setCategories((catsRes.data ?? []) as Category[]);
     setServices((servicesRes.data ?? []) as ServiceRow[]);
     setDoctorPortrait(
@@ -242,10 +249,30 @@ export default function MediaHub() {
     setSaving(true);
     setError(null);
     setInfo(null);
+
+    const { data: current, error: readError } = await supabase
+      .from('clinic_settings')
+      .select('address')
+      .eq('id', 1)
+      .maybeSingle();
+    if (readError) {
+      setSaving(false);
+      setError(readError.message);
+      return;
+    }
+
+    const prevAddress =
+      current?.address && typeof current.address === 'object' && !Array.isArray(current.address)
+        ? { ...(current.address as Record<string, unknown>) }
+        : {};
+    const nextAddress = { ...prevAddress };
+    if (url.trim()) nextAddress.exosomesPromoUrl = url.trim();
+    else delete nextAddress.exosomesPromoUrl;
+
     const { error: updateError } = await supabase
       .from('clinic_settings')
       .upsert(
-        { id: 1, exosomes_promo_url: url || null, updated_at: new Date().toISOString() },
+        { id: 1, address: nextAddress, updated_at: new Date().toISOString() },
         { onConflict: 'id' },
       );
     const result = mutationResult(updateError);

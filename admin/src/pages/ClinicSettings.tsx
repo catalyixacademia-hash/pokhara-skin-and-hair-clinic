@@ -111,6 +111,9 @@ export default function ClinicSettings() {
   const [error, setError] = useState<string | null>(null);
 
   const applySettings = (s: Partial<Settings> & Pick<Settings, 'name'>) => {
+    const addr = (s.address ?? {}) as Record<string, string>;
+    const fromAddress =
+      typeof addr.exosomesPromoUrl === 'string' ? addr.exosomesPromoUrl : '';
     const merged: Settings = {
       ...DEFAULT_SETTINGS,
       ...s,
@@ -127,7 +130,7 @@ export default function ClinicSettings() {
       social_facebook_url: s.social_facebook_url ?? DEFAULT_SETTINGS.social_facebook_url,
       social_tiktok_url: s.social_tiktok_url ?? DEFAULT_SETTINGS.social_tiktok_url,
       whatsapp_main_url: s.whatsapp_main_url ?? DEFAULT_SETTINGS.whatsapp_main_url,
-      exosomes_promo_url: s.exosomes_promo_url ?? '',
+      exosomes_promo_url: s.exosomes_promo_url || fromAddress || '',
     };
     setSettings(merged);
     setAddress(toAddressFields(merged.address));
@@ -204,6 +207,9 @@ export default function ClinicSettings() {
       short: address.short.trim(),
       mapCaption: address.mapCaption.trim(),
     };
+    const promo = settings.exosomes_promo_url.trim();
+    if (promo) addressPayload.exosomesPromoUrl = promo;
+
     const hoursPayload: Record<string, string> = {
       daily: hours.daily.trim(),
       saturdayNote: hours.saturdayNote.trim(),
@@ -227,7 +233,6 @@ export default function ClinicSettings() {
         social_facebook_url: settings.social_facebook_url.trim(),
         social_tiktok_url: settings.social_tiktok_url.trim(),
         whatsapp_main_url: settings.whatsapp_main_url.trim(),
-        exosomes_promo_url: settings.exosomes_promo_url.trim() || null,
         updated_at: new Date().toISOString(),
       })
       .select('id')

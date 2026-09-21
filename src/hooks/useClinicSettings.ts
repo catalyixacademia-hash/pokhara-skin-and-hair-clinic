@@ -86,6 +86,19 @@ function str(value: unknown, fallbackValue: string): string {
   return typeof value === 'string' && value.trim() ? value.trim() : fallbackValue;
 }
 
+function cleanPromoUrl(url: string): string {
+  if (!url.trim()) return '';
+  const lower = url.toLowerCase();
+  if (
+    lower.includes('pexels.com') ||
+    lower.includes('unsplash.com') ||
+    lower.includes('images.unsplash')
+  ) {
+    return '';
+  }
+  return url.trim();
+}
+
 function mapRow(row: Record<string, unknown>): ClinicSettingsView {
   const addr = asRecord(row.address);
   const hrs = asRecord(row.hours);
@@ -94,6 +107,11 @@ function mapRow(row: Record<string, unknown>): ClinicSettingsView {
     Array.isArray(fullFromDb) && fullFromDb.every((x) => typeof x === 'string')
       ? (fullFromDb as string[])
       : fallback.address.full;
+
+  // Prefer dedicated column when present; otherwise address.exosomesPromoUrl
+  // (sideloaded so Media hub works without a DDL migration).
+  const fromColumn = typeof row.exosomes_promo_url === 'string' ? row.exosomes_promo_url : '';
+  const fromAddress = typeof addr.exosomesPromoUrl === 'string' ? addr.exosomesPromoUrl : '';
 
   return {
     name: str(row.name, fallback.name),
@@ -125,19 +143,7 @@ function mapRow(row: Record<string, unknown>): ClinicSettingsView {
       whatsappMainUrl: str(row.whatsapp_main_url, fallback.social.whatsappMainUrl),
       whatsappFloatNumber: str(row.whatsapp_float_number, fallback.social.whatsappFloatNumber),
     },
-    exosomesPromoUrl: (() => {
-      const url = str(row.exosomes_promo_url, '');
-      if (!url) return '';
-      const lower = url.toLowerCase();
-      if (
-        lower.includes('pexels.com') ||
-        lower.includes('unsplash.com') ||
-        lower.includes('images.unsplash')
-      ) {
-        return '';
-      }
-      return url;
-    })(),
+    exosomesPromoUrl: cleanPromoUrl(fromColumn || fromAddress),
   };
 }
 
