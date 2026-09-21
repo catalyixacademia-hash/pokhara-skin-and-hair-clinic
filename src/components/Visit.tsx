@@ -42,7 +42,6 @@ export default function Visit() {
   const { settings } = useClinicSettings();
   const prefersReducedMotion = useReducedMotion();
   const [mode, setMode] = useState<FormMode>('booking');
-  const [mapLoaded, setMapLoaded] = useState(false);
   const [openStatus, setOpenStatus] = useState(() => getClinicOpenStatus());
   const [formData, setFormData] = useState({
     name: '',
@@ -445,25 +444,14 @@ export default function Visit() {
             </a>
           </div>
 
-          <div className="map-facade">
-            {mapLoaded ? (
-              <iframe
-                src={settings.maps.embedUrl}
-                title="Pokhara Skin and Hair Clinic location"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
-            ) : (
-              <button
-                type="button"
-                className="map-facade__btn"
-                onClick={() => setMapLoaded(true)}
-              >
-                <span className="text-h3 font-display">Open interactive map</span>
-                <span className="text-sm opacity-80">Loads Google Maps when you tap</span>
-              </button>
-            )}
+          <div className="map-frame h-[280px] sm:h-[380px] lg:h-[450px] bg-surface-container">
+            <iframe
+              src={settings.maps.embedUrl}
+              title="Pokhara Skin and Hair Clinic location"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
           </div>
 
           <p className="font-body text-base text-muted mt-4">
