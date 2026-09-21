@@ -172,9 +172,6 @@ export default function Footer() {
         <div className="border-t border-outline-variant pt-4 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
           <p className="font-body text-caption text-muted text-center md:text-left">
             © {new Date().getFullYear()} {clinic.nameShort}. All rights reserved.
-            <span className="text-muted/60"> · </span>
-            Built by{' '}
-            <span className="font-semibold text-error">Orcrist Tech Nepal</span>
           </p>
           <div className="flex flex-wrap justify-center gap-1 -mx-2">
             {legalDocuments.map((doc) => (
@@ -189,6 +186,11 @@ export default function Footer() {
             ))}
           </div>
         </div>
+
+        <p className="mt-4 text-center font-body text-caption">
+          Developed By :{' '}
+          <span className="font-semibold text-error">Orcrist Nepal</span>
+        </p>
       </Container>
 
       <LegalModal doc={activeLegal} onClose={() => setActiveLegal(null)} />
