@@ -169,11 +169,15 @@ export default function Footer() {
           POKHARA SKIN &amp; HAIR
         </p>
 
-        <div className="border-t border-outline-variant pt-4 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+        <div className="border-t border-outline-variant pt-4 grid gap-2 md:grid-cols-3 md:items-center">
           <p className="font-body text-caption text-muted text-center md:text-left">
             © {new Date().getFullYear()} {clinic.nameShort}. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-1 -mx-2">
+          <p className="font-body text-caption text-muted text-center order-first md:order-none">
+            Developed By :{' '}
+            <span className="font-semibold text-[var(--color-error)]">Orcrist Nepal</span>
+          </p>
+          <div className="flex flex-wrap justify-center md:justify-end gap-1 -mx-2">
             {legalDocuments.map((doc) => (
               <button
                 key={doc.id}
@@ -186,11 +190,6 @@ export default function Footer() {
             ))}
           </div>
         </div>
-
-        <p className="mt-4 text-center font-body text-caption text-muted">
-          Developed By :{' '}
-          <span className="font-semibold text-[var(--color-error)]">Orcrist Nepal</span>
-        </p>
       </Container>
 
       <LegalModal doc={activeLegal} onClose={() => setActiveLegal(null)} />
