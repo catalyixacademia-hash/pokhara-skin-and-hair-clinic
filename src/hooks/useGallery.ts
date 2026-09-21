@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase';
 import type { DbGalleryItem } from '../types/cms';
 import {
-  fallbackGallery,
-  isStockGalleryUrl,
+  localGalleryFallback,
   mapGalleryRow,
+  mergeGalleryItems,
   type GalleryItem,
 } from '../data/gallery';
 
 export function useGallery() {
-  const [items, setItems] = useState<GalleryItem[]>(fallbackGallery);
+  const [items, setItems] = useState<GalleryItem[]>(localGalleryFallback);
   const [loading, setLoading] = useState(isSupabaseConfigured);
   const [fromDb, setFromDb] = useState(false);
 
@@ -26,18 +26,11 @@ export function useGallery() {
       .eq('is_published', true)
       .order('sort_order')
       .then(({ data, error }) => {
-        if (!error && data?.length) {
-          const curated = data
-            .map((row) => mapGalleryRow(row as DbGalleryItem))
-            .filter((item) => !isStockGalleryUrl(item.imageUrl));
-          if (curated.length > 0) {
-            setItems(curated);
-            setFromDb(true);
-          } else {
-            // Keep clinic photography when CMS only has Pexels seed rows.
-            setItems(fallbackGallery);
-            setFromDb(false);
-          }
+        if (!error && data) {
+          const mapped = data.map((row) => mapGalleryRow(row as DbGalleryItem));
+          const merged = mergeGalleryItems(mapped);
+          setItems(merged);
+          setFromDb(mapped.length > 0);
         }
         setLoading(false);
       });

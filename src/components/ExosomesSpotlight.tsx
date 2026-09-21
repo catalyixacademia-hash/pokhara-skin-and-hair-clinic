@@ -1,7 +1,10 @@
 import Container from './ui/Container';
 import Reveal from './motion/Reveal';
 import { Stagger, StaggerItem } from './motion/Stagger';
+import { useClinicSettings } from '../hooks/useClinicSettings';
 import { scrollToId } from '../lib/scroll';
+
+const FALLBACK_EXO_PROMO = '/images/treatments/skin/exosomes-promo.webp?v=5';
 
 const MINI_CARDS = [
   {
@@ -56,6 +59,9 @@ const MINI_CARDS = [
  * Placed under TrustStrip so it sits in the first scroll after the hero.
  */
 export default function ExosomesSpotlight() {
+  const { settings } = useClinicSettings();
+  const promoSrc = settings.exosomesPromoUrl || FALLBACK_EXO_PROMO;
+
   return (
     <section
       id="exosomes"
@@ -111,7 +117,7 @@ export default function ExosomesSpotlight() {
           <Reveal className="exosomes-spotlight__media-wrap" direction="right" delay={0.1}>
             <figure className="exosomes-spotlight__media">
               <img
-                src="/images/treatments/skin/exosomes-promo.webp?v=5"
+                src={promoSrc}
                 alt="Exosomes — next generation skin rejuvenation, first in Pokhara at Pokhara Skin and Hair Clinic"
                 width={687}
                 height={1024}

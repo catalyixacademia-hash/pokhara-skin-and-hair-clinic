@@ -13,7 +13,7 @@ import ClinicSettings from '@/pages/ClinicSettings';
 import ServicesManager from '@/pages/ServicesManager';
 import TestimonialsManager from '@/pages/TestimonialsManager';
 import ResultsManager from '@/pages/ResultsManager';
-import GalleryManager from '@/pages/GalleryManager';
+import MediaHub from '@/pages/MediaHub';
 import HeroSlidesManager from '@/pages/HeroSlidesManager';
 import DoctorProfile from '@/pages/DoctorProfile';
 
@@ -67,7 +67,8 @@ export default function App() {
               <Route path="/services" element={<ServicesManager />} />
               <Route path="/testimonials" element={<TestimonialsManager />} />
               <Route path="/results" element={<ResultsManager />} />
-              <Route path="/gallery" element={<GalleryManager />} />
+              <Route path="/media" element={<MediaHub />} />
+              <Route path="/gallery" element={<Navigate to="/media" replace />} />
               <Route path="/hero" element={<HeroSlidesManager />} />
               <Route path="/doctor" element={<DoctorProfile />} />
             </Route>

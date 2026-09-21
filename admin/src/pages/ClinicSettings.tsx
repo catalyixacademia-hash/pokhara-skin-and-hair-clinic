@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { mutationResult } from '@/lib/supabase-result';
+import ImageUpload from '@/components/ImageUpload';
 
 type AddressFields = {
   line1: string;
@@ -31,6 +32,7 @@ type Settings = {
   social_facebook_url: string;
   social_tiktok_url: string;
   whatsapp_main_url: string;
+  exosomes_promo_url: string;
 };
 
 type Phone = { id: string; number: string; role: string; label: string; sort_order: number };
@@ -64,6 +66,7 @@ const DEFAULT_SETTINGS: Settings = {
   social_facebook_url: 'https://www.facebook.com/profile.php?id=61561770561179',
   social_tiktok_url: 'https://www.tiktok.com/@pokharaskinandhairclinic',
   whatsapp_main_url: 'https://wa.me/9779706929329',
+  exosomes_promo_url: '',
 };
 
 const PHONE_ROLES = ['main', 'appointments', 'landline', 'additional'] as const;
@@ -124,6 +127,7 @@ export default function ClinicSettings() {
       social_facebook_url: s.social_facebook_url ?? DEFAULT_SETTINGS.social_facebook_url,
       social_tiktok_url: s.social_tiktok_url ?? DEFAULT_SETTINGS.social_tiktok_url,
       whatsapp_main_url: s.whatsapp_main_url ?? DEFAULT_SETTINGS.whatsapp_main_url,
+      exosomes_promo_url: s.exosomes_promo_url ?? '',
     };
     setSettings(merged);
     setAddress(toAddressFields(merged.address));
@@ -223,6 +227,7 @@ export default function ClinicSettings() {
         social_facebook_url: settings.social_facebook_url.trim(),
         social_tiktok_url: settings.social_tiktok_url.trim(),
         whatsapp_main_url: settings.whatsapp_main_url.trim(),
+        exosomes_promo_url: settings.exosomes_promo_url.trim() || null,
         updated_at: new Date().toISOString(),
       })
       .select('id')
@@ -446,6 +451,19 @@ export default function ClinicSettings() {
             className="admin-input"
             value={settings.maps_open_url}
             onChange={(e) => setSettings({ ...settings, maps_open_url: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="admin-label">Exosomes promo poster</label>
+          <p className="text-xs text-muted mb-2">
+            Optional CMS override for the homepage Exosomes spotlight. Leave empty to use the
+            curated local poster.
+          </p>
+          <ImageUpload
+            folder="exosomes"
+            value={settings.exosomes_promo_url}
+            onChange={(url) => setSettings({ ...settings, exosomes_promo_url: url })}
           />
         </div>
 

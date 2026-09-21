@@ -25,16 +25,23 @@ function BarList({ items, maxItems = 8 }: { items: { label: string; count: numbe
   const top = items.slice(0, maxItems);
   const max = Math.max(...top.map((i) => i.count), 1);
 
+  if (top.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-line/80 bg-[var(--color-surface-container-low,#f3f3f6)] px-4 py-8 text-center">
+        <p className="text-sm text-muted">No data in this range yet.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-3">
-      {top.length === 0 && <p className="text-sm text-muted">No data yet.</p>}
+    <div className="space-y-3.5">
       {top.map((item) => (
         <div key={item.label}>
-          <div className="flex justify-between text-sm mb-1 gap-4">
-            <span className="text-ink truncate">{item.label}</span>
-            <span className="text-muted shrink-0">{item.count}</span>
+          <div className="flex justify-between text-sm mb-1.5 gap-4">
+            <span className="text-ink truncate font-medium">{item.label}</span>
+            <span className="text-muted shrink-0 tabular-nums">{item.count}</span>
           </div>
-          <div className="admin-bar-track">
+          <div className="admin-bar-track" style={{ height: '0.625rem' }}>
             <div className="admin-bar-fill" style={{ width: `${(item.count / max) * 100}%` }} />
           </div>
         </div>
@@ -52,10 +59,19 @@ function DailyChart({
 }) {
   const max = Math.max(...data.map((d) => d.count), 1);
   const labelEvery = rangeDays <= 7 ? 1 : rangeDays <= 30 ? 5 : 10;
+  const hasAny = data.some((d) => d.count > 0);
+
+  if (!hasAny) {
+    return (
+      <div className="rounded-xl border border-dashed border-line/80 bg-[var(--color-surface-container-low,#f3f3f6)] px-4 py-12 text-center">
+        <p className="text-sm text-muted">No submissions in the last {rangeDays} days.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className="flex items-end gap-1 h-36 mb-2">
+      <div className="flex items-end gap-1 h-40 mb-2">
         {data.map((d) => (
           <div key={d.date} className="flex-1 min-w-0 flex flex-col items-center justify-end h-full gap-0.5">
             <div className="w-full flex items-end justify-center gap-px h-[calc(100%-1rem)]">
@@ -65,10 +81,9 @@ function DailyChart({
                 title={`${d.date}: ${d.bookings} bookings`}
               />
               <div
-                className="admin-chart-bar flex-1 max-w-3 opacity-60"
+                className="admin-chart-bar admin-chart-bar--muted flex-1 max-w-3"
                 style={{
                   height: `${Math.max((d.enquiries / max) * 100, d.enquiries > 0 ? 8 : 2)}%`,
-                  background: 'var(--color-muted, #5c5c57)',
                 }}
                 title={`${d.date}: ${d.enquiries} enquiries`}
               />
@@ -90,12 +105,16 @@ function DailyChart({
           </div>
         ))}
       </div>
-      <div className="flex gap-4 mt-4 text-xs text-muted">
+      <div className="flex flex-wrap gap-5 mt-5 text-xs text-muted">
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-accent" /> Bookings
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-sm bg-muted" /> Enquiries
+          <span
+            className="inline-block w-3 h-3 rounded-sm"
+            style={{ background: 'var(--color-secondary, #765842)', opacity: 0.7 }}
+          />{' '}
+          Enquiries
         </span>
       </div>
     </div>
@@ -149,20 +168,24 @@ export default function Analytics() {
 
   return (
     <div>
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div className="admin-analytics-hero">
         <div>
-          <h1 className="font-serif text-3xl text-ink">Analytics</h1>
-          <p className="text-sm text-muted mt-1">
+          <p className="text-[10px] uppercase tracking-widest text-[var(--color-secondary)] font-semibold mb-2">
+            Insights
+          </p>
+          <h1 className="admin-page-title text-3xl">Analytics</h1>
+          <p className="text-sm text-muted mt-1 max-w-lg">
             Live insights from patient booking and enquiry forms.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="admin-range-pills" role="group" aria-label="Date range">
           {RANGE_OPTIONS.map((option) => (
             <button
               key={option.value}
               type="button"
-              className={rangeDays === option.value ? 'admin-btn-primary' : 'admin-btn-secondary'}
+              className={`admin-range-pill${rangeDays === option.value ? ' admin-range-pill--active' : ''}`}
               onClick={() => setRangeDays(option.value)}
+              aria-pressed={rangeDays === option.value}
             >
               {option.label}
             </button>
@@ -201,20 +224,20 @@ export default function Analytics() {
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="admin-card">
-          <h2 className="font-serif text-xl text-ink mb-1">Top treatments & topics</h2>
+          <h2 className="admin-page-title text-xl mb-1">Top treatments & topics</h2>
           <p className="text-xs text-muted mb-4">Main patient interests · last {rangeDays} days</p>
           <BarList items={topTopics} />
         </div>
 
         <div className="admin-card">
-          <h2 className="font-serif text-xl text-ink mb-1">Status breakdown</h2>
+          <h2 className="admin-page-title text-xl mb-1">Status breakdown</h2>
           <p className="text-xs text-muted mb-4">Staff progress · last {rangeDays} days</p>
           <BarList items={statusBreakdown.map((s) => ({ label: s.label, count: s.count }))} />
         </div>
       </div>
 
       <div className="admin-card mb-6">
-        <h2 className="font-serif text-xl text-ink mb-1">Submissions — last {rangeDays} days</h2>
+        <h2 className="admin-page-title text-xl mb-1">Submissions — last {rangeDays} days</h2>
         <p className="text-xs text-muted mb-4">Daily form volume split by booking vs enquiry</p>
         <DailyChart data={dailyRange} rangeDays={rangeDays} />
       </div>

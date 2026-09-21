@@ -39,9 +39,19 @@ export default function ImageUpload({ value, onChange, folder }: ImageUploadProp
   return (
     <div className="space-y-2">
       {value && (
-        <img src={value} alt="Preview" className="w-32 h-32 object-cover border border-blush" />
+        <img
+          src={value}
+          alt="Preview"
+          className="w-32 h-32 object-cover rounded-xl border border-line/70"
+        />
       )}
-      <input type="file" accept="image/*" onChange={handleFile} disabled={uploading} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFile}
+        disabled={uploading}
+        className="block w-full text-sm text-muted file:mr-3 file:rounded-full file:border-0 file:bg-[color-mix(in_srgb,var(--color-primary)_10%,white)] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[var(--color-primary)]"
+      />
       <input
         type="url"
         value={value}
@@ -49,7 +59,7 @@ export default function ImageUpload({ value, onChange, folder }: ImageUploadProp
         placeholder="Or paste image URL"
         className="admin-input"
       />
-      {uploading && <p className="text-xs text-warm-gray">Uploading…</p>}
+      {uploading && <p className="text-xs text-muted">Uploading…</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );

@@ -17,12 +17,35 @@ type GalleryItem = {
   is_published: boolean;
 };
 
-const empty = (): Omit<GalleryItem, 'id'> => ({
+const STORAGE =
+  'https://hgreobmkdckjecvgiver.supabase.co/storage/v1/object/public/clinic-media/gallery';
+
+/** Same clinic photos shown in the public “Inside the clinic” section. */
+const CLINIC_SEED: Omit<GalleryItem, 'id'>[] = [
+  {
+    image_url: `${STORAGE}/interior-waiting.webp`,
+    label: 'Reception & waiting',
+    tag: 'Clinic',
+    is_tall: false,
+    sort_order: 1,
+    is_published: true,
+  },
+  {
+    image_url: `${STORAGE}/welcome-board.webp`,
+    label: 'Welcome — coffee & cookies corner',
+    tag: 'Visit',
+    is_tall: true,
+    sort_order: 2,
+    is_published: true,
+  },
+];
+
+const empty = (nextSort = 10): Omit<GalleryItem, 'id'> => ({
   image_url: '',
   label: '',
   tag: '',
   is_tall: false,
-  sort_order: 0,
+  sort_order: nextSort,
   is_published: true,
 });
 
@@ -34,7 +57,9 @@ export default function GalleryManager() {
   const [editing, setEditing] = useState<GalleryItem | null>(null);
   const [form, setForm] = useState(empty());
   const [saving, setSaving] = useState(false);
+  const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const { data, error: fetchError } = await supabase
@@ -61,6 +86,11 @@ export default function GalleryManager() {
     return rows.filter((r) => r.label.toLowerCase().includes(q));
   }, [rows, search]);
 
+  const nextSortOrder = useMemo(() => {
+    if (rows.length === 0) return 10;
+    return Math.max(...rows.map((r) => r.sort_order)) + 1;
+  }, [rows]);
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.image_url.trim()) {
@@ -73,6 +103,7 @@ export default function GalleryManager() {
     }
     setSaving(true);
     setError(null);
+    setInfo(null);
     const payload = { ...form, updated_at: new Date().toISOString() };
     const { error: saveError } = editing
       ? await supabase.from('gallery_items').update(payload).eq('id', editing.id)
@@ -90,6 +121,7 @@ export default function GalleryManager() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setError(null);
+    setInfo(null);
     const { error: deleteError } = await supabase
       .from('gallery_items')
       .delete()
@@ -103,24 +135,86 @@ export default function GalleryManager() {
     void load();
   };
 
+  const handleSeedClinicPhotos = async () => {
+    setSeeding(true);
+    setError(null);
+    setInfo(null);
+    let inserted = 0;
+    let updated = 0;
+
+    for (const seed of CLINIC_SEED) {
+      const existing = rows.find((r) => r.label.toLowerCase() === seed.label.toLowerCase());
+      if (existing) {
+        const { error: updateError } = await supabase
+          .from('gallery_items')
+          .update({ ...seed, updated_at: new Date().toISOString() })
+          .eq('id', existing.id);
+        if (updateError) {
+          setError(updateError.message);
+          setSeeding(false);
+          return;
+        }
+        updated += 1;
+      } else {
+        const { error: insertError } = await supabase.from('gallery_items').insert(seed);
+        if (insertError) {
+          setError(insertError.message);
+          setSeeding(false);
+          return;
+        }
+        inserted += 1;
+      }
+    }
+
+    setSeeding(false);
+    setInfo(
+      inserted || updated
+        ? `Clinic photos ready (${inserted} added, ${updated} refreshed). Published items appear in “Inside the clinic”.`
+        : 'Clinic photos already present.',
+    );
+    void load();
+  };
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-serif text-3xl">Gallery</h1>
-        <button
-          type="button"
-          className="admin-btn-primary"
-          onClick={() => {
-            setEditing(null);
-            setForm(empty());
-            setError(null);
-            setFormOpen(true);
-          }}
-        >
-          Add Image
-        </button>
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-2">
+        <div>
+          <h1 className="font-serif text-3xl">Gallery</h1>
+          <p className="text-sm text-muted mt-1 max-w-xl">
+            Photos shown in the public “Inside the clinic” grid. Add images here; published
+            rows appear on the website in sort order.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="admin-btn-secondary"
+            disabled={seeding}
+            onClick={() => void handleSeedClinicPhotos()}
+          >
+            {seeding ? 'Seeding…' : 'Restore clinic photos'}
+          </button>
+          <button
+            type="button"
+            className="admin-btn-primary"
+            onClick={() => {
+              setEditing(null);
+              setForm(empty(nextSortOrder));
+              setError(null);
+              setInfo(null);
+              setFormOpen(true);
+            }}
+          >
+            Add Image
+          </button>
+        </div>
       </div>
 
+      {info && (
+        <p className="text-sm text-ink mb-4" role="status">
+          {info}
+        </p>
+      )}
       {error && (
         <p className="text-sm text-red-600 mb-4" role="alert">
           {error}
@@ -156,6 +250,12 @@ export default function GalleryManager() {
           },
           { key: 'label', label: 'Label' },
           { key: 'tag', label: 'Tag' },
+          {
+            key: 'is_published',
+            label: 'Published',
+            render: (r) => (r.is_published ? 'Yes' : 'No'),
+          },
+          { key: 'sort_order', label: 'Order' },
           { key: 'is_tall', label: 'Tall', render: (r) => (r.is_tall ? 'Yes' : 'No') },
         ]}
         rows={filtered}
@@ -172,6 +272,7 @@ export default function GalleryManager() {
             is_published: r.is_published,
           });
           setError(null);
+          setInfo(null);
           setFormOpen(true);
         }}
         onDelete={setDeleteTarget}
@@ -198,6 +299,7 @@ export default function GalleryManager() {
             className="admin-input"
             value={form.tag ?? ''}
             onChange={(e) => setForm({ ...form, tag: e.target.value })}
+            placeholder="Clinic, Visit, Treatment…"
           />
         </FormField>
         <FormField label="Image">
@@ -221,7 +323,7 @@ export default function GalleryManager() {
             checked={form.is_tall}
             onChange={(e) => setForm({ ...form, is_tall: e.target.checked })}
           />
-          Tall cell (avoid for hair images)
+          Tall cell (taller crop on the public grid)
         </label>
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -229,7 +331,7 @@ export default function GalleryManager() {
             checked={form.is_published}
             onChange={(e) => setForm({ ...form, is_published: e.target.checked })}
           />
-          Published
+          Published on website
         </label>
       </CrudForm>
 

@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { address, clinic, hours } from '../data/clinic';
+import { useHeroMedia } from '../hooks/useHeroMedia';
 import { scrollToId } from '../lib/scroll';
 import Container from './ui/Container';
 
@@ -43,6 +44,7 @@ function ClockIcon() {
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  const heroMedia = useHeroMedia();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -100,33 +102,44 @@ export default function Hero() {
         style={reduceMotion ? undefined : { y: mediaY, scale: mediaScale }}
       >
         {/*
-          Same reception photo at every breakpoint. Desktop gets the 1920 JPEG;
-          smaller viewports get a WebP derived from that same frame (not a
-          different clinic shot). JPEG remains the no-WebP fallback.
+          CMS hero_slides (first published) override when set; otherwise the
+          curated reception photo at every breakpoint (1920 JPEG / WebP / JPEG).
         */}
-        <picture>
-          <source
-            media="(min-width: 1024px)"
-            srcSet="/images/hero/clinic-hero@1920.jpg?v=9"
+        {heroMedia.cmsUrl ? (
+          <img
+            src={heroMedia.cmsUrl}
+            alt={heroMedia.alt}
+            className="hero-bg-image"
             width={1920}
             height={1080}
-          />
-          <source
-            srcSet="/images/hero/clinic-hero.webp?v=9"
-            type="image/webp"
-            width={1280}
-            height={720}
-          />
-          <img
-            src="/images/hero/clinic-hero.jpg?v=9"
-            alt={`${clinic.nameShort} reception — Nayabazar-8, opposite GMC Hospital, Pokhara`}
-            className="hero-bg-image"
-            width={1280}
-            height={720}
             decoding="async"
             fetchPriority="high"
           />
-        </picture>
+        ) : (
+          <picture>
+            <source
+              media="(min-width: 1024px)"
+              srcSet={heroMedia.local.desktopSrc}
+              width={1920}
+              height={1080}
+            />
+            <source
+              srcSet={heroMedia.local.webpSrc}
+              type="image/webp"
+              width={1280}
+              height={720}
+            />
+            <img
+              src={heroMedia.local.jpegSrc}
+              alt={heroMedia.alt}
+              className="hero-bg-image"
+              width={1280}
+              height={720}
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
+        )}
         <div className="hero-overlay" aria-hidden="true" />
         <div className="hero-grain" aria-hidden="true" />
       </motion.div>

@@ -5,6 +5,7 @@ import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 import { Stagger, StaggerItem } from './motion/Stagger';
 import { fallbackResults } from '../data/results';
+import { useResults } from '../hooks/useResults';
 import { scrollToId } from '../lib/scroll';
 
 type BeforeAfterSliderProps = {
@@ -157,7 +158,8 @@ function BeforeAfterSlider({ beforeUrl, afterUrl, label }: BeforeAfterSliderProp
 }
 
 export default function Outcomes() {
-  const display = fallbackResults;
+  const { results, fromDb } = useResults();
+  const display = fromDb && results.length > 0 ? results : fallbackResults;
 
   return (
     <section

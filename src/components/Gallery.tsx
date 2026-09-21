@@ -73,10 +73,7 @@ export default function Gallery() {
   const { items } = useGallery();
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
 
-  const filteredItems = useMemo(
-    () => items.filter((item) => !isHeroCrop(item.imageUrl)),
-    [items],
-  );
+  const filteredItems = useMemo(() => items.filter((item) => !isHeroCrop(item.imageUrl)), [items]);
 
   const closeLightbox = useCallback(() => setLightboxItem(null), []);
 
@@ -92,11 +89,19 @@ export default function Gallery() {
             index="06"
             title="Inside the clinic"
             titleId="gallery-heading"
-            lede="A calm clinical environment opposite GMC Hospital in Nayabazar-8."
+            lede="A calm clinical environment opposite of GMC Hospital in Nayabazar-8."
           />
         </Reveal>
 
-        <Stagger className="gallery-grid" role="group" aria-label="Clinic photographs" tabIndex={0}>
+        <Stagger
+          className={cn(
+            'gallery-grid',
+            filteredItems.length >= 4 && 'gallery-grid--dense',
+          )}
+          role="group"
+          aria-label="Clinic photographs"
+          tabIndex={0}
+        >
           {filteredItems.map((item) => (
             <StaggerItem
               key={item.id}

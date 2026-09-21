@@ -2654,6 +2654,16 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
   }
+
+  .gallery-grid--dense {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .gallery-grid--dense {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .gallery-hint {

@@ -22,6 +22,15 @@ function mapRow(row: DbResult): ResultItem {
   };
 }
 
+function isStockUrl(url: string): boolean {
+  const lower = url.toLowerCase();
+  return (
+    lower.includes('pexels.com') ||
+    lower.includes('unsplash.com') ||
+    lower.includes('images.unsplash')
+  );
+}
+
 export function useResults() {
   const [results, setResults] = useState<ResultItem[]>([]);
   const [loading, setLoading] = useState(isSupabaseConfigured);
@@ -41,8 +50,13 @@ export function useResults() {
       .order('sort_order')
       .then(({ data, error }) => {
         if (!error && data?.length) {
-          setResults(data.map((row) => mapRow(row as DbResult)));
-          setFromDb(true);
+          const mapped = data
+            .map((row) => mapRow(row as DbResult))
+            .filter((r) => !isStockUrl(r.beforeUrl) && !isStockUrl(r.afterUrl));
+          if (mapped.length) {
+            setResults(mapped);
+            setFromDb(true);
+          }
         }
         setLoading(false);
       });

@@ -38,6 +38,8 @@ export type ClinicSettingsView = {
     whatsappMainUrl: string;
     whatsappFloatNumber: string;
   };
+  /** CMS override for Exosomes spotlight poster; empty uses local curated asset. */
+  exosomesPromoUrl: string;
 };
 
 const fallback: ClinicSettingsView = {
@@ -70,6 +72,7 @@ const fallback: ClinicSettingsView = {
     whatsappMainUrl: staticSocial.whatsapp.url,
     whatsappFloatNumber: staticSocial.whatsappFloat.number,
   },
+  exosomesPromoUrl: '',
 };
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -122,6 +125,7 @@ function mapRow(row: Record<string, unknown>): ClinicSettingsView {
       whatsappMainUrl: str(row.whatsapp_main_url, fallback.social.whatsappMainUrl),
       whatsappFloatNumber: str(row.whatsapp_float_number, fallback.social.whatsappFloatNumber),
     },
+    exosomesPromoUrl: str(row.exosomes_promo_url, ''),
   };
 }
 

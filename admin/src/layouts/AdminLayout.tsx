@@ -16,6 +16,7 @@ type NavIcon =
   | 'testimonials'
   | 'results'
   | 'gallery'
+  | 'hero'
   | 'doctor';
 
 type NavItem = {
@@ -52,7 +53,8 @@ const navSections: NavSection[] = [
       { to: '/services', label: 'Services', icon: 'services' },
       { to: '/testimonials', label: 'Testimonials', icon: 'testimonials' },
       { to: '/results', label: 'Results', icon: 'results' },
-      { to: '/gallery', label: 'Gallery', icon: 'gallery' },
+      { to: '/media', label: 'Media', icon: 'gallery' },
+      { to: '/hero', label: 'Hero', icon: 'hero' },
       { to: '/doctor', label: 'Doctor profile', icon: 'doctor' },
     ],
   },
@@ -152,6 +154,12 @@ function NavIconSvg({ name }: { name: NavIcon }) {
         <path d="M3 16l5-4 4 3 3-2 6 4" {...stroke} />
       </svg>
     ),
+    hero: (
+      <svg {...common}>
+        <rect x="3" y="5" width="18" height="14" rx="2" {...stroke} />
+        <path d="M3 14l4-3 3 2 4-4 7 5" {...stroke} />
+      </svg>
+    ),
     doctor: (
       <svg {...common}>
         <circle cx="12" cy="8" r="3.5" {...stroke} />
@@ -166,7 +174,7 @@ function NavIconSvg({ name }: { name: NavIcon }) {
 function NavBadge({ count }: { count: number }) {
   if (count <= 0) return null;
   return (
-    <span className="ml-auto inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-paper text-ink text-[10px] font-semibold px-1.5 py-0.5">
+    <span className="admin-nav-badge">
       {count > 99 ? '99+' : count}
     </span>
   );
@@ -197,19 +205,19 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-shell h-dvh flex flex-col lg:flex-row bg-paper overflow-hidden">
-      <header className="admin-shell__header flex lg:hidden items-center justify-between bg-ink text-paper px-5 py-3 border-b border-paper/10 shrink-0 z-30">
+      <header className="admin-shell__header flex lg:hidden items-center justify-between px-5 py-3 shrink-0 z-30">
         <div className="min-w-0">
-          <span className="font-display font-semibold text-sm leading-tight text-paper block truncate">
+          <span className="font-display font-semibold text-sm leading-tight text-ink block truncate">
             Pokhara Skin &amp; Hair Clinic
           </span>
-          <span className="font-display text-[9px] uppercase tracking-wider text-paper/70 block mt-0.5">
+          <span className="font-display text-[9px] uppercase tracking-wider text-muted block mt-0.5">
             Clinic admin
           </span>
         </div>
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="inline-flex items-center justify-center min-h-11 min-w-11 focus:outline-none shrink-0"
+          className="inline-flex items-center justify-center min-h-11 min-w-11 focus:outline-none shrink-0 text-ink"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -231,28 +239,28 @@ export default function AdminLayout() {
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-ink/50 z-30 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-ink/40 z-30 lg:hidden transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-ink text-paper flex flex-col border-r border-line transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:shrink-0 ${
+        className={`admin-sidebar fixed inset-y-0 left-0 z-40 w-64 flex flex-col transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:shrink-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="p-5 border-b border-paper/10">
-          <p className="font-display font-semibold text-base leading-tight text-paper">
+        <div className="p-5 border-b border-line/70">
+          <p className="font-display font-semibold text-base leading-tight text-ink">
             Pokhara Skin &amp; Hair Clinic
           </p>
-          <p className="text-[10px] text-paper/40 mt-3 uppercase tracking-widest">Clinic admin</p>
-          <p className="text-[10px] text-paper/30 mt-2 truncate font-mono">{user?.email}</p>
+          <p className="text-[10px] text-muted mt-3 uppercase tracking-widest">Clinic admin</p>
+          <p className="text-[10px] text-muted/80 mt-2 truncate">{user?.email}</p>
         </div>
 
         <nav className="flex-1 py-4 px-2 overflow-y-auto">
           {navSections.map((section) => (
             <div key={section.title} className="mb-4 last:mb-0">
-              <p className="px-4 pb-2 text-[10px] uppercase tracking-widest text-paper/35">
+              <p className="px-4 pb-2 text-[10px] uppercase tracking-widest text-muted">
                 {section.title}
               </p>
               <div className="space-y-1">
@@ -261,10 +269,8 @@ export default function AdminLayout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 min-h-11 px-4 py-2.5 rounded text-sm transition-colors ${
-                        isActive
-                          ? 'bg-accent text-paper font-medium'
-                          : 'text-paper/70 hover:text-paper hover:bg-paper/5'
+                      `admin-nav-link flex items-center gap-3 min-h-11 px-4 py-2.5 rounded-xl text-sm transition-colors ${
+                        isActive ? 'admin-nav-link--active' : ''
                       }`
                     }
                   >
@@ -278,29 +284,13 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-paper/10 space-y-2">
+        <div className="p-4 border-t border-line/70 space-y-2">
           <a
             href={siteUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full admin-btn-ghost text-xs"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-              className="shrink-0"
-            >
-              <path
-                d="M14 5h5v5M19 5l-9 9M10 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h10a2.5 2.5 0 0 0 2.5-2.5V14"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
             View website
           </a>
           <button
@@ -308,22 +298,6 @@ export default function AdminLayout() {
             onClick={handleSignOut}
             className="flex items-center justify-center gap-2 w-full admin-btn-ghost text-xs"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-              className="shrink-0"
-            >
-              <path
-                d="M10 5H6.5A2.5 2.5 0 0 0 4 7.5v9A2.5 2.5 0 0 0 6.5 19H10M14 16l4-4-4-4M18 12H9"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
             Sign out
           </button>
         </div>

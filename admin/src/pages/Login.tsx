@@ -22,11 +22,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-ink px-4">
+    <div className="min-h-screen flex items-center justify-center bg-paper px-4">
       <div className="w-full max-w-md">
         <form onSubmit={handleSubmit} className="admin-card">
-          <p className="text-[10px] uppercase tracking-widest text-accent mb-2">Staff only</p>
-          <h1 className="font-serif text-2xl text-ink mb-1">Admin panel</h1>
+          <p className="text-[10px] uppercase tracking-widest text-[var(--color-secondary)] mb-2 font-semibold">
+            Staff only
+          </p>
+          <h1 className="admin-page-title text-2xl mb-1">Admin panel</h1>
           <p className="text-sm text-muted mb-6">
             Sign in to manage bookings, enquiries, website content, and analytics.
           </p>
@@ -65,8 +67,8 @@ export default function Login() {
             </button>
           </div>
         </form>
-        <p className="text-center mt-6 text-sm text-paper/60">
-          <a href={siteUrl} className="text-accent hover:underline">
+        <p className="text-center mt-6 text-sm text-muted">
+          <a href={siteUrl} className="admin-link">
             ← Back to clinic website
           </a>
         </p>

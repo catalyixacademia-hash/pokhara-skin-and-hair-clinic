@@ -23,14 +23,14 @@ export default function CrudForm({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/40">
-      <div className="h-full w-full max-w-lg bg-white shadow-xl overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-blush px-6 py-4 flex items-center justify-between gap-3">
-          <h2 className="font-serif text-xl">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-start justify-end bg-ink/40">
+      <div className="h-full w-full max-w-lg bg-white shadow-[var(--shadow-4,0_16px_48px_rgba(26,28,30,0.12))] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b border-line/70 px-6 py-4 flex items-center justify-between gap-3 z-10">
+          <h2 className="admin-page-title text-xl">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center justify-center min-h-11 min-w-11 text-warm-gray hover:text-charcoal"
+            className="inline-flex items-center justify-center min-h-11 min-w-11 text-muted hover:text-ink"
             aria-label="Close"
           >
             ✕
