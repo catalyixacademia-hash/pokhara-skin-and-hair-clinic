@@ -187,9 +187,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="mt-4 text-center font-body text-caption">
+        <p className="mt-4 text-center font-body text-caption text-muted">
           Developed By :{' '}
-          <span className="font-semibold text-error">Orcrist Nepal</span>
+          <span className="font-semibold text-[var(--color-error)]">Orcrist Nepal</span>
         </p>
       </Container>
 
