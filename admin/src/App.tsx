@@ -16,6 +16,7 @@ import ResultsManager from '@/pages/ResultsManager';
 import MediaHub from '@/pages/MediaHub';
 import HeroSlidesManager from '@/pages/HeroSlidesManager';
 import DoctorProfile from '@/pages/DoctorProfile';
+import Trash from '@/pages/Trash';
 
 const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -61,6 +62,7 @@ export default function App() {
                 path="/enquiries/:id"
                 element={<SubmissionDetail formType="general_query" topicLabel="Topic" />}
               />
+              <Route path="/trash" element={<Trash />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/treatment-options" element={<TreatmentOptionsManager />} />
               <Route path="/settings" element={<ClinicSettings />} />

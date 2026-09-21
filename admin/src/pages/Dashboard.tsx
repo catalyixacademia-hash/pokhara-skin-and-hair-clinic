@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { errorMessage } from '@/lib/supabase-result';
+import { runExpiredPurge } from '@/lib/trash';
 import StatusBadge from '@/components/StatusBadge';
 import { formatPreferredDate, preferredDateUrgency } from '@/lib/contact-links';
 import type { Submission } from '@/types/submission';
@@ -30,6 +31,9 @@ export default function Dashboard() {
 
   const load = useCallback(async () => {
     setError(null);
+
+    // Best-effort: permanently remove trash older than 30 days.
+    void runExpiredPurge();
 
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);

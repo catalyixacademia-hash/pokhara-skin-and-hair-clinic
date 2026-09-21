@@ -5,5 +5,11 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/:path*", "destination": "/admin/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/purge-trash",
+      "schedule": "15 3 * * *"
+    }
   ]
 }

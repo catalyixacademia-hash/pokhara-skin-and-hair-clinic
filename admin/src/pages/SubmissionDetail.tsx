@@ -215,10 +215,17 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
             <StatusBadge status={row.status} />
             {isTrashed && (
               <span className="text-xs font-medium px-2 py-1 rounded border border-red-200 bg-red-50 text-red-800">
-                In trash
+                In trash · permanently deleted after 30 days
               </span>
             )}
           </div>
+          {isTrashed && (
+            <p className="text-sm text-muted mt-2">
+              <Link to="/trash" className="admin-link">
+                Open Trash
+              </Link>
+            </p>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <a href={phoneHref(row.phone)} className="admin-btn-secondary">
@@ -372,7 +379,7 @@ export default function SubmissionDetail({ formType, topicLabel }: SubmissionDet
       <ConfirmDelete
         open={deleteOpen}
         title="Remove submission?"
-        message={`Remove submission from ${row.name}? It will be hidden from the inbox (soft-delete).`}
+        message={`Remove submission from ${row.name}? It will move to Trash for 30 days.`}
         deleting={deleting}
         onConfirm={() => void handleDelete()}
         onCancel={() => setDeleteOpen(false)}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import DataTable from '@/components/DataTable';
 import StatusBadge from '@/components/StatusBadge';
@@ -55,7 +55,6 @@ export default function SubmissionsList({
   const [rows, setRows] = useState<Submission[]>([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | SubmissionStatus>('all');
-  const [showTrash, setShowTrash] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Submission | null>(null);
@@ -67,15 +66,13 @@ export default function SubmissionsList({
   const load = async () => {
     setLoading(true);
     setError(null);
-    let query = supabase
+    const { data, error: fetchError } = await supabase
       .from('appointments')
       .select('*')
       .eq('form_type', formType)
+      .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
-    query = showTrash ? query.not('deleted_at', 'is', null) : query.is('deleted_at', null);
-
-    const { data, error: fetchError } = await query;
     if (fetchError) setError(fetchError.message);
     else setRows((data ?? []) as Submission[]);
     setLoading(false);
@@ -85,7 +82,7 @@ export default function SubmissionsList({
     void load();
 
     const channel = supabase
-      .channel(`submissions-${formType}-${showTrash ? 'trash' : 'active'}`)
+      .channel(`submissions-${formType}-active`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
         void load();
       })
@@ -94,7 +91,7 @@ export default function SubmissionsList({
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [formType, showTrash]);
+  }, [formType]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -141,16 +138,6 @@ export default function SubmissionsList({
     }
     setDeleting(false);
     setDeleteTarget(null);
-  };
-
-  const handleRestore = async (row: Submission) => {
-    setError(null);
-    const { error: restoreError } = await supabase
-      .from('appointments')
-      .update({ deleted_at: null, updated_at: new Date().toISOString() })
-      .eq('id', row.id);
-    if (restoreError) setError(restoreError.message);
-    else setRows((prev) => prev.filter((x) => x.id !== row.id));
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -251,95 +238,38 @@ export default function SubmissionsList({
           <p className="text-sm text-muted mt-1">{description}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            className={showTrash ? 'admin-btn-secondary' : 'admin-btn-primary'}
-            onClick={() => {
-              setShowTrash(false);
-              setStatusFilter('all');
-            }}
-          >
-            Inbox
-          </button>
-          <button
-            type="button"
-            className={showTrash ? 'admin-btn-primary' : 'admin-btn-secondary'}
-            onClick={() => {
-              setShowTrash(true);
-              setStatusFilter('all');
-            }}
-          >
+          <Link to="/trash" className="admin-btn-secondary">
             Trash
+          </Link>
+          <button
+            type="button"
+            className="admin-btn-primary"
+            onClick={() => {
+              setCreateOpen(true);
+              setError(null);
+            }}
+          >
+            {formType === 'booking' ? 'Add booking' : 'Add enquiry'}
           </button>
-          {!showTrash && (
-            <button
-              type="button"
-              className="admin-btn-secondary"
-              onClick={() => {
-                setCreateOpen(true);
-                setError(null);
-              }}
-            >
-              {formType === 'booking' ? 'Add booking' : 'Add enquiry'}
-            </button>
-          )}
         </div>
       </div>
 
-      {!showTrash && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {STATUS_FILTERS.map((item) => (
-            <button
-              key={item.value}
-              type="button"
-              className={statusFilter === item.value ? 'admin-btn-primary' : 'admin-btn-secondary'}
-              onClick={() => setStatusFilter(item.value)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {STATUS_FILTERS.map((item) => (
+          <button
+            key={item.value}
+            type="button"
+            className={statusFilter === item.value ? 'admin-btn-primary' : 'admin-btn-secondary'}
+            onClick={() => setStatusFilter(item.value)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       {loading ? (
         <p className="text-muted">Loading…</p>
-      ) : showTrash ? (
-        <div className="space-y-3">
-          {filtered.length === 0 ? (
-            <p className="text-muted">Trash is empty.</p>
-          ) : (
-            filtered.map((r) => (
-              <article key={r.id} className="admin-card flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="font-medium text-ink">{r.name}</p>
-                  <p className="text-sm text-muted">
-                    {r.treatment} · {r.phone}
-                  </p>
-                  <p className="text-xs text-muted mt-1">
-                    Hidden {r.deleted_at ? new Date(r.deleted_at).toLocaleString() : '—'}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="admin-btn-secondary"
-                    onClick={() => navigate(`${basePath}/${r.id}`)}
-                  >
-                    Open
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn-primary"
-                    onClick={() => void handleRestore(r)}
-                  >
-                    Restore
-                  </button>
-                </div>
-              </article>
-            ))
-          )}
-        </div>
       ) : (
         <DataTable
           columns={columns}
@@ -359,7 +289,7 @@ export default function SubmissionsList({
       <ConfirmDelete
         open={!!deleteTarget}
         title="Remove submission?"
-        message={`Remove submission from ${deleteTarget?.name}? It will move to Trash (soft-delete).`}
+        message={`Remove submission from ${deleteTarget?.name}? It will move to Trash for 30 days.`}
         deleting={deleting}
         onConfirm={() => void handleDelete()}
         onCancel={() => setDeleteTarget(null)}

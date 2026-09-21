@@ -17,7 +17,8 @@ type NavIcon =
   | 'results'
   | 'gallery'
   | 'hero'
-  | 'doctor';
+  | 'doctor'
+  | 'trash';
 
 type NavItem = {
   to: string;
@@ -39,6 +40,7 @@ const navSections: NavSection[] = [
       { to: '/queue', label: 'Follow-up queue', icon: 'queue', badgeKey: 'queue' },
       { to: '/bookings', label: 'Bookings', icon: 'bookings', badgeKey: 'bookings' },
       { to: '/enquiries', label: 'Enquiries', icon: 'enquiries', badgeKey: 'enquiries' },
+      { to: '/trash', label: 'Trash', icon: 'trash' },
     ],
   },
   {
@@ -164,6 +166,11 @@ function NavIconSvg({ name }: { name: NavIcon }) {
       <svg {...common}>
         <circle cx="12" cy="8" r="3.5" {...stroke} />
         <path d="M5.5 19.5c0-3.1 2.9-5.5 6.5-5.5s6.5 2.4 6.5 5.5" {...stroke} />
+      </svg>
+    ),
+    trash: (
+      <svg {...common}>
+        <path d="M4 7h16M9 7V5h6v2M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" {...stroke} />
       </svg>
     ),
   };
