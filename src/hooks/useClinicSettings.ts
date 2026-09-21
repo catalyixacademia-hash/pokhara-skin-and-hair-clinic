@@ -125,7 +125,19 @@ function mapRow(row: Record<string, unknown>): ClinicSettingsView {
       whatsappMainUrl: str(row.whatsapp_main_url, fallback.social.whatsappMainUrl),
       whatsappFloatNumber: str(row.whatsapp_float_number, fallback.social.whatsappFloatNumber),
     },
-    exosomesPromoUrl: str(row.exosomes_promo_url, ''),
+    exosomesPromoUrl: (() => {
+      const url = str(row.exosomes_promo_url, '');
+      if (!url) return '';
+      const lower = url.toLowerCase();
+      if (
+        lower.includes('pexels.com') ||
+        lower.includes('unsplash.com') ||
+        lower.includes('images.unsplash')
+      ) {
+        return '';
+      }
+      return url;
+    })(),
   };
 }
 
