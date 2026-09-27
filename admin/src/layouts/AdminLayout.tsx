@@ -57,7 +57,7 @@ const navSections: NavSection[] = [
       { to: '/results', label: 'Results', icon: 'results' },
       { to: '/media', label: 'Media', icon: 'gallery' },
       { to: '/hero', label: 'Hero', icon: 'hero' },
-      { to: '/doctor', label: 'Doctor profile', icon: 'doctor' },
+      { to: '/doctor', label: 'Doctors', icon: 'doctor' },
     ],
   },
 ];

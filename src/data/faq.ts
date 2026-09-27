@@ -32,6 +32,6 @@ export const faqs: FaqItem[] = [
   {
     question: 'Do you treat both skin and hair concerns?',
     answer:
-      'Yes. Skin care is our primary specialty; hair restoration and selected aesthetic procedures complement comprehensive dermatology under Dr. Prakash Acharya.',
+      'Yes. Skin care is our primary specialty; hair restoration and selected aesthetic procedures complement comprehensive dermatology under Dr. Prakash Acharya and Dr. Bishnu Prasad Adhikari.',
   },
 ];

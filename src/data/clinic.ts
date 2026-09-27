@@ -120,6 +120,9 @@ export const doctor = {
   nmcSpecialty: 'Dermatology',
   nmcStatus: 'Specialist',
   website: 'https://drprakashacharya.com.np/',
+  pullQuote:
+    'Every plan starts with evidence — I recommend only what is medically appropriate for your skin, not what is fashionable.',
+  portraitUrl: '/images/doctor/dr-prakash-acharya.png',
   education: [
     {
       degree: 'MD, Dermatology',
@@ -164,6 +167,59 @@ export const doctor = {
   ],
   portraitAlt: 'Dr. Prakash Acharya — Board Certified Dermatologist, NMC Reg. No. 12549',
 } as const;
+
+export const doctorBishnu = {
+  name: 'Dr. Bishnu Prasad Adhikari',
+  title: 'Consultant Dermatologist & Lecturer',
+  titleShort: 'Consultant Dermatologist · MD',
+  qualificationLine: 'MD, Dermatology · NMC Reg. No. 19353',
+  nmcNumber: '19353',
+  nmcSpecialty: 'Dermatology',
+  nmcStatus: 'Specialist',
+  website: '',
+  pullQuote:
+    'I start with a clear diagnosis — then treat skin and related conditions with what is medically indicated, not what is fashionable.',
+  portraitUrl: '/images/doctor/dr-bishnu-prasad-adhikari.jpg',
+  education: [
+    {
+      degree: 'MD, Dermatology',
+      institution: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',
+      year: '',
+    },
+    {
+      degree: 'MBBS',
+      institution: 'Ryazan State I.P. Medical University, Ryazan',
+      year: '',
+    },
+  ],
+  credentials: [
+    { label: 'NMC Registration', value: 'No. 19353' },
+    {
+      label: 'MD, Dermatology',
+      value: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',
+    },
+    {
+      label: 'MBBS',
+      value: 'Ryazan State I.P. Medical University, Ryazan',
+    },
+    {
+      label: 'Lecturer',
+      value: 'Department of Dermatology, MCOMS, Pokhara',
+    },
+    {
+      label: 'Focus Areas',
+      value: 'Skin diseases, venereal diseases, and related medical dermatology',
+    },
+  ],
+  bio: [
+    'Dr. Bishnu Prasad Adhikari is a Consultant Dermatologist at Pokhara Skin and Hair Clinic, where he provides specialist care for a wide range of skin, hair, and related conditions. He is registered with the Nepal Medical Council (NMC Reg. No. 19353).',
+    'He holds an MBBS from Ryazan State I.P. Medical University and an MD in Dermatology from Manipal College of Medical Sciences (MCOMS), Kathmandu University. He is a Lecturer in the Department of Dermatology at MCOMS, Pokhara, and has published case reports in the Nepal Journal of Dermatology, Venereology & Leprology, including work on rare presentations such as Lues Maligna and acquired epidermodysplasia verruciformis.',
+  ],
+  portraitAlt:
+    'Dr. Bishnu Prasad Adhikari — Consultant Dermatologist & Lecturer, NMC Reg. No. 19353',
+} as const;
+
+export const doctors = [doctor, doctorBishnu] as const;
 
 export const treatmentOptionGroups = [
   {

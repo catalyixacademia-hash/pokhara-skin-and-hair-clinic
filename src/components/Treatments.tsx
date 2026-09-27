@@ -21,7 +21,7 @@ const TABS: { id: Category; label: string; panelId: string }[] = [
 ];
 
 const PANEL_NOTES: Record<Category, string> = {
-  skin: 'Primary specialty · led by Dr. Prakash Acharya',
+  skin: 'Primary specialty · led by Dr. Prakash Acharya and Dr. Bishnu Prasad Adhikari',
   hair: 'Complementary care · scalp & density',
   aesthetic: 'Natural refinement after clinical assessment',
 };

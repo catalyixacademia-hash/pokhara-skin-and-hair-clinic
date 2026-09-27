@@ -1,53 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { mutationResult } from '@/lib/supabase-result';
+import { useRefetchOnFocus } from '@/hooks/useRefetchOnFocus';
+import DataTable from '@/components/DataTable';
+import CrudForm, { FormField } from '@/components/CrudForm';
+import ConfirmDelete from '@/components/ConfirmDelete';
 import ImageUpload from '@/components/ImageUpload';
 
 type Credential = { label: string; value: string };
 
-type Doctor = {
+type DoctorRow = {
+  id: string;
+  numericId: number;
   name: string;
   title: string;
   title_short: string;
   bio: string[];
   credentials: Credential[];
   portrait_url: string | null;
+  pull_quote: string;
+  sort_order: number;
+  is_published: boolean;
 };
 
-const DEFAULT_CREDENTIALS: Credential[] = [
-  {
-    label: 'NMC Registration',
-    value: 'No. 12549 · Specialist (Dermatology) · Unlimited',
-  },
-  {
-    label: 'MD, Dermatology',
-    value: 'Kathmandu University, Nepal (2020)',
-  },
-  {
-    label: 'MBBS',
-    value: 'Tribhuvan University, Maharajgunj Medical Campus (2011)',
-  },
-  {
-    label: 'Focus Areas',
-    value:
-      'Melasma & pigmentation, acne & scars, anti-aging, hair loss, regenerative dermatology',
-  },
-];
+type DoctorForm = Omit<DoctorRow, 'id' | 'numericId'>;
 
-const DEFAULT_DOCTOR: Doctor = {
-  name: 'Dr. Prakash Acharya',
-  title: 'Board Certified Dermatologist',
-  title_short: 'Board Certified Dermatologist · MD',
-  bio: [
-    'Dr. Prakash Acharya is a Board Certified Dermatologist and Nepal Medical Council specialist (NMC Reg. No. 12549). He holds an MD in Dermatology from Kathmandu University (2020) and an MBBS from Tribhuvan University, Maharajgunj Medical Campus (2011). He established Pokhara Skin and Hair Clinic to bring evidence-based dermatological care to patients across Pokhara and the Gandaki region.',
-    'His clinical work focuses on melasma and pigmentation, acne and scarring, hair loss, and regenerative anti-aging treatments tailored to South Asian skin. He has treated 10,000+ patients, authored 25+ peer-reviewed publications in journals including JAAD, BJD, and JEADV, and speaks at international meetings including IMCAS, MEIDAM, and ISAAH. He also practices in Kathmandu as founder of Reva Skin & Hair Clinic.',
-  ],
-  credentials: DEFAULT_CREDENTIALS,
+const emptyCredentials = (): Credential[] => [{ label: '', value: '' }];
+
+const emptyForm = (sortOrder = 0): DoctorForm => ({
+  name: '',
+  title: '',
+  title_short: '',
+  bio: [],
+  credentials: emptyCredentials(),
   portrait_url: null,
-};
+  pull_quote: '',
+  sort_order: sortOrder,
+  is_published: true,
+});
 
 function normalizeCredentials(raw: unknown): Credential[] {
-  if (!Array.isArray(raw) || raw.length === 0) return [...DEFAULT_CREDENTIALS];
+  if (!Array.isArray(raw) || raw.length === 0) return emptyCredentials();
   return raw.map((item) => {
     if (item && typeof item === 'object' && 'label' in item && 'value' in item) {
       const row = item as Credential;
@@ -57,72 +50,102 @@ function normalizeCredentials(raw: unknown): Credential[] {
   });
 }
 
+function nmcValue(credentials: Credential[]): string {
+  const nmc = credentials.find((c) => /nmc/i.test(c.label));
+  return nmc?.value || '—';
+}
+
 export default function DoctorProfile() {
-  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [rows, setRows] = useState<DoctorRow[]>([]);
+  const [search, setSearch] = useState('');
+  const [formOpen, setFormOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<DoctorRow | null>(null);
+  const [editing, setEditing] = useState<DoctorRow | null>(null);
+  const [form, setForm] = useState<DoctorForm>(emptyForm());
   const [bioText, setBioText] = useState('');
-  const [credentials, setCredentials] = useState<Credential[]>(DEFAULT_CREDENTIALS);
-  const [loading, setLoading] = useState(true);
+  const [credentials, setCredentials] = useState<Credential[]>(emptyCredentials());
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const applyDoctor = (d: Doctor) => {
-    setDoctor(d);
-    setBioText((d.bio ?? []).join('\n\n'));
-    setCredentials(normalizeCredentials(d.credentials));
-  };
+  const load = useCallback(async () => {
+    const { data, error: fetchError } = await supabase
+      .from('doctor_profile')
+      .select('*')
+      .order('id');
+    if (fetchError) {
+      setError(fetchError.message);
+      return;
+    }
+    setError(null);
+    setRows(
+      (data ?? []).map((row) => ({
+        id: String(row.id),
+        numericId: Number(row.id),
+        name: String(row.name ?? ''),
+        title: String(row.title ?? ''),
+        title_short: String(row.title_short ?? ''),
+        bio: Array.isArray(row.bio) ? (row.bio as string[]) : [],
+        credentials: normalizeCredentials(row.credentials),
+        portrait_url: typeof row.portrait_url === 'string' ? row.portrait_url : null,
+        pull_quote: typeof row.pull_quote === 'string' ? row.pull_quote : '',
+        sort_order: Number(row.sort_order ?? 0),
+        is_published: row.is_published !== false,
+      })),
+    );
+  }, []);
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      setError(null);
-      const { data, error: fetchError } = await supabase
-        .from('doctor_profile')
-        .select('*')
-        .eq('id', 1)
-        .maybeSingle();
-
-      if (fetchError) {
-        setError(fetchError.message);
-        setLoading(false);
-        return;
-      }
-
-      if (data) {
-        applyDoctor(data as Doctor);
-      } else {
-        const { data: created, error: createError } = await supabase
-          .from('doctor_profile')
-          .upsert({ id: 1, ...DEFAULT_DOCTOR }, { onConflict: 'id' })
-          .select()
-          .maybeSingle();
-        if (createError) setError(createError.message);
-        applyDoctor((created as Doctor) ?? DEFAULT_DOCTOR);
-      }
-      setLoading(false);
-    }
     void load();
-  }, []);
+  }, [load]);
+
+  useRefetchOnFocus(() => {
+    void load();
+  });
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase();
+    return rows.filter(
+      (r) => r.name.toLowerCase().includes(q) || r.title.toLowerCase().includes(q),
+    );
+  }, [rows, search]);
+
+  const openCreate = () => {
+    const nextSort = rows.reduce((max, row) => Math.max(max, row.sort_order), 0) + 1;
+    setEditing(null);
+    setForm(emptyForm(nextSort));
+    setBioText('');
+    setCredentials(emptyCredentials());
+    setError(null);
+    setFormOpen(true);
+  };
+
+  const openEdit = (row: DoctorRow) => {
+    setEditing(row);
+    setForm({
+      name: row.name,
+      title: row.title,
+      title_short: row.title_short,
+      bio: row.bio,
+      credentials: row.credentials,
+      portrait_url: row.portrait_url,
+      pull_quote: row.pull_quote,
+      sort_order: row.sort_order,
+      is_published: row.is_published,
+    });
+    setBioText((row.bio ?? []).join('\n\n'));
+    setCredentials(normalizeCredentials(row.credentials));
+    setError(null);
+    setFormOpen(true);
+  };
 
   const updateCredential = (index: number, field: keyof Credential, value: string) => {
     setCredentials((prev) => prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)));
   };
 
-  const addCredential = () => {
-    setCredentials((prev) => [...prev, { label: '', value: '' }]);
-  };
-
-  const removeCredential = (index: number) => {
-    setCredentials((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!doctor) return;
-
-    if (!doctor.name.trim() || !doctor.title.trim()) {
+    if (!form.name.trim() || !form.title.trim()) {
       setError('Name and title are required.');
-      setMessage(null);
       return;
     }
 
@@ -132,102 +155,177 @@ export default function DoctorProfile() {
 
     if (cleanedCredentials.some((c) => !c.label || !c.value)) {
       setError('Each credential needs both a label and a value.');
-      setMessage(null);
       return;
     }
 
     setSaving(true);
-    setMessage(null);
     setError(null);
 
-    const { data, error: updateError } = await supabase
-      .from('doctor_profile')
-      .upsert({
-        id: 1,
-        name: doctor.name.trim(),
-        title: doctor.title.trim(),
-        title_short: doctor.title_short.trim(),
-        bio: bioText
-          .split('\n\n')
-          .map((p) => p.trim())
-          .filter(Boolean),
-        credentials: cleanedCredentials,
-        portrait_url: doctor.portrait_url,
-        updated_at: new Date().toISOString(),
-      })
-      .select('id')
-      .maybeSingle();
+    const payload = {
+      name: form.name.trim(),
+      title: form.title.trim(),
+      title_short: form.title_short.trim(),
+      bio: bioText
+        .split('\n\n')
+        .map((p) => p.trim())
+        .filter(Boolean),
+      credentials: cleanedCredentials,
+      portrait_url: form.portrait_url,
+      pull_quote: form.pull_quote.trim() || null,
+      sort_order: form.sort_order,
+      is_published: form.is_published,
+      updated_at: new Date().toISOString(),
+    };
 
-    const result = mutationResult(updateError);
+    let { error: saveError } = editing
+      ? await supabase.from('doctor_profile').update(payload).eq('id', editing.numericId)
+      : await supabase.from('doctor_profile').insert(payload);
+
+    if (saveError && /pull_quote|sort_order|is_published/i.test(saveError.message)) {
+      const legacy = {
+        name: payload.name,
+        title: payload.title,
+        title_short: payload.title_short,
+        bio: payload.bio,
+        credentials: payload.credentials,
+        portrait_url: payload.portrait_url,
+        updated_at: payload.updated_at,
+      };
+      const retry = editing
+        ? await supabase.from('doctor_profile').update(legacy).eq('id', editing.numericId)
+        : await supabase.from('doctor_profile').insert(legacy);
+      saveError = retry.error;
+    }
+
+    const result = mutationResult(saveError);
+    setSaving(false);
     if (!result.ok) {
       setError(result.message);
-    } else if (!data) {
-      setError('Doctor profile could not be saved. Please try again.');
-    } else {
-      setCredentials(cleanedCredentials);
-      setMessage('Doctor profile saved.');
+      return;
     }
-    setSaving(false);
+    setFormOpen(false);
+    void load();
   };
 
-  if (loading || !doctor) return <p className="text-muted">Loading…</p>;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setError(null);
+    const { error: deleteError } = await supabase
+      .from('doctor_profile')
+      .delete()
+      .eq('id', deleteTarget.numericId);
+    const result = mutationResult(deleteError);
+    setDeleteTarget(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    void load();
+  };
 
   return (
     <div>
-      <h1 className="font-serif text-3xl mb-6">Doctor Profile</h1>
-      <p className="text-sm text-muted mb-4 max-w-2xl">
-        Credentials should stay aligned with NMC registration and{' '}
-        <a
-          href="https://drprakashacharya.com.np/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="admin-link"
-        >
-          drprakashacharya.com.np
-        </a>
-        .
-      </p>
-      <form onSubmit={(e) => void handleSave(e)} className="admin-card max-w-2xl space-y-4">
-        {message && <p className="text-sm text-accent">{message}</p>}
-        {error && (
-          <p className="text-sm text-red-600" role="alert">
-            {error}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="font-serif text-3xl">Doctors</h1>
+          <p className="text-sm text-muted mt-2 max-w-2xl">
+            Profiles on the public Dermatology section. Keep NMC details accurate for each
+            physician.
           </p>
-        )}
-        <div>
-          <label className="admin-label">Name</label>
+        </div>
+        <button type="button" className="admin-btn-primary" onClick={openCreate}>
+          Add doctor
+        </button>
+      </div>
+
+      {error && !formOpen && (
+        <p className="text-sm text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
+
+      <DataTable
+        columns={[
+          {
+            key: 'portrait',
+            label: 'Portrait',
+            render: (r) =>
+              r.portrait_url ? (
+                <img
+                  src={r.portrait_url}
+                  alt=""
+                  className="h-12 w-10 object-cover rounded-md bg-surface"
+                />
+              ) : (
+                <span className="text-muted">—</span>
+              ),
+          },
+          { key: 'name', label: 'Name' },
+          { key: 'title', label: 'Title' },
+          {
+            key: 'nmc',
+            label: 'NMC',
+            render: (r) => nmcValue(r.credentials),
+          },
+          { key: 'sort_order', label: 'Sort' },
+          {
+            key: 'is_published',
+            label: 'Published',
+            render: (r) => (r.is_published ? 'Yes' : 'No'),
+          },
+        ]}
+        rows={filtered}
+        search={search}
+        onSearchChange={setSearch}
+        onEdit={openEdit}
+        onDelete={setDeleteTarget}
+      />
+
+      <CrudForm
+        title={editing ? 'Edit doctor' : 'Add doctor'}
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSubmit={(e) => void handleSave(e)}
+        saving={saving}
+        error={error}
+      >
+        <FormField label="Name">
           <input
             className="admin-input"
-            value={doctor.name}
-            onChange={(e) => setDoctor({ ...doctor, name: e.target.value })}
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
           />
-        </div>
-        <div>
-          <label className="admin-label">Title</label>
+        </FormField>
+        <FormField label="Title">
           <input
             className="admin-input"
-            value={doctor.title}
-            onChange={(e) => setDoctor({ ...doctor, title: e.target.value })}
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
             required
           />
-        </div>
-        <div>
-          <label className="admin-label">Short Title</label>
+        </FormField>
+        <FormField label="Short title">
           <input
             className="admin-input"
-            value={doctor.title_short ?? ''}
-            onChange={(e) => setDoctor({ ...doctor, title_short: e.target.value })}
+            value={form.title_short}
+            onChange={(e) => setForm({ ...form, title_short: e.target.value })}
           />
-        </div>
-        <div>
-          <label className="admin-label">Bio (paragraphs separated by blank line)</label>
+        </FormField>
+        <FormField label="Pull quote">
+          <textarea
+            className="admin-input min-h-24"
+            value={form.pull_quote}
+            onChange={(e) => setForm({ ...form, pull_quote: e.target.value })}
+          />
+        </FormField>
+        <FormField label="Bio (paragraphs separated by a blank line)">
           <textarea
             className="admin-input min-h-40"
             value={bioText}
             onChange={(e) => setBioText(e.target.value)}
           />
-        </div>
+        </FormField>
 
         <fieldset className="space-y-3 border border-line rounded p-4">
           <legend className="text-sm font-medium text-ink px-1">Credentials</legend>
@@ -252,29 +350,53 @@ export default function DoctorProfile() {
               <button
                 type="button"
                 className="admin-btn-secondary text-xs py-2 px-3 mb-0.5"
-                onClick={() => removeCredential(index)}
+                onClick={() => setCredentials((prev) => prev.filter((_, i) => i !== index))}
               >
                 Remove
               </button>
             </div>
           ))}
-          <button type="button" className="admin-btn-secondary text-xs" onClick={addCredential}>
+          <button
+            type="button"
+            className="admin-btn-secondary text-xs"
+            onClick={() => setCredentials((prev) => [...prev, { label: '', value: '' }])}
+          >
             Add credential
           </button>
         </fieldset>
 
-        <div>
-          <label className="admin-label">Portrait</label>
+        <FormField label="Portrait">
           <ImageUpload
             folder="doctor"
-            value={doctor.portrait_url ?? ''}
-            onChange={(url) => setDoctor({ ...doctor, portrait_url: url })}
+            value={form.portrait_url ?? ''}
+            onChange={(url) => setForm({ ...form, portrait_url: url || null })}
           />
-        </div>
-        <button type="submit" disabled={saving} className="admin-btn-primary">
-          {saving ? 'Saving…' : 'Save Profile'}
-        </button>
-      </form>
+        </FormField>
+        <FormField label="Sort order">
+          <input
+            type="number"
+            className="admin-input"
+            value={form.sort_order}
+            onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })}
+          />
+        </FormField>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={form.is_published}
+            onChange={(e) => setForm({ ...form, is_published: e.target.checked })}
+          />
+          Published
+        </label>
+      </CrudForm>
+
+      <ConfirmDelete
+        open={!!deleteTarget}
+        title="Delete doctor?"
+        message={`Remove "${deleteTarget?.name}" from the website?`}
+        onConfirm={() => void handleDelete()}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

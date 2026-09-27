@@ -32,7 +32,7 @@ export default function ClinicJourney() {
 
   const extraParagraphs = [
     `Sitting opposite GMC Hospital means patients already travelling for medical care can add a dermatology visit without a long detour — same neighbourhood, clearer next steps for skin concerns, hair loss, and aesthetic treatment when it is clinically appropriate.`,
-    `Clinic operations and patient experience are guided by founder Mr. Arjun Giri. Consultations and procedures are led by our board-certified dermatologist, so every plan stays grounded in specialist judgment — from first assessment through follow-up.`,
+    `Clinic operations and patient experience are guided by founder Mr. Arjun Giri. Consultations and procedures are led by our board-certified dermatologists, so every plan stays grounded in specialist judgment — from first assessment through follow-up.`,
     `Whether you are visiting for acne, pigmentation, hair restoration, or a routine skin check, we aim for the same standard: clear explanation, realistic expectations, and care that respects both medical need and how you want to feel in your own skin.`,
   ];
 
@@ -118,7 +118,7 @@ export default function ClinicJourney() {
                 <h3 className="font-display text-2xl text-ink mt-1">Mr. Arjun Giri</h3>
                 <p className="font-body text-base text-muted leading-relaxed mt-2.5">
                   Clinic leadership dedicated to bringing trusted skin and hair care to Pokhara —
-                  with clinical treatment led by our board-certified dermatologist.
+                  with clinical treatment led by our board-certified dermatologists.
                 </p>
               </figcaption>
             </figure>

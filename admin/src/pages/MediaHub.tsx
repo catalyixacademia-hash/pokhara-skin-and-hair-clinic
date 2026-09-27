@@ -57,13 +57,20 @@ type GalleryItem = {
   is_published: boolean;
 };
 
+type DoctorMediaRow = {
+  id: number;
+  name: string;
+  portrait_url: string | null;
+  sort_order?: number;
+};
+
 const TABS: { id: MediaTab; label: string }[] = [
   { id: 'hero', label: 'Hero' },
   { id: 'exosomes', label: 'Exosomes' },
   { id: 'skin', label: 'Skin' },
   { id: 'hair', label: 'Hair' },
   { id: 'aesthetic', label: 'Aesthetic' },
-  { id: 'doctor', label: 'Doctor' },
+  { id: 'doctor', label: 'Doctors' },
   { id: 'results', label: 'Results' },
   { id: 'clinic', label: 'Clinic' },
   { id: 'founder', label: 'Founder' },
@@ -94,6 +101,11 @@ const CLINIC_SEED: Omit<GalleryItem, 'id'>[] = [
 const LOCAL_HERO = '/images/hero/clinic-hero@1920.jpg?v=9';
 const LOCAL_EXO = '/images/treatments/skin/exosomes-promo.webp?v=5';
 const LOCAL_DOCTOR = '/images/doctor/dr-prakash-acharya.png';
+const LOCAL_DOCTOR_BISHNU = '/images/doctor/dr-bishnu-prasad-adhikari.jpg';
+
+function doctorFallback(name: string): string {
+  return /bishnu/i.test(name) ? LOCAL_DOCTOR_BISHNU : LOCAL_DOCTOR;
+}
 const LOCAL_FOUNDER = '/images/founder/arjun-giri.png';
 
 function isStockUrl(url: string | null | undefined): boolean {
@@ -123,7 +135,7 @@ export default function MediaHub() {
   const [exosomesUrl, setExosomesUrl] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
   const [services, setServices] = useState<ServiceRow[]>([]);
-  const [doctorPortrait, setDoctorPortrait] = useState<string | null>(null);
+  const [doctors, setDoctors] = useState<DoctorMediaRow[]>([]);
   const [results, setResults] = useState<ResultRow[]>([]);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
 
@@ -154,7 +166,7 @@ export default function MediaHub() {
       supabase.from('clinic_settings').select('*').eq('id', 1).maybeSingle(),
       supabase.from('service_categories').select('id, slug, label').order('sort_order'),
       supabase.from('services').select('id, title, image_url, category_id, sort_order, is_published').order('sort_order'),
-      supabase.from('doctor_profile').select('portrait_url').eq('id', 1).maybeSingle(),
+      supabase.from('doctor_profile').select('id, name, portrait_url').order('id'),
       supabase.from('results').select('*').order('sort_order'),
       supabase.from('gallery_items').select('*').order('sort_order'),
     ]);
@@ -185,9 +197,7 @@ export default function MediaHub() {
     }
     setCategories((catsRes.data ?? []) as Category[]);
     setServices((servicesRes.data ?? []) as ServiceRow[]);
-    setDoctorPortrait(
-      typeof doctorRes.data?.portrait_url === 'string' ? doctorRes.data.portrait_url : null,
-    );
+    setDoctors((doctorRes.data ?? []) as DoctorMediaRow[]);
     setResults((resultsRes.data ?? []) as ResultRow[]);
     setGallery((galleryRes.data ?? []) as GalleryItem[]);
     setLoading(false);
@@ -303,23 +313,23 @@ export default function MediaHub() {
     void load();
   };
 
-  const saveDoctorPortrait = async (url: string) => {
+  const saveDoctorPortrait = async (id: number, url: string) => {
     setSaving(true);
     setError(null);
     setInfo(null);
     const { error: updateError } = await supabase
       .from('doctor_profile')
-      .upsert(
-        { id: 1, portrait_url: url || null, updated_at: new Date().toISOString() },
-        { onConflict: 'id' },
-      );
+      .update({ portrait_url: url || null, updated_at: new Date().toISOString() })
+      .eq('id', id);
     const result = mutationResult(updateError);
     setSaving(false);
     if (!result.ok) {
       setError(result.message);
       return;
     }
-    setDoctorPortrait(url);
+    setDoctors((prev) =>
+      prev.map((row) => (row.id === id ? { ...row, portrait_url: url || null } : row)),
+    );
     setInfo('Doctor portrait updated.');
   };
 
@@ -563,26 +573,34 @@ export default function MediaHub() {
       {tab === 'doctor' && (
         <section className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-muted">Portrait on the Dermatology / doctor section.</p>
+            <p className="text-sm text-muted">Portraits on the Dermatology / doctor section.</p>
             <Link to="/doctor" className="admin-link">
-              Full doctor profile →
+              Full doctor profiles →
             </Link>
           </div>
           <div className="admin-media-grid">
-            <article className="admin-media-card">
-              <div className="admin-media-card__thumb">
-                <img src={displayUrl(doctorPortrait, LOCAL_DOCTOR)} alt="Doctor portrait" />
-              </div>
-              <div className="admin-media-card__body">
-                <h3 className="admin-media-card__label">Dr. Prakash Acharya</h3>
-                <p className="admin-media-card__meta">doctor_profile.portrait_url</p>
-                <ImageUpload
-                  folder="doctor"
-                  value={doctorPortrait ?? ''}
-                  onChange={(url) => void saveDoctorPortrait(url)}
-                />
-              </div>
-            </article>
+            {doctors.map((doc) => (
+              <article key={doc.id} className="admin-media-card">
+                <div className="admin-media-card__thumb">
+                  <img
+                    src={displayUrl(doc.portrait_url, doctorFallback(doc.name))}
+                    alt={`${doc.name} portrait`}
+                  />
+                </div>
+                <div className="admin-media-card__body">
+                  <h3 className="admin-media-card__label">{doc.name}</h3>
+                  <p className="admin-media-card__meta">doctor_profile.portrait_url</p>
+                  <ImageUpload
+                    folder="doctor"
+                    value={doc.portrait_url ?? ''}
+                    onChange={(url) => void saveDoctorPortrait(doc.id, url)}
+                  />
+                </div>
+              </article>
+            ))}
+            {doctors.length === 0 && (
+              <p className="text-sm text-muted">No doctor profiles in CMS yet.</p>
+            )}
           </div>
         </section>
       )}

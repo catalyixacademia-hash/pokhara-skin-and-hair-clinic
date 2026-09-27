@@ -20,7 +20,7 @@ const BRAND = {
   hours: 'Daily 8:00 AM – 7:00 PM',
   siteUrl: 'https://pokhara-skin-and-hair-clinic.vercel.app',
   whatsappUrl: 'https://wa.me/9779706929329',
-  doctor: 'Dr. Prakash Acharya, MD',
+  doctor: 'Dr. Prakash Acharya, MD, and Dr. Bishnu Prasad Adhikari, MD',
 } as const;
 
 const C = {
