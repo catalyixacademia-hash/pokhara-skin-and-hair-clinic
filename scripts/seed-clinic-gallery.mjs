@@ -53,6 +53,14 @@ const SEEDS = [
     is_tall: true,
     sort_order: 2,
   },
+  {
+    file: 'public/images/clinic/reception-desk.webp',
+    storagePath: 'gallery/reception-desk.webp',
+    label: 'Reception desk',
+    tag: 'Clinic',
+    is_tall: true,
+    sort_order: 3,
+  },
 ];
 
 async function main() {

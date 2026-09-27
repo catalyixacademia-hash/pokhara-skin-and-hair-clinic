@@ -31,6 +31,13 @@ export const fallbackGallery: GalleryItem[] = [
     tag: 'Visit',
     isTall: true,
   },
+  {
+    id: 'fallback-reception-desk',
+    imageUrl: `${STORAGE}/reception-desk.webp`,
+    label: 'Reception desk',
+    tag: 'Clinic',
+    isTall: true,
+  },
 ];
 
 /** Local paths kept for offline / first paint before Storage resolves. */
@@ -47,6 +54,13 @@ export const localGalleryFallback: GalleryItem[] = [
     imageUrl: '/images/clinic/welcome-board.webp?v=3',
     label: 'Welcome — coffee & cookies corner',
     tag: 'Visit',
+    isTall: true,
+  },
+  {
+    id: 'fallback-reception-desk-local',
+    imageUrl: '/images/clinic/reception-desk.webp',
+    label: 'Reception desk',
+    tag: 'Clinic',
     isTall: true,
   },
 ];

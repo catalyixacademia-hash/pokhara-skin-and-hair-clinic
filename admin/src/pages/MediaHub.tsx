@@ -96,6 +96,14 @@ const CLINIC_SEED: Omit<GalleryItem, 'id'>[] = [
     sort_order: 2,
     is_published: true,
   },
+  {
+    image_url: `${STORAGE}/reception-desk.webp`,
+    label: 'Reception desk',
+    tag: 'Clinic',
+    is_tall: true,
+    sort_order: 3,
+    is_published: true,
+  },
 ];
 
 const LOCAL_HERO = '/images/hero/clinic-hero@1920.jpg?v=9';
