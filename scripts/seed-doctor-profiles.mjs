@@ -43,7 +43,7 @@ const BISHNU = {
     'He holds an MBBS from Ryazan State I.P. Medical University and an MD in Dermatology from Manipal College of Medical Sciences (MCOMS), Kathmandu University. He is a Lecturer in the Department of Dermatology at MCOMS, Pokhara, and has published case reports in the Nepal Journal of Dermatology, Venereology & Leprology, including work on rare presentations such as Lues Maligna and acquired epidermodysplasia verruciformis.',
   ],
   credentials: [
-    { label: 'NMC Registration', value: 'No. 19353' },
+    { label: 'NMC Registration', value: 'NMC Reg. No. 19353' },
     {
       label: 'MD, Dermatology',
       value: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',

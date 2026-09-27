@@ -58,7 +58,7 @@ values (
   'Consultant Dermatologist & Lecturer',
   'Consultant Dermatologist · MD',
   '["Dr. Bishnu Prasad Adhikari is a Consultant Dermatologist at Pokhara Skin and Hair Clinic, where he provides specialist care for a wide range of skin, hair, and related conditions. He is registered with the Nepal Medical Council (NMC Reg. No. 19353).","He holds an MBBS from Ryazan State I.P. Medical University and an MD in Dermatology from Manipal College of Medical Sciences (MCOMS), Kathmandu University. He is a Lecturer in the Department of Dermatology at MCOMS, Pokhara, and has published case reports in the Nepal Journal of Dermatology, Venereology & Leprology, including work on rare presentations such as Lues Maligna and acquired epidermodysplasia verruciformis."]'::jsonb,
-  '[{"label":"NMC Registration","value":"No. 19353"},{"label":"MD, Dermatology","value":"Manipal College of Medical Sciences (MCOMS), Kathmandu University"},{"label":"MBBS","value":"Ryazan State I.P. Medical University, Ryazan"},{"label":"Lecturer","value":"Department of Dermatology, MCOMS, Pokhara"},{"label":"Focus Areas","value":"Skin diseases, venereal diseases, and related medical dermatology"}]'::jsonb,
+  '[{"label":"NMC Registration","value":"NMC Reg. No. 19353"},{"label":"MD, Dermatology","value":"Manipal College of Medical Sciences (MCOMS), Kathmandu University"},{"label":"MBBS","value":"Ryazan State I.P. Medical University, Ryazan"},{"label":"Lecturer","value":"Department of Dermatology, MCOMS, Pokhara"},{"label":"Focus Areas","value":"Skin diseases, venereal diseases, and related medical dermatology"}]'::jsonb,
   2,
   true,
   'I start with a clear diagnosis — then treat skin and related conditions with what is medically indicated, not what is fashionable.'

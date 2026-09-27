@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { mutationResult } from '@/lib/supabase-result';
+import {
+  type Credential,
+  nmcColumnLabel,
+  normalizeDoctorCredentials,
+  specialistColumnLabel,
+} from '@/lib/doctor-credentials';
 import { useRefetchOnFocus } from '@/hooks/useRefetchOnFocus';
 import DataTable from '@/components/DataTable';
 import CrudForm, { FormField } from '@/components/CrudForm';
 import ConfirmDelete from '@/components/ConfirmDelete';
 import ImageUpload from '@/components/ImageUpload';
-
-type Credential = { label: string; value: string };
 
 type DoctorRow = {
   id: string;
@@ -48,11 +52,6 @@ function normalizeCredentials(raw: unknown): Credential[] {
     }
     return { label: '', value: '' };
   });
-}
-
-function nmcValue(credentials: Credential[]): string {
-  const nmc = credentials.find((c) => /nmc/i.test(c.label));
-  return nmc?.value || '—';
 }
 
 export default function DoctorProfile() {
@@ -133,7 +132,7 @@ export default function DoctorProfile() {
       is_published: row.is_published,
     });
     setBioText((row.bio ?? []).join('\n\n'));
-    setCredentials(normalizeCredentials(row.credentials));
+    setCredentials(normalizeDoctorCredentials(normalizeCredentials(row.credentials), row.name));
     setError(null);
     setFormOpen(true);
   };
@@ -149,9 +148,9 @@ export default function DoctorProfile() {
       return;
     }
 
-    const cleanedCredentials = credentials
-      .map((c) => ({ label: c.label.trim(), value: c.value.trim() }))
-      .filter((c) => c.label || c.value);
+    const cleanedCredentials = normalizeDoctorCredentials(credentials, form.name).filter(
+      (c) => c.label && c.value,
+    );
 
     if (cleanedCredentials.some((c) => !c.label || !c.value)) {
       setError('Each credential needs both a label and a value.');
@@ -265,7 +264,12 @@ export default function DoctorProfile() {
           {
             key: 'nmc',
             label: 'NMC',
-            render: (r) => nmcValue(r.credentials),
+            render: (r) => nmcColumnLabel(r.credentials),
+          },
+          {
+            key: 'specialist',
+            label: 'Specialist',
+            render: (r) => specialistColumnLabel(r.credentials),
           },
           { key: 'sort_order', label: 'Sort' },
           {
@@ -329,6 +333,11 @@ export default function DoctorProfile() {
 
         <fieldset className="space-y-3 border border-line rounded p-4">
           <legend className="text-sm font-medium text-ink px-1">Credentials</legend>
+          <p className="text-xs text-muted">
+            Use <strong>NMC Registration</strong> with value <strong>NMC Reg. No. 12549</strong> (or
+            19353). Keep <strong>Specialist (Dermatology)</strong> as its own row — do not combine it
+            with the registration number.
+          </p>
           {credentials.map((row, index) => (
             <div key={index} className="grid sm:grid-cols-[1fr_1.4fr_auto] gap-2 items-end">
               <div>

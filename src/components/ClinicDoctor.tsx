@@ -1,4 +1,4 @@
-import { doctor as staticDoctor } from '../data/clinic';
+import { doctor as staticDoctor, doctors as staticDoctors } from '../data/clinic';
 import {
   useDoctorProfiles,
   type DoctorProfileView,
@@ -8,11 +8,40 @@ import Container from './ui/Container';
 import SectionIntro from './ui/SectionIntro';
 import Reveal from './motion/Reveal';
 
-function nmcChipLabel(doctor: DoctorProfileView): string {
+function matchStaticDoctor(name: string) {
+  const trimmed = name.trim().toLowerCase();
+  const exact = staticDoctors.find((entry) => entry.name.toLowerCase() === trimmed);
+  if (exact) return exact;
+  if (trimmed.includes('bishnu')) return staticDoctors[1];
+  return staticDoctors[0];
+}
+
+function doctorChipLabels(doctor: DoctorProfileView): string[] {
+  const fallback = matchStaticDoctor(doctor.name);
   const nmcCred = doctor.credentials.find((c) => /nmc/i.test(c.label));
-  if (nmcCred) return nmcCred.value;
-  if (doctor.qualificationLine.includes('NMC')) return doctor.qualificationLine;
-  return `NMC Reg. No. ${staticDoctor.nmcNumber} · Specialist (${staticDoctor.nmcSpecialty})`;
+  const nmcSource = [nmcCred?.value, doctor.qualificationLine].filter(Boolean).join(' ');
+  const labels: string[] = [];
+
+  const nmcNumber = nmcSource.match(/(\d{4,})/)?.[1] ?? fallback.nmcNumber;
+  labels.push(`NMC Reg. No. ${nmcNumber}`);
+
+  const specialistMatch = nmcSource.match(/Specialist\s*\(\s*([^)]+?)\s*\)/i);
+  const specialistCred = doctor.credentials.find((c) => /specialist\s*\(/i.test(c.label));
+  if (specialistMatch || specialistCred || fallback.name === staticDoctor.name) {
+    const specialty = specialistMatch?.[1]?.trim() ?? fallback.nmcSpecialty;
+    labels.push(`Specialist (${specialty})`);
+  }
+
+  const seen = new Set(labels.map((label) => label.toLowerCase()));
+  for (const cred of doctor.credentials) {
+    if (/nmc/i.test(cred.label) || /specialist\s*\(/i.test(cred.label)) continue;
+    if (seen.has(cred.label.toLowerCase())) continue;
+    labels.push(cred.label);
+    seen.add(cred.label.toLowerCase());
+    if (labels.length >= 6) break;
+  }
+
+  return labels;
 }
 
 function DoctorProfileCard({
@@ -22,15 +51,18 @@ function DoctorProfileCard({
   doctor: DoctorProfileView;
   delay: number;
 }) {
-  const nmcLabel = nmcChipLabel(doctor);
-  const credentialChips = doctor.credentials
-    .filter((c) => !/nmc/i.test(c.label))
-    .slice(0, 4);
+  const chips = doctorChipLabels(doctor);
 
   return (
     <article className="doctor-card">
       <Reveal delay={delay} direction="up">
-        <div className="doctor-portrait-lg">
+        <div
+          className={
+            /bishnu/i.test(doctor.name)
+              ? 'doctor-portrait-lg doctor-portrait-lg--pullback'
+              : 'doctor-portrait-lg'
+          }
+        >
           <img
             src={doctor.portraitUrl}
             alt={doctor.portraitAlt}
@@ -45,15 +77,14 @@ function DoctorProfileCard({
       <Reveal delay={delay + 0.05} direction="up">
         <div className="doctor-card__body space-y-6">
           <div>
-            <h3 className="font-display text-display text-ink">{doctor.name}</h3>
-            <p className="font-body text-body-lg text-muted mt-2">{doctor.title}</p>
+            <h3 className="doctor-card__name font-display text-ink">{doctor.name}</h3>
+            <p className="font-body text-base text-muted mt-1.5">{doctor.title}</p>
           </div>
 
           <div className="doctor-chips">
-            <span className="doctor-chip">{nmcLabel}</span>
-            {credentialChips.map((cred) => (
-              <span key={cred.label} className="doctor-chip">
-                {cred.label}
+            {chips.map((chip) => (
+              <span key={chip} className="doctor-chip">
+                {chip}
               </span>
             ))}
           </div>

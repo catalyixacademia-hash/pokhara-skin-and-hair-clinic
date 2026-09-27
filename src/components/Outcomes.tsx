@@ -64,21 +64,53 @@ function BeforeAfterSlider({ beforeUrl, afterUrl, label }: BeforeAfterSliderProp
     return () => observer.disconnect();
   }, [prefersReducedMotion]);
 
+  const endDrag = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    draggingRef.current = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  }, []);
+
+  const startDrag = useCallback(
+    (e: React.PointerEvent<HTMLElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      draggingRef.current = true;
+      updateFromClientX(e.clientX);
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {
+        /* pointer already released */
+      }
+    },
+    [updateFromClientX],
+  );
+
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLElement>) => {
+      if (!draggingRef.current) return;
+      updateFromClientX(e.clientX);
+    },
+    [updateFromClientX],
+  );
+
   useEffect(() => {
-    const onPointerMove = (e: PointerEvent) => {
+    const onPointerMoveWindow = (e: PointerEvent) => {
       if (!draggingRef.current) return;
       updateFromClientX(e.clientX);
     };
 
-    const onPointerUp = () => {
+    const onPointerUpWindow = () => {
       draggingRef.current = false;
     };
 
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointermove', onPointerMoveWindow);
+    window.addEventListener('pointerup', onPointerUpWindow);
+    window.addEventListener('pointercancel', onPointerUpWindow);
     return () => {
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointermove', onPointerMoveWindow);
+      window.removeEventListener('pointerup', onPointerUpWindow);
+      window.removeEventListener('pointercancel', onPointerUpWindow);
     };
   }, [updateFromClientX]);
 
@@ -119,11 +151,10 @@ function BeforeAfterSlider({ beforeUrl, afterUrl, label }: BeforeAfterSliderProp
       aria-label={`${label} — before and after comparison`}
       tabIndex={0}
       onKeyDown={onKeyDown}
-      onPointerDown={(e) => {
-        draggingRef.current = true;
-        sliderRef.current?.setPointerCapture(e.pointerId);
-        updateFromClientX(e.clientX);
-      }}
+      onPointerDown={startDrag}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
     >
       <img
         src={beforeUrl}
@@ -149,9 +180,14 @@ function BeforeAfterSlider({ beforeUrl, afterUrl, label }: BeforeAfterSliderProp
         className="ba-slider__handle"
         style={{ left: `${position}%` }}
         aria-hidden="true"
-        onPointerDown={(e) => e.stopPropagation()}
+        onPointerDown={startDrag}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
       >
-        <span className="ba-slider__knob">↔</span>
+        <span className="ba-slider__knob" aria-hidden="true">
+          ↔
+        </span>
       </div>
     </div>
   );

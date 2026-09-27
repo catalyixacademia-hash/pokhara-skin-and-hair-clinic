@@ -138,7 +138,11 @@ export const doctor = {
   credentials: [
     {
       label: 'NMC Registration',
-      value: 'No. 12549 · Specialist (Dermatology) · Unlimited',
+      value: 'NMC Reg. No. 12549',
+    },
+    {
+      label: 'Specialist (Dermatology)',
+      value: 'Nepal Medical Council specialist',
     },
     {
       label: 'MD, Dermatology',
@@ -193,7 +197,7 @@ export const doctorBishnu = {
     },
   ],
   credentials: [
-    { label: 'NMC Registration', value: 'No. 19353' },
+    { label: 'NMC Registration', value: 'NMC Reg. No. 19353' },
     {
       label: 'MD, Dermatology',
       value: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',
