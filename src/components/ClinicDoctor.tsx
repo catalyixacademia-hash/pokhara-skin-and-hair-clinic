@@ -67,7 +67,7 @@ function doctorChipLabels(doctor: DoctorProfileView): string[] {
     if (/nmc/i.test(cred.label) || /specialist\s*\(/i.test(cred.label)) continue;
     if (/^md,\s*dermatology$/i.test(cred.label)) continue;
     if (/^md,\s*mbbs$/i.test(cred.label)) continue;
-    if (/^(clinic|location)$/i.test(cred.label)) continue;
+    if (/^(clinic|location|recognition)$/i.test(cred.label)) continue;
     if (seen.has(cred.label.toLowerCase())) continue;
     labels.push(cred.label);
     seen.add(cred.label.toLowerCase());

@@ -165,11 +165,6 @@ export const doctor = {
       value:
         'Melasma & pigmentation, acne & scars, anti-aging, hair loss, regenerative dermatology',
     },
-    {
-      label: 'Recognition',
-      value:
-        '25+ peer-reviewed publications · Best Paper Award (SODVELON) · International speaker (IMCAS, MEIDAM, ISAAH)',
-    },
   ],
   bio: [
     'Dr. Prakash Acharya is a Board Certified Dermatologist and Nepal Medical Council specialist (NMC Reg. No. 12549). He holds an MD in Dermatology from Kathmandu University (2020) and an MBBS from Tribhuvan University, Maharajgunj Medical Campus (2011). He established Pokhara Skin and Hair Clinic to bring evidence-based dermatological care to patients across Pokhara and the Gandaki region.',
