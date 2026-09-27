@@ -141,16 +141,24 @@ export const doctor = {
       value: 'NMC Reg. No. 12549',
     },
     {
-      label: 'Specialist (Dermatology)',
+      label: 'MD Specialist (Dermatology)',
       value: 'Nepal Medical Council specialist',
-    },
-    {
-      label: 'MD, Dermatology',
-      value: 'Kathmandu University, Nepal (2020)',
     },
     {
       label: 'MBBS',
       value: 'Tribhuvan University, Maharajgunj Medical Campus (2011)',
+    },
+    {
+      label: 'Qualification',
+      value: 'MD, Dermatology — Kathmandu University (2020)',
+    },
+    {
+      label: 'Certification',
+      value: 'Board Certified Dermatologist',
+    },
+    {
+      label: 'Specialization',
+      value: 'Clinical & Aesthetic Dermatology',
     },
     {
       label: 'Focus Areas',
@@ -162,8 +170,6 @@ export const doctor = {
       value:
         '25+ peer-reviewed publications · Best Paper Award (SODVELON) · International speaker (IMCAS, MEIDAM, ISAAH)',
     },
-    { label: 'Clinic', value: clinic.name },
-    { label: 'Location', value: 'Nayabazar-8, Pokhara, Nepal' },
   ],
   bio: [
     'Dr. Prakash Acharya is a Board Certified Dermatologist and Nepal Medical Council specialist (NMC Reg. No. 12549). He holds an MD in Dermatology from Kathmandu University (2020) and an MBBS from Tribhuvan University, Maharajgunj Medical Campus (2011). He established Pokhara Skin and Hair Clinic to bring evidence-based dermatological care to patients across Pokhara and the Gandaki region.',
@@ -199,12 +205,24 @@ export const doctorBishnu = {
   credentials: [
     { label: 'NMC Registration', value: 'NMC Reg. No. 19353' },
     {
-      label: 'MD, Dermatology',
-      value: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',
+      label: 'MD Specialist (Dermatology)',
+      value: 'Nepal Medical Council specialist',
     },
     {
       label: 'MBBS',
       value: 'Ryazan State I.P. Medical University, Ryazan',
+    },
+    {
+      label: 'Qualification',
+      value: 'MD, Dermatology — Manipal College of Medical Sciences (MCOMS), Kathmandu University',
+    },
+    {
+      label: 'Certification',
+      value: 'Consultant Dermatologist',
+    },
+    {
+      label: 'Specialization',
+      value: 'Medical Dermatology',
     },
     {
       label: 'Lecturer',

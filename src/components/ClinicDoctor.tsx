@@ -1,4 +1,4 @@
-import { doctor as staticDoctor, doctors as staticDoctors } from '../data/clinic';
+import { doctors as staticDoctors } from '../data/clinic';
 import {
   useDoctorProfiles,
   type DoctorProfileView,
@@ -16,9 +16,24 @@ function matchStaticDoctor(name: string) {
   return staticDoctors[0];
 }
 
+const CHIP_PRIORITY = [
+  'MBBS',
+  'Qualification',
+  'Certification',
+  'Specialization',
+  'Lecturer',
+  'Focus Areas',
+] as const;
+
 function doctorChipLabels(doctor: DoctorProfileView): string[] {
   const fallback = matchStaticDoctor(doctor.name);
-  const nmcCred = doctor.credentials.find((c) => /nmc/i.test(c.label));
+  const mergedCredentials = [...doctor.credentials];
+  for (const cred of fallback.credentials) {
+    const exists = mergedCredentials.some((c) => c.label.toLowerCase() === cred.label.toLowerCase());
+    if (!exists) mergedCredentials.push({ label: cred.label, value: cred.value });
+  }
+
+  const nmcCred = mergedCredentials.find((c) => /nmc/i.test(c.label));
   const nmcSource = [nmcCred?.value, doctor.qualificationLine].filter(Boolean).join(' ');
   const labels: string[] = [];
 
@@ -26,19 +41,37 @@ function doctorChipLabels(doctor: DoctorProfileView): string[] {
   labels.push(`NMC Reg. No. ${nmcNumber}`);
 
   const specialistMatch = nmcSource.match(/Specialist\s*\(\s*([^)]+?)\s*\)/i);
-  const specialistCred = doctor.credentials.find((c) => /specialist\s*\(/i.test(c.label));
-  if (specialistMatch || specialistCred || fallback.name === staticDoctor.name) {
-    const specialty = specialistMatch?.[1]?.trim() ?? fallback.nmcSpecialty;
-    labels.push(`Specialist (${specialty})`);
-  }
+  const specialty = specialistMatch?.[1]?.trim() ?? fallback.nmcSpecialty;
+  labels.push(`MD Specialist (${specialty})`);
 
   const seen = new Set(labels.map((label) => label.toLowerCase()));
-  for (const cred of doctor.credentials) {
+  const byLabel = new Map(
+    mergedCredentials.map((cred) => [cred.label.toLowerCase(), cred.label] as const),
+  );
+
+  for (const preferred of CHIP_PRIORITY) {
+    const found =
+      byLabel.get(preferred.toLowerCase()) ??
+      (preferred === 'MBBS' ? byLabel.get('md, mbbs') : undefined);
+    if (!found) continue;
+    const display = /^md,\s*mbbs$/i.test(found) ? 'MBBS' : found;
+    if (seen.has(display.toLowerCase()) || seen.has(found.toLowerCase())) continue;
+    labels.push(display);
+    seen.add(display.toLowerCase());
+    seen.add(found.toLowerCase());
+    seen.add('mbbs');
+    seen.add('md, mbbs');
+  }
+
+  for (const cred of mergedCredentials) {
     if (/nmc/i.test(cred.label) || /specialist\s*\(/i.test(cred.label)) continue;
+    if (/^md,\s*dermatology$/i.test(cred.label)) continue;
+    if (/^md,\s*mbbs$/i.test(cred.label)) continue;
+    if (/^(clinic|location)$/i.test(cred.label)) continue;
     if (seen.has(cred.label.toLowerCase())) continue;
     labels.push(cred.label);
     seen.add(cred.label.toLowerCase());
-    if (labels.length >= 6) break;
+    if (labels.length >= 8) break;
   }
 
   return labels;

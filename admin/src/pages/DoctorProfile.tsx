@@ -335,8 +335,8 @@ export default function DoctorProfile() {
           <legend className="text-sm font-medium text-ink px-1">Credentials</legend>
           <p className="text-xs text-muted">
             Use <strong>NMC Registration</strong> with value <strong>NMC Reg. No. 12549</strong> (or
-            19353). Keep <strong>Specialist (Dermatology)</strong> as its own row — do not combine it
-            with the registration number.
+            19353). Keep <strong>MD Specialist (Dermatology)</strong> and <strong>MBBS</strong> as
+            their own rows — do not combine them with the registration number.
           </p>
           {credentials.map((row, index) => (
             <div key={index} className="grid sm:grid-cols-[1fr_1.4fr_auto] gap-2 items-end">

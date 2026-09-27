@@ -18,16 +18,20 @@ export function nmcColumnLabel(credentials: Credential[]): string {
 /** Separate specialist chip, never combined with the registration number. */
 export function specialistColumnLabel(credentials: Credential[]): string {
   const labeled = credentials.find((c) => /specialist\s*\(/i.test(c.label));
-  if (labeled) return labeled.label;
+  if (labeled) {
+    return /md\s+specialist/i.test(labeled.label)
+      ? labeled.label
+      : labeled.label.replace(/^Specialist/i, 'MD Specialist');
+  }
   const nmc = credentials.find((c) => /nmc/i.test(c.label) || /nmc/i.test(c.value));
   const specialty = specialtyFrom(nmc?.value ?? '');
-  return specialty ? `Specialist (${specialty})` : '—';
+  return specialty ? `MD Specialist (${specialty})` : '—';
 }
 
 /**
  * Persist chips the public site expects:
  * NMC Registration → "NMC Reg. No. {n}"
- * Specialist (Dermatology) as its own row, not joined with the NMC value.
+ * MD Specialist (Dermatology) as its own row, not joined with the NMC value.
  */
 export function normalizeDoctorCredentials(
   raw: Credential[],
@@ -56,7 +60,7 @@ export function normalizeDoctorCredentials(
     if (isSpecialistLabel) {
       specialty = specialtyFrom(cred.label) ?? specialty ?? 'Dermatology';
       rest.push({
-        label: `Specialist (${specialty})`,
+        label: `MD Specialist (${specialty})`,
         value: cred.value || 'Nepal Medical Council specialist',
       });
       continue;
@@ -65,7 +69,7 @@ export function normalizeDoctorCredentials(
     rest.push(cred);
   }
 
-  if (/prakash/i.test(doctorName) && !specialty) {
+  if (!specialty) {
     specialty = 'Dermatology';
   }
 
@@ -75,8 +79,16 @@ export function normalizeDoctorCredentials(
   }
   if (specialty && !rest.some((c) => /specialist\s*\(/i.test(c.label))) {
     next.push({
-      label: `Specialist (${specialty})`,
+      label: `MD Specialist (${specialty})`,
       value: 'Nepal Medical Council specialist',
+    });
+  }
+  if (!rest.some((c) => /^mbbs$/i.test(c.label) || /^md,\s*mbbs$/i.test(c.label))) {
+    rest.push({
+      label: 'MBBS',
+      value: /bishnu/i.test(doctorName)
+        ? 'Ryazan State I.P. Medical University, Ryazan'
+        : 'Tribhuvan University, Maharajgunj Medical Campus (2011)',
     });
   }
   next.push(...rest.filter((c) => !/specialist\s*\(/i.test(c.label)));

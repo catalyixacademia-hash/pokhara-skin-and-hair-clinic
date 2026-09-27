@@ -44,11 +44,14 @@ const BISHNU = {
   ],
   credentials: [
     { label: 'NMC Registration', value: 'NMC Reg. No. 19353' },
-    {
-      label: 'MD, Dermatology',
-      value: 'Manipal College of Medical Sciences (MCOMS), Kathmandu University',
-    },
+    { label: 'MD Specialist (Dermatology)', value: 'Nepal Medical Council specialist' },
     { label: 'MBBS', value: 'Ryazan State I.P. Medical University, Ryazan' },
+    {
+      label: 'Qualification',
+      value: 'MD, Dermatology — Manipal College of Medical Sciences (MCOMS), Kathmandu University',
+    },
+    { label: 'Certification', value: 'Consultant Dermatologist' },
+    { label: 'Specialization', value: 'Medical Dermatology' },
     { label: 'Lecturer', value: 'Department of Dermatology, MCOMS, Pokhara' },
     {
       label: 'Focus Areas',
